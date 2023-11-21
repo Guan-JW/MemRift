@@ -1,0 +1,27 @@
+# ninja log v5
+1	97655	1700611014264000000	/opt/finetune/MemRift/float_split_stride_pin/build/temp.linux-aarch64-cpython-312/float_split_stride_pin.o	e18793231aa510ea
+44	97683	1700611171132000000	/opt/finetune/MemRift/float_split_stride_pin/build/temp.linux-aarch64-cpython-312/float_split_stride_pin.o	e18793231aa510ea
+43	97347	1700611287280000000	/opt/finetune/MemRift/float_split_stride_pin/build/temp.linux-aarch64-cpython-312/float_split_stride_pin.o	e18793231aa510ea
+43	97673	1700611602880000000	/opt/finetune/MemRift/float_split_stride_pin/build/temp.linux-aarch64-cpython-312/float_split_stride_pin.o	e18793231aa510ea
+46	97847	1700611971236000000	/opt/finetune/MemRift/float_split_stride_pin/build/temp.linux-aarch64-cpython-312/float_split_stride_pin.o	e18793231aa510ea
+44	97846	1700613313260000000	/opt/finetune/MemRift/float_split_stride_pin/build/temp.linux-aarch64-cpython-312/float_split_stride_pin.o	e18793231aa510ea
+42	97802	1700613436864000000	/opt/finetune/MemRift/float_split_stride_pin/build/temp.linux-aarch64-cpython-312/float_split_stride_pin.o	e18793231aa510ea
+45	98051	1700615872616000000	/opt/finetune/MemRift/float_split_stride_pin/build/temp.linux-aarch64-cpython-312/float_split_stride_pin.o	e18793231aa510ea
+44	98114	1700616134764000000	/opt/finetune/MemRift/float_split_stride_pin/build/temp.linux-aarch64-cpython-312/float_split_stride_pin.o	e18793231aa510ea
+168	90430	1700663993296000000	/opt/finetune/MemRift/float_split_stride_pin/build/temp.linux-aarch64-cpython-312/float_split_stride_pin.o	e18793231aa510ea
+43	97160	1700681086940000000	/opt/finetune/MemRift/float_split_stride_pin/build/temp.linux-aarch64-cpython-312/float_split_stride_pin.o	e18793231aa510ea
+47	97209	1700681640584000000	/opt/finetune/MemRift/float_split_stride_pin/build/temp.linux-aarch64-cpython-312/float_split_stride_pin.o	e18793231aa510ea
+45	96814	1700682317228000000	/opt/finetune/MemRift/float_split_stride_pin/build/temp.linux-aarch64-cpython-312/float_split_stride_pin.o	e18793231aa510ea
+44	88584	1700682851852000000	/opt/finetune/MemRift/float_split_stride_pin/build/temp.linux-aarch64-cpython-312/float_split_stride_pin.o	e18793231aa510ea
+46	92779	1700683093140000000	/opt/finetune/MemRift/float_split_stride_pin/build/temp.linux-aarch64-cpython-312/float_split_stride_pin.o	e18793231aa510ea
+45	91894	1700684121724000000	/opt/finetune/MemRift/float_split_stride_pin/build/temp.linux-aarch64-cpython-312/float_split_stride_pin.o	e18793231aa510ea
+41	89022	1700684403488000000	/opt/finetune/MemRift/float_split_stride_pin/build/temp.linux-aarch64-cpython-312/float_split_stride_pin.o	e18793231aa510ea
+45	88151	1700685476744000000	/opt/finetune/MemRift/float_split_stride_pin/build/temp.linux-aarch64-cpython-312/float_split_stride_pin.o	e18793231aa510ea
+52	90327	1700685672448000000	/opt/finetune/MemRift/float_split_stride_pin/build/temp.linux-aarch64-cpython-312/float_split_stride_pin.o	e18793231aa510ea
+45	92716	1700685981816000000	/opt/finetune/MemRift/float_split_stride_pin/build/temp.linux-aarch64-cpython-312/float_split_stride_pin.o	e18793231aa510ea
+46	93326	1700686210056000000	/opt/finetune/MemRift/float_split_stride_pin/build/temp.linux-aarch64-cpython-312/float_split_stride_pin.o	e18793231aa510ea
+47	96530	1700687292016000000	/opt/finetune/MemRift/float_split_stride_pin/build/temp.linux-aarch64-cpython-312/float_split_stride_pin.o	e18793231aa510ea
+47	95057	1700687719348000000	/opt/finetune/MemRift/float_split_stride_pin/build/temp.linux-aarch64-cpython-312/float_split_stride_pin.o	e18793231aa510ea
+44	92451	1700687863292000000	/opt/finetune/MemRift/float_split_stride_pin/build/temp.linux-aarch64-cpython-312/float_split_stride_pin.o	e18793231aa510ea
+52	97191	1700688177496000000	/opt/finetune/MemRift/float_split_stride_pin/build/temp.linux-aarch64-cpython-312/float_split_stride_pin.o	e18793231aa510ea
+43	97436	1700688325884000000	/opt/finetune/MemRift/float_split_stride_pin/build/temp.linux-aarch64-cpython-312/float_split_stride_pin.o	e18793231aa510ea

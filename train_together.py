@@ -2,7 +2,7 @@ import os, psutil, contextlib, weakref
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 import json, mmap, queue, threading, struct, argparse, gc, humanize, sys, types, re, pprint, json, mmap
-import numpy as np, torch, zstandard as zstd, time, imagecodecs, concurrent.futures as fut
+import numpy as np, torch, time, imagecodecs, concurrent.futures as fut
 from collections import deque, defaultdict
 import pandas as pd
 from torch import nn
@@ -17,10 +17,14 @@ from datasets import load_dataset
 from accelerate import init_empty_weights
 import float_split_stride_pin as fs_sp
 
+import zstandard as zstd
+import lz4.frame as lz4f, lz4.block as lz4b
+import io
+
 parser = argparse.ArgumentParser()
 parser.add_argument("--model", default="/opt/models/hf/Mistral-7B-v0.1")
-parser.add_argument("--outdir", default=".weight_comp/prepare_weight/zstd_comped_weights_level21")
-parser.add_argument("--finetune_type", choices=["lora", "qlora"], default="lora", help="Type of finetuning")
+parser.add_argument("--outdir", default="./weight_comp/prepare_weight/zstd_comped_weights_level21")
+parser.add_argument("--finetune_type", choices=["full", "lora", "qlora"], default="lora", help="Type of finetuning")
 parser.add_argument("--check_diff", action="store_true",
                     help="同时加载原始模型并比对差值（耗显存）")
 parser.add_argument("--hook", action="store_true", help="Run with compression hooks")
@@ -29,14 +33,20 @@ parser.add_argument("--print_ratio", action="store_true", help="Print activation
 parser.add_argument("--weight", default=False, action="store_true", help="Switch on weight compression")
 parser.add_argument("--activation", default=False, action="store_true", help="Switch on activation compression")
 parser.add_argument(
-        "--level", type=int, default=-1, help="Zstd compression level (<22)"
+        "--level", type=int, default=1, help="Zstd compression level (<22)"
     )
 parser.add_argument(
         "--round", type=int, default=5, help="# training cycles"
     )
+parser.add_argument(
+        "--max_length", type=int, default=512, help="Input length"
+    )
+parser.add_argument(
+        "--batch_size", type=int, default=1, help="Input batch size"
+    )
 args = parser.parse_args()
 os.makedirs(args.outdir, exist_ok=True)
-print(f"\n\n{args.model=}, {args.outdir=}, {args.weight=}, {args.activation=}")
+print(f"\n\n{args.model=}, {args.outdir=}, {args.weight=}, {args.activation=}, {args.max_length=}")
 rid = 0
 orig_len = new_len = 0
 
@@ -66,8 +76,9 @@ if args.finetune_type == "qlora":
     )
     model = prepare_model_for_kbit_training(model, 
             use_gradient_checkpointing=gradient_checkpointing)
-elif args.finetune_type == "lora":
-    model = AutoModelForCausalLM.from_pretrained(args.model, torch_dtype=MODEL_TYPE, device_map={"": 0})
+else:
+    model = AutoModelForCausalLM.from_pretrained(args.model, 
+                    torch_dtype=MODEL_TYPE, device_map={"": 0})
 
 # cfg = AutoConfig.from_pretrained(args.model)
 # with init_empty_weights():            # 所有 Parameter 都在 device='meta'
@@ -93,17 +104,17 @@ def materialize_trainables(model, device):
 # 在构造优化器 **之前** 调用
 # model = materialize_trainables(model, device)
 
-
-peft_config = LoraConfig(
-            lora_alpha=16,
-            lora_dropout=0.0,
-            r=16,
-            bias="none",
-            task_type="CAUSAL_LM",
-            target_modules= ["gate_proj", "up_proj", "down_proj"]
-    )
-model = get_peft_model(model, peft_config, 
-                autocast_adapter_dtype=True)   # set this to keep the adapters in bfloat16
+if args.finetune_type in ["lora", "qlora"]:
+    peft_config = LoraConfig(
+                lora_alpha=16,
+                lora_dropout=0.0,
+                r=16,
+                bias="none",
+                task_type="CAUSAL_LM",
+                target_modules= ["gate_proj", "up_proj", "down_proj"]
+        )
+    model = get_peft_model(model, peft_config, 
+                    autocast_adapter_dtype=True)   # set this to keep the adapters in bfloat16
 
 
 gc.collect()
@@ -115,7 +126,7 @@ print(f"Peak GPU memory usage: {torch.cuda.max_memory_allocated(device) / 1024 /
 
 _tls = threading.local()
 decomp_lock = threading.Lock()
-decomp_time = 0
+decomp_time = comp_time = 0
 # --------------------------------------------------------------
 #           2. Model Weight Compression & Injection 
 # --------------------------------------------------------------
@@ -725,18 +736,24 @@ def is_lora_weight(tensor: torch.Tensor):
     except Exception:
         return False
 
-def get_cctx(level=-1):
+def get_cctx(algo="zstd", level=-1):
     try:
         return _tls.cctx
     except AttributeError:
-        _tls.cctx = zstd.ZstdCompressor(level=level)
+        if algo == "zstd":
+            _tls.cctx = zstd.ZstdCompressor(level=level)
+        elif algo == "lz4":
+            _tls.cctx = lz4f.LZ4FrameCompressor(compression_level=level)
         return _tls.cctx
 
-def get_dctx():
+def get_dctx(algo="zstd"):
     try:
         return _tls.dctx
     except AttributeError:
-        _tls.dctx = zstd.ZstdDecompressor()
+        if algo == "zstd":
+            _tls.dctx = zstd.ZstdDecompressor()
+        elif algo == "lz4":
+            _tls.dctx = lz4f.LZ4FrameDecompressor()
         return _tls.dctx
 
 
@@ -744,7 +761,7 @@ class HookRuntime:
     def __init__(self, pool_workers=None, window=None):
         self.pool_workers = pool_workers or os.cpu_count() // 3
         self._build()
-        self.window = window or 10
+        self.window = window or 14
     
     # ---------------- internal helpers ----------------
     def _build(self):
@@ -834,7 +851,7 @@ class HookRuntime:
                     cpu_exp = torch.from_numpy(exp_arr)
                 elif algo == "zstd":
                     # dctx = zstd.ZstdDecompressor()
-                    dctx = get_dctx()
+                    dctx = get_dctx(algo)
                     # zrec = dctx.decompress(comped_bytes)
                     # # exp_arr = np.frombuffer(zrec, dtype=np.uint8)
                     # cpu_exp = torch.frombuffer(zrec, dtype=torch.uint8)
@@ -844,25 +861,20 @@ class HookRuntime:
                     with dctx.stream_reader(memoryview(comped_bytes)) as reader:
                         view = memoryview(cpu_exp.numpy())
                         nread = reader.readinto(view)
-                        # assert nread == numel, "decompress size mismatch"
-                        # cpu_exp = cpu_exp[:nread]
+                elif algo == "lz4":
+                    # dctx = lz4f.LZ4FrameDecompressor()
+                    dctx = get_dctx(algo)
+                    zrec = dctx.decompress(comped_bytes)
+                    arr = np.frombuffer(zrec, dtype=np.uint8)
+                    if args.debug:
+                        if not (arr == exp_arr).all():
+                            print(f"{np.frombuffer(comped_bytes, dtype=np.uint8)=}")
+                            print(f"{arr=}, {exp_arr=}")
+                        assert (arr == exp_arr).all()
+                    cpu_exp = torch.empty(arr.shape, dtype=torch.uint8,
+                                        device='cpu', pin_memory=True)
+                    cpu_exp.numpy()[:] = arr
 
-                    # arr = np.frombuffer(zrec, dtype=np.uint8)
-                    # if args.debug:
-                    #     if not (arr == exp_arr).all():
-                    #         print(f"{np.frombuffer(comped_bytes, dtype=np.uint8)=}")
-                    #         print(f"{arr=}, {exp_arr=}")
-                    #     assert (arr == exp_arr).all()
-                    # # 2) 把 arr 拷贝到一个 cpu pin_memory Tensor
-                    # cpu_exp = torch.empty(arr.shape, dtype=torch.uint8,
-                    #                     device='cpu', pin_memory=True)
-                    # # numpy -> pinned Tensor
-                    # cpu_exp.numpy()[:] = arr
-
-                    # assert (exp_arr == exp_rec).all(), "zstd decode error"
-                # print(f"_decode_and_copy: Finished decompression {seq_id}")
-                # jxl_decode_time = time.time() - t1
-                # token.decode_done_evt.set()    # <- 关键：告诉 _unpack "我解压完成了"
                 token.free_future() # delete the compression future to free memory
 
                 # --- GPU copy ---
@@ -1101,13 +1113,14 @@ def build_hooks(rt: HookRuntime):
             # prep_time3 += p3 - p2
 
             def _encode_token(token, algo="JXL"):
+                global comp_time
                 # torch.cuda.set_device(0)
                 
                 # 把当前 stream 的事件插入到 d2h_stream 的等待列表中
                 # current_stream.wait_stream(rt.d2h_stream)
 
                 # global comp_time, comp_cnt
-                # start = time.time()
+                start = time.time()
                 token.DtoC_copy_evt.synchronize()
                 # token.free_gpu_exp()    # 拷贝完成，可以free掉 gpu 上 exp_bits 内存
 
@@ -1146,14 +1159,12 @@ def build_hooks(rt: HookRuntime):
                     # # print(f"{ratio=}")
                 elif algo == "zstd":
                     # cctx = zstd.ZstdCompressor(level=-1)
-                    cctx = get_cctx(args.level)
+                    cctx = get_cctx(algo, args.level)
                     comped_bytes = cctx.compress(arr)
-                    if args.print_ratio:
-                        global orig_len, new_len
-                        orig_len += arr.nbytes
-                        new_len += len(comped_bytes)
-                        # ratio = arr.nbytes / len(comped_bytes)
-                        # print(f"orig={arr.nbytes}, new={len(comped_bytes)}")
+                    # out_buf = io.BytesIO()
+                    # with cctx.stream_writer(out_buf, closefd=False) as compressor:
+                    #     compressor.write(arr.tobytes())    # ✅ 不需要复制 arr，原地读入流式压缩
+                    # comped_bytes = out_buf.getvalue()
 
                     if args.debug:
                         # dctx = zstd.ZstdDecompressor()
@@ -1169,15 +1180,28 @@ def build_hooks(rt: HookRuntime):
                             print(f"{arr=}, {exp_arr=}")
                         assert (arr == exp_arr).all()
                     
-                    # if (exp_arr == 0xFF).any():
-                    #     print(f"Decomp. to 0xFF. {arr=}, {exp_arr=}, {np.sum(arr == 0xFF)=}, {np.sum(exp_arr == 0xFF)=}")
-                    # assert (exp_arr == arr).all(), "zstd encode error"
+                elif algo == "lz4":
+                    cctx = get_cctx(algo, args.level)
+                    # cctx = lz4f.LZ4FrameCompressor(compression_level=args.level)
+                    comped_bytes = lz4f.compress(arr)
 
-                # with comp_lock:
-                #     comp_time += time.time() - start
-                #     comp_cnt += 1
+                    if args.debug:
+                        dctx = lz4f.LZ4FrameDecompressor()
+                        zrec = dctx.decompress(comped_bytes)
+                        exp_arr = np.frombuffer(zrec, dtype=np.uint8)
+                        if not (arr == exp_arr).all():
+                            # print(f"{np.frombuffer(comped_bytes, dtype=np.uint8)=}")
+                            print(f"{arr=}, {exp_arr=}")
+                        assert (arr == exp_arr).all()
+
+                if args.print_ratio:
+                    global orig_len, new_len
+                    orig_len += arr.nbytes
+                    new_len += len(comped_bytes)
                 
                 token.free_cpu_exp_buf()    # 压缩完成，free 掉 cpu 上的 exp_bits 内存
+                
+                comp_time += time.time() - start
                 if args.debug:
                     return comped_bytes, arr
                 else:
@@ -1450,15 +1474,17 @@ def classify_leaf(t: torch.Tensor) -> str:
 def attach_live_mem_hooks(model):
     def _fw_hook(mod, *_):
         torch.cuda.synchronize()
+        torch.cuda.reset_peak_memory_stats()
         print(f"[FW] {mod.__class__.__name__:30s} "
-              f"=> {torch.cuda.memory_allocated()/1024**2:8.1f} MB")
+              f"=> {torch.cuda.max_memory_allocated()/1024**2:8.1f} MB")
     def _bw_hook(mod, *_):
         torch.cuda.synchronize()
+        torch.cuda.reset_peak_memory_stats()
         print(f"[BW] {mod.__class__.__name__:30s} "
-              f"=> {torch.cuda.memory_allocated()/1024**2:8.1f} MB")
+              f"=> {torch.cuda.max_memory_allocated()/1024**2:8.1f} MB")
     for m in model.modules():
         m.register_forward_hook(_fw_hook,      prepend=False)
-        m.register_full_backward_hook(_bw_hook,prepend=False)
+        # m.register_full_backward_hook(_bw_hook,prepend=False)
 
 # attach_live_mem_hooks(model)     
 
@@ -1466,15 +1492,22 @@ dataset = load_dataset("timdettmers/openassistant-guanaco")
 df = pd.DataFrame(dataset['train'])
 #Tokenizer
 tokenizer = AutoTokenizer.from_pretrained(args.model, use_fast=True)
-tokenizer.pad_token = tokenizer.unk_token
-tokenizer.pad_token_id =  tokenizer.unk_token_id
+if tokenizer.pad_token is None:
+    if tokenizer.eos_token is not None:
+        tokenizer.pad_token = tokenizer.eos_token
+        tokenizer.pad_token_id = tokenizer.eos_token_id
+    else:
+        tokenizer.add_special_tokens({'pad_token': '[PAD]'})
+        model.resize_token_embeddings(len(tokenizer))
+# tokenizer.pad_token = tokenizer.unk_token
+# tokenizer.pad_token_id =  tokenizer.unk_token_id
 tokenizer.padding_side = 'left'
 
 # sample one input
-sample_text = dataset['train'][0]['text']      # 也可以随机选一条
+sample_text = [dataset['train'][i]['text'] for i in range(args.batch_size)]
 encoding = tokenizer(
     sample_text,
-    max_length=512,
+    max_length=args.max_length,
     padding='max_length',          # 填充到 512
     truncation=True,
     return_tensors='pt'
@@ -1506,7 +1539,7 @@ if gradient_checkpointing:
     model.enable_input_require_grads()
     model.config.use_cache = False  # for mistral or LLaMA, 在大多数 HuggingFace 的 decoder-only 模型（如 Mistral、LLaMA）中，use_cache=True 会导致模型跳过中间状态保存，从而禁用 gradient checkpointing。
 
-def measure(n=10):
+def measure(n=args.round):
     if args.weight:
         prefetch_first_layer(layer2cps, layer_names)
 
@@ -1522,10 +1555,6 @@ def measure(n=10):
         torch.cuda.empty_cache()
         torch.cuda.reset_peak_memory_stats()
         peak0 = torch.cuda.max_memory_allocated(device)
-
-        # stats = compressed_param_memory(model, verbose=True)
-        # print("Logical CPU bytes  :", humanize.naturalsize(stats["total_cpu"], binary=True))
-        # print("Logical GPU bytes  :", humanize.naturalsize(stats["total_gpu"], binary=True))
 
         if args.activation:
             runtime = HookRuntime()
@@ -1543,13 +1572,12 @@ def measure(n=10):
                 loss = model(**inputs).loss
 
             print(f"{loss=}")
-            t = (time.time() - t0)
             peak1 = torch.cuda.max_memory_allocated(device)
             print(f"Round {i}: peak1={(peak1)/1024/1024:.1f} MB")
 
-            # stats = compressed_param_memory(model, verbose=True)
-            # print("Logical CPU bytes  :", humanize.naturalsize(stats["total_cpu"], binary=True))
-            # print("Logical GPU bytes  :", humanize.naturalsize(stats["total_gpu"], binary=True))
+            process = psutil.Process(os.getpid())
+            cpu_mem_peak = process.memory_info().rss / 1024 / 1024  # 单位: MB
+            print(f"Peak CPU memory usage: {cpu_mem_peak:.2f} MB")
             
             if not EVAL:
                 if runtime is not None:
@@ -1562,15 +1590,16 @@ def measure(n=10):
                 optimizer.zero_grad()
                 # print(f"After zero grad")
                 
+            t = (time.time() - t0)
             torch.cuda.synchronize()
 
             peak = torch.cuda.max_memory_allocated(device)
 
             print(f"Round {i}: {t*1000:.1f} ms , peak Δ={peak/1024/1024:.1f} MB")
 
-            process = psutil.Process(os.getpid())
             cpu_mem_peak = process.memory_info().rss / 1024 / 1024  # 单位: MB
             print(f"Peak CPU memory usage: {(cpu_mem_peak-cpu_mem_peak0):.2f} MB")
+            print(f"Compression time: {comp_time*1000:.1f} ms")
             print(f"Decompression time: {decomp_time*1000:.1f} ms")
             if args.print_ratio and orig_len > 0 and new_len > 0:
                 print(f"{orig_len=}, {new_len=}, ratio={orig_len/new_len}")

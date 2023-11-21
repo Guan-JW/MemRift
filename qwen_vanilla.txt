@@ -1,0 +1,17 @@
+args=Namespace(model='/opt/models/hf/Qwen3-0.6B', finetune_type='qlora', autocast_context=False, outdir='./zstd_comped_weights', check_diff=False, max_length=4096, batch_size=1, round=3)
+loss=tensor(14.7749, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 0: peak1=18063.6 MB
+Peak CPU memory usage: 1180.38 MB
+Round 0: 36581.7 ms , peak =19525.6 MB
+Peak CPU memory usage: 1270.10 MB
+loss=tensor(10.5876, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 1: peak1=18113.8 MB
+Peak CPU memory usage: 1272.60 MB
+Round 1: 33291.2 ms , peak =19575.7 MB
+Peak CPU memory usage: 1273.26 MB
+loss=tensor(7.5052, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 2: peak1=18113.8 MB
+Peak CPU memory usage: 1273.26 MB
+Round 2: 33278.5 ms , peak =19575.7 MB
+Peak CPU memory usage: 1273.26 MB
+Saved into ctx (tensor → times saved):

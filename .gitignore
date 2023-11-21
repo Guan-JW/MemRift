@@ -1,3 +1,5 @@
 weight_comp/prepare_weight/zstd_comped_weights
 weight_comp/prepare_weight/zstd_comped_weights_level21
 weight_comp/prepare_weight/zstd_comped_weights_level22
+weight_comp/prepare_weight/Llama-3.1-8B-zstd-compressed-weights
+weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights

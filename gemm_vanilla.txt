@@ -1,0 +1,27 @@
+args=Namespace(model='/opt/models/hf/gemma-2-2b-it', finetune_type='lora', autocast_context=False, outdir='./zstd_comped_weights', check_diff=False, max_length=1024, batch_size=1, round=5)
+loss=tensor(20.6466, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 0: peak1=12253.4 MB
+Peak CPU memory usage: 1411.84 MB
+Round 0: 5282.0 ms , peak =12748.9 MB
+Peak CPU memory usage: 1492.72 MB
+loss=tensor(18.7463, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 1: peak1=12358.6 MB
+Peak CPU memory usage: 1495.66 MB
+Round 1: 3797.9 ms , peak =12854.1 MB
+Peak CPU memory usage: 1495.66 MB
+loss=tensor(12.5742, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 2: peak1=12358.6 MB
+Peak CPU memory usage: 1496.09 MB
+Round 2: 3798.9 ms , peak =12854.1 MB
+Peak CPU memory usage: 1496.09 MB
+loss=tensor(4.4609, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 3: peak1=12358.6 MB
+Peak CPU memory usage: 1496.62 MB
+Round 3: 3778.6 ms , peak =12854.1 MB
+Peak CPU memory usage: 1496.62 MB
+loss=tensor(3.9143, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 4: peak1=12358.6 MB
+Peak CPU memory usage: 1496.62 MB
+Round 4: 3799.4 ms , peak =12854.1 MB
+Peak CPU memory usage: 1496.62 MB
+Saved into ctx (tensor → times saved):

@@ -1,0 +1,27 @@
+args=Namespace(model='/opt/models/Llama-3.1-8B', finetune_type='lora', autocast_context=False, outdir='./zstd_comped_weights', check_diff=False, max_length=512, batch_size=1, round=5)
+loss=tensor(8.8206, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 0: peak1=19885.5 MB
+Peak CPU memory usage: 1370.32 MB
+Round 0: 4995.2 ms , peak =19942.0 MB
+Peak CPU memory usage: 1444.92 MB
+loss=tensor(7.0232, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 1: peak1=20109.6 MB
+Peak CPU memory usage: 1447.86 MB
+Round 1: 3856.2 ms , peak =20166.1 MB
+Peak CPU memory usage: 1448.25 MB
+loss=tensor(2.2104, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 2: peak1=20109.6 MB
+Peak CPU memory usage: 1448.25 MB
+Round 2: 3849.5 ms , peak =20166.1 MB
+Peak CPU memory usage: 1448.25 MB
+loss=tensor(1.3593, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 3: peak1=20109.6 MB
+Peak CPU memory usage: 1448.25 MB
+Round 3: 3859.2 ms , peak =20166.1 MB
+Peak CPU memory usage: 1448.25 MB
+loss=tensor(0.9595, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 4: peak1=20109.6 MB
+Peak CPU memory usage: 1448.25 MB
+Round 4: 3836.5 ms , peak =20166.1 MB
+Peak CPU memory usage: 1448.25 MB
+Saved into ctx (tensor → times saved):

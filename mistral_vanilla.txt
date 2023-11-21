@@ -1,0 +1,17 @@
+args=Namespace(model='/opt/models/hf/Mistral-7B-v0.1', finetune_type='lora', autocast_context=False, outdir='./zstd_comped_weights', check_diff=False, max_length=1600, batch_size=1, round=3)
+loss=tensor(4.7055, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 0: peak1=26473.7 MB
+Peak CPU memory usage: 277.74 MB
+Round 0: 21328.3 ms , peak =26473.7 MB
+Peak CPU memory usage: 120.02 MB
+loss=tensor(1.3794, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 1: peak1=26694.3 MB
+Peak CPU memory usage: 141.61 MB
+Round 1: 13125.2 ms , peak =26694.3 MB
+Peak CPU memory usage: 117.02 MB
+loss=tensor(0.5985, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 2: peak1=26694.3 MB
+Peak CPU memory usage: 82.89 MB
+Round 2: 13223.3 ms , peak =26694.3 MB
+Peak CPU memory usage: 80.95 MB
+Saved into ctx (tensor → times saved):

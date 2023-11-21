@@ -1,0 +1,95 @@
+
+
+args.model='/opt/models/Llama-3.1-8B', args.outdir='./weight_comp/prepare_weight/zstd_comped_weights_level21', args.weight=False, args.activation=True
+Peak CPU memory usage: 617.80 MB
+Peak GPU memory usage: 15424.82 MB
+
+
+*************** i=0 ****************
+loss=tensor(8.8206, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 0: peak1=19499.4 MB
+Round 0: 7630.5 ms , peak Δ=19499.4 MB
+Peak CPU memory usage: 1834.46 MB
+Decompression time: 2097.2 ms
+reset done, forced gc
+
+
+*************** i=1 ****************
+loss=tensor(6.9581, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 1: peak1=19711.5 MB
+Round 1: 5206.3 ms , peak Δ=19711.5 MB
+Peak CPU memory usage: 2170.30 MB
+Decompression time: 1986.7 ms
+reset done, forced gc
+
+
+*************** i=2 ****************
+loss=tensor(2.1663, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 2: peak1=19699.5 MB
+Round 2: 4238.6 ms , peak Δ=19699.5 MB
+Peak CPU memory usage: 2143.62 MB
+Decompression time: 1951.2 ms
+reset done, forced gc
+
+
+*************** i=3 ****************
+loss=tensor(1.3373, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 3: peak1=19706.5 MB
+Round 3: 4197.6 ms , peak Δ=19706.5 MB
+Peak CPU memory usage: 2425.53 MB
+Decompression time: 2139.4 ms
+reset done, forced gc
+
+
+*************** i=4 ****************
+loss=tensor(0.9508, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 4: peak1=19706.5 MB
+Round 4: 4216.4 ms , peak Δ=19706.5 MB
+Peak CPU memory usage: 2188.75 MB
+Decompression time: 2092.3 ms
+reset done, forced gc
+
+
+*************** i=5 ****************
+loss=tensor(0.8684, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 5: peak1=19708.5 MB
+Round 5: 4162.2 ms , peak Δ=19708.5 MB
+Peak CPU memory usage: 2480.83 MB
+Decompression time: 2035.6 ms
+reset done, forced gc
+
+
+*************** i=6 ****************
+loss=tensor(0.8362, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 6: peak1=19708.5 MB
+Round 6: 3880.3 ms , peak Δ=19708.5 MB
+Peak CPU memory usage: 2113.05 MB
+Decompression time: 2037.2 ms
+reset done, forced gc
+
+
+*************** i=7 ****************
+loss=tensor(0.8167, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 7: peak1=19708.5 MB
+Round 7: 4006.9 ms , peak Δ=19708.5 MB
+Peak CPU memory usage: 2150.05 MB
+Decompression time: 1861.7 ms
+reset done, forced gc
+
+
+*************** i=8 ****************
+loss=tensor(0.7933, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 8: peak1=19708.5 MB
+Round 8: 4113.9 ms , peak Δ=19708.5 MB
+Peak CPU memory usage: 2308.65 MB
+Decompression time: 1989.6 ms
+reset done, forced gc
+
+
+*************** i=9 ****************
+loss=tensor(0.7697, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 9: peak1=19708.5 MB
+Round 9: 4146.4 ms , peak Δ=19708.5 MB
+Peak CPU memory usage: 2300.00 MB
+Decompression time: 2098.1 ms
+reset done, forced gc

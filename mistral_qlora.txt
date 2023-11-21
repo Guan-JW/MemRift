@@ -1,0 +1,52 @@
+args.model='/opt/models/hf/Mistral-7B-v0.1', args.outdir='./zstd_comped_weights'
+loss=tensor(4.7144, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 0: peak1=19673.2 MB
+Peak CPU memory usage: 1304.16 MB
+Round 0: 17891.9 ms , peak =19673.2 MB
+Peak CPU memory usage: 1394.07 MB
+loss=tensor(1.1147, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 1: peak1=19897.6 MB
+Peak CPU memory usage: 1397.25 MB
+Round 1: 15920.8 ms , peak =19897.6 MB
+Peak CPU memory usage: 1397.56 MB
+loss=tensor(0.4043, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 2: peak1=19897.6 MB
+Peak CPU memory usage: 1397.56 MB
+Round 2: 15919.3 ms , peak =19897.6 MB
+Peak CPU memory usage: 1397.56 MB
+loss=tensor(0.3449, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 3: peak1=19897.6 MB
+Peak CPU memory usage: 1397.63 MB
+Round 3: 15928.0 ms , peak =19897.6 MB
+Peak CPU memory usage: 1398.13 MB
+loss=tensor(0.3391, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 4: peak1=19897.6 MB
+Peak CPU memory usage: 1398.13 MB
+Round 4: 15912.2 ms , peak =19897.6 MB
+Peak CPU memory usage: 1398.13 MB
+loss=tensor(0.3278, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 5: peak1=19897.6 MB
+Peak CPU memory usage: 1398.13 MB
+Round 5: 15939.6 ms , peak =19897.6 MB
+Peak CPU memory usage: 1398.13 MB
+loss=tensor(0.3111, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 6: peak1=19897.6 MB
+Peak CPU memory usage: 1398.13 MB
+Round 6: 15905.3 ms , peak =19897.6 MB
+Peak CPU memory usage: 1398.13 MB
+loss=tensor(0.2916, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 7: peak1=19897.6 MB
+Peak CPU memory usage: 1398.17 MB
+Round 7: 15952.1 ms , peak =19897.6 MB
+Peak CPU memory usage: 1398.17 MB
+loss=tensor(0.2691, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 8: peak1=19897.6 MB
+Peak CPU memory usage: 1398.17 MB
+Round 8: 15876.7 ms , peak =19897.6 MB
+Peak CPU memory usage: 1398.17 MB
+loss=tensor(0.2454, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 9: peak1=19897.6 MB
+Peak CPU memory usage: 1398.17 MB
+Round 9: 15923.9 ms , peak =19897.6 MB
+Peak CPU memory usage: 1398.17 MB
+Saved into ctx (tensor → times saved):

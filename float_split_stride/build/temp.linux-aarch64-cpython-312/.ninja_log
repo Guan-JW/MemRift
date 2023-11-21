@@ -1,0 +1,5 @@
+# ninja log v5
+0	108192	1748607085604000000	/opt/finetune/float_split_stride/build/temp.linux-aarch64-cpython-312/float_split_stride.o	17395e76759d08b0
+161	116159	1748616391920000000	/opt/finetune/float_split_stride/build/temp.linux-aarch64-cpython-312/float_split_stride.o	17395e76759d08b0
+221	118339	1748617977000000000	/opt/finetune/float_split_stride/build/temp.linux-aarch64-cpython-312/float_split_stride.o	17395e76759d08b0
+251	108795	1700604694532000000	/opt/finetune/float_split_stride/build/temp.linux-aarch64-cpython-312/float_split_stride.o	17395e76759d08b0

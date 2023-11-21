@@ -1,107 +1,145 @@
 
 
-args.model='/opt/models/hf/Mistral-7B-v0.1', args.outdir='./prepare_weight/zstd_comped_weights'
-Peak CPU memory usage: 613.65 MB
-Peak GPU memory usage: 13920.82 MB
-[before_inject] GPU: allocated=13920.5 MB, reserved=14052.0 MB | CPU RSS=613.7 MB
-[before inject] logical param size = 13.6 GiB
-[after_inject] GPU: allocated=7264.3 MB, reserved=7340.0 MB | CPU RSS=3183.3 MB
-[after inject] logical param size = 608.0 MiB
-Peak CPU memory usage: 3183.30 MB
-Peak GPU memory usage: 14312.51 MB
-sign  : 6.5 GiB
-exp   : 2.4 GiB
-bf16  : 0 Bytes
-python: 22.5 KiB
----------------
-TOTAL : 8.9 GiB
+args.model='/opt/models/hf/TinyLlama-1.1B-Chat-v1.0', args.outdir='./weight_comp/prepare_weight/zstd_comped_weights_level21', args.weight=False, args.activation=True, args.max_length=1024
+Peak CPU memory usage: 650.00 MB
+Peak GPU memory usage: 2129.22 MB
 
 
 *************** i=0 ****************
-loss=tensor(6.5809, device='cuda:0', grad_fn=<NllLossBackward0>)
-Round 0: peak1=11125.0 MB
-Round 0: 9512.2 ms , peak Δ=11125.0 MB
-Peak CPU memory usage: 4084.84 MB
-Decompression time: 28670.0 ms
+loss=tensor(6.0450, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 0: 12632.1 ms , 12632.3 ms , peak Δ=14979.7 MB
+Peak CPU memory usage: 2636.64 MB
+- Fwd time: 5705.5 ms
+- Bwd time: 6926.6 ms
+Compression time: 21608.1 ms
+	Wait comp start time: 7276.2 ms
+Decompression time: 17711.8 ms
+	Wait comp done time: 1244.2 ms
+	Wait decomp done time: 14459.7 ms
+	Wait merge done time: 2007.4 ms
+Pack time: 3557.1 ms
+	Prep time 1: 23.0 ms
+		 - pp1: 0.6 ms
+		 - pp2: 4.7 ms
+		 - pp3: 3.7 ms
+		 - pp4: 0.3 ms
+	Prep time 2: 3460.4 ms
+	Prep time 3: 57.3 ms
+	Prep time 4: 15.5 ms
+Unpack time: 5049.3 ms
+	Post time 1: 80.7 ms
+	Post time 2: 3161.7 ms
+	Post time 3: 1734.1 ms
 reset done, forced gc
 
 
 *************** i=1 ****************
-loss=tensor(5.6107, device='cuda:0', grad_fn=<NllLossBackward0>)
-Round 1: peak1=11336.0 MB
-Round 1: 8476.3 ms , peak Δ=11336.0 MB
-Peak CPU memory usage: 4387.48 MB
-Decompression time: 28107.4 ms
+loss=tensor(5.7467, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 1: 10652.6 ms , 11757.6 ms , peak Δ=14713.6 MB
+Peak CPU memory usage: 2860.14 MB
+- Fwd time: 5058.5 ms
+- Bwd time: 5594.1 ms
+Compression time: 41388.0 ms
+	Wait comp start time: 7080.5 ms
+Decompression time: 16817.5 ms
+	Wait comp done time: 145.8 ms
+	Wait decomp done time: 14396.3 ms
+	Wait merge done time: 2274.9 ms
+Pack time: 2921.3 ms
+	Prep time 1: 10.4 ms
+		 - pp1: 0.6 ms
+		 - pp2: 3.4 ms
+		 - pp3: 10.4 ms
+		 - pp4: 0.3 ms
+	Prep time 2: 2836.2 ms
+	Prep time 3: 61.1 ms
+	Prep time 4: 12.7 ms
+Unpack time: 4961.5 ms
+	Post time 1: 80.3 ms
+	Post time 2: 3149.6 ms
+	Post time 3: 1634.9 ms
 reset done, forced gc
 
 
 *************** i=2 ****************
-loss=tensor(3.7453, device='cuda:0', grad_fn=<NllLossBackward0>)
-Round 2: peak1=11338.0 MB
-Round 2: 8448.7 ms , peak Δ=11338.0 MB
-Peak CPU memory usage: 4377.16 MB
-Decompression time: 27723.6 ms
+loss=tensor(4.9007, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 2: 10748.6 ms , 11714.1 ms , peak Δ=14821.6 MB
+Peak CPU memory usage: 3348.58 MB
+- Fwd time: 5071.0 ms
+- Bwd time: 5677.6 ms
+Compression time: 61187.6 ms
+	Wait comp start time: 7253.0 ms
+Decompression time: 16854.3 ms
+	Wait comp done time: 185.0 ms
+	Wait decomp done time: 14710.4 ms
+	Wait merge done time: 1958.4 ms
+Pack time: 2804.5 ms
+	Prep time 1: 10.8 ms
+		 - pp1: 0.6 ms
+		 - pp2: 3.5 ms
+		 - pp3: 3.6 ms
+		 - pp4: 0.3 ms
+	Prep time 2: 2716.9 ms
+	Prep time 3: 57.3 ms
+	Prep time 4: 16.2 ms
+Unpack time: 5028.0 ms
+	Post time 1: 77.0 ms
+	Post time 2: 3195.7 ms
+	Post time 3: 1665.4 ms
 reset done, forced gc
 
 
 *************** i=3 ****************
-loss=tensor(2.4370, device='cuda:0', grad_fn=<NllLossBackward0>)
-Round 3: peak1=11339.1 MB
-Round 3: 8440.8 ms , peak Δ=11339.1 MB
-Peak CPU memory usage: 4274.87 MB
-Decompression time: 28037.6 ms
+loss=tensor(3.7612, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 3: 10700.5 ms , 11628.5 ms , peak Δ=14821.6 MB
+Peak CPU memory usage: 3405.39 MB
+- Fwd time: 5073.9 ms
+- Bwd time: 5626.6 ms
+Compression time: 80873.5 ms
+	Wait comp start time: 7587.9 ms
+Decompression time: 16545.3 ms
+	Wait comp done time: 159.2 ms
+	Wait decomp done time: 14531.4 ms
+	Wait merge done time: 1854.2 ms
+Pack time: 2729.3 ms
+	Prep time 1: 10.5 ms
+		 - pp1: 0.6 ms
+		 - pp2: 3.4 ms
+		 - pp3: 3.4 ms
+		 - pp4: 0.3 ms
+	Prep time 2: 2648.8 ms
+	Prep time 3: 52.8 ms
+	Prep time 4: 16.3 ms
+Unpack time: 5023.8 ms
+	Post time 1: 72.7 ms
+	Post time 2: 2970.7 ms
+	Post time 3: 1909.2 ms
 reset done, forced gc
 
 
 *************** i=4 ****************
-loss=tensor(2.1267, device='cuda:0', grad_fn=<NllLossBackward0>)
-Round 4: peak1=11332.0 MB
-Round 4: 8438.3 ms , peak Δ=11332.0 MB
-Peak CPU memory usage: 4445.26 MB
-Decompression time: 28132.7 ms
-reset done, forced gc
-
-
-*************** i=5 ****************
-loss=tensor(1.8981, device='cuda:0', grad_fn=<NllLossBackward0>)
-Round 5: peak1=11338.1 MB
-Round 5: 8497.9 ms , peak Δ=11338.1 MB
-Peak CPU memory usage: 4281.46 MB
-Decompression time: 27931.6 ms
-reset done, forced gc
-
-
-*************** i=6 ****************
-loss=tensor(1.7965, device='cuda:0', grad_fn=<NllLossBackward0>)
-Round 6: peak1=11330.1 MB
-Round 6: 8480.0 ms , peak Δ=11330.1 MB
-Peak CPU memory usage: 4366.55 MB
-Decompression time: 27874.9 ms
-reset done, forced gc
-
-
-*************** i=7 ****************
-loss=tensor(1.6916, device='cuda:0', grad_fn=<NllLossBackward0>)
-Round 7: peak1=11332.0 MB
-Round 7: 8458.9 ms , peak Δ=11332.0 MB
-Peak CPU memory usage: 4508.86 MB
-Decompression time: 28212.8 ms
-reset done, forced gc
-
-
-*************** i=8 ****************
-loss=tensor(1.6079, device='cuda:0', grad_fn=<NllLossBackward0>)
-Round 8: peak1=11350.1 MB
-Round 8: 8439.7 ms , peak Δ=11350.1 MB
-Peak CPU memory usage: 4461.99 MB
-Decompression time: 27913.4 ms
-reset done, forced gc
-
-
-*************** i=9 ****************
-loss=tensor(1.5471, device='cuda:0', grad_fn=<NllLossBackward0>)
-Round 9: peak1=11347.1 MB
-Round 9: 8436.8 ms , peak Δ=11347.1 MB
-Peak CPU memory usage: 4446.02 MB
-Decompression time: 27787.5 ms
+loss=tensor(2.7618, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 4: 10690.9 ms , 11752.0 ms , peak Δ=14761.6 MB
+Peak CPU memory usage: 3640.81 MB
+- Fwd time: 5062.9 ms
+- Bwd time: 5628.0 ms
+Compression time: 100439.5 ms
+	Wait comp start time: 7056.7 ms
+Decompression time: 16653.8 ms
+	Wait comp done time: 197.4 ms
+	Wait decomp done time: 14433.9 ms
+	Wait merge done time: 2022.1 ms
+Pack time: 2725.9 ms
+	Prep time 1: 10.8 ms
+		 - pp1: 0.5 ms
+		 - pp2: 7.5 ms
+		 - pp3: 3.3 ms
+		 - pp4: 0.2 ms
+	Prep time 2: 2642.0 ms
+	Prep time 3: 59.4 ms
+	Prep time 4: 12.7 ms
+Unpack time: 5016.4 ms
+	Post time 1: 72.4 ms
+	Post time 2: 2985.8 ms
+	Post time 3: 1874.9 ms
 reset done, forced gc

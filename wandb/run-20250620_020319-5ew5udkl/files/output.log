@@ -1,0 +1,59 @@
+
+
+args.model='/opt/models/hf/TinyLlama-1.1B-Chat-v1.0', args.outdir='./weight_comp/prepare_weight/zstd_comped_weights_level21', args.weight=False, args.activation=True, args.max_length=2048
+init AsyncCompressor
+type(model) = <class 'transformers.models.llama.modeling_llama.LlamaForCausalLM'>
+type(model.model) = <class 'transformers.models.llama.modeling_llama.LlamaModel'>
+type(container) = <class 'transformers.models.llama.modeling_llama.LlamaModel'>
+Peak CPU memory usage: 753.97 MB
+Peak GPU memory usage: 2129.22 MB
+Using the latest cached version of the dataset since timdettmers/openassistant-guanaco couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /data/models/huggingface/datasets/timdettmers___openassistant-guanaco/default/0.0.0/831dabac2283d99420cda0b673d7a2a43849f17a (last modified on Thu May  1 09:51:59 2025).
+
+
+*************** i=0 ****************
+tok.out.shape=torch.Size([2048, 2048])
+tok.out.shape=torch.Size([2048, 2048])
+tok.out.shape=torch.Size([2048, 2048])
+tok.out.shape=torch.Size([2048, 2048])
+tok.out.shape=torch.Size([2048, 2048])
+tok.out.shape=torch.Size([2048, 2048])
+tok.out.shape=torch.Size([2048, 2048])
+tok.out.shape=torch.Size([2048, 2048])
+tok.out.shape=torch.Size([2048, 2048])
+tok.out.shape=torch.Size([2048, 2048])
+tok.out.shape=torch.Size([2048, 2048])
+tok.out.shape=torch.Size([2048, 2048])
+tok.out.shape=torch.Size([2048, 2048])
+tok.out.shape=torch.Size([2048, 2048])
+tok.out.shape=torch.Size([2048, 2048])
+tok.out.shape=torch.Size([2048, 2048])
+tok.out.shape=torch.Size([2048, 2048])
+tok.out.shape=torch.Size([2048, 2048])
+tok.out.shape=torch.Size([2048, 2048])
+tok.out.shape=torch.Size([2048, 2048])
+tok.out.shape=torch.Size([2048, 2048])
+loss=tensor(6.0270, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 0: 14687.9 ms , 14688.1 ms , peak Δ=11838.2 MB
+Peak CPU memory usage: 809.09 MB
+- Fwd time: 12385.2 ms
+- Bwd time: 2302.7 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms

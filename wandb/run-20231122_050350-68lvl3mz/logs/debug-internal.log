@@ -1,0 +1,81 @@
+{"time":"2023-11-22T05:03:50.98527632+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20231122_050350-68lvl3mz/logs/debug-core.log"}
+{"time":"2023-11-22T05:03:51.811862624+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:03:54.7062432+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:04:00.01028496+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:04:09.761138752+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:04:27.108896288+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:05:04.002005696+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:06:04.627718528+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:07:05.265479264+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:08:05.890250688+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:09:06.558793856+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:10:07.20233216+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:11:07.808710848+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:12:08.64960352+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:13:09.291120704+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:14:09.922063936+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:15:10.5518512+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:16:11.197435808+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:17:12.072313408+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:18:12.711253696+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:19:13.332306912+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:20:13.971940416+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:20:13.972869664+08:00","level":"ERROR","msg":"Failed to load features, feature will default to disabled","error":"api: failed sending: POST https://api.wandb.ai/graphql giving up after 21 attempt(s): Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:20:13.973671392+08:00","level":"INFO","msg":"stream: created new stream","id":"68lvl3mz"}
+{"time":"2023-11-22T05:20:13.973734208+08:00","level":"INFO","msg":"stream: started","id":"68lvl3mz"}
+{"time":"2023-11-22T05:20:13.973760672+08:00","level":"INFO","msg":"handler: started","stream_id":"68lvl3mz"}
+{"time":"2023-11-22T05:20:13.97377552+08:00","level":"INFO","msg":"sender: started","stream_id":"68lvl3mz"}
+{"time":"2023-11-22T05:20:13.973836288+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"68lvl3mz"}
+{"time":"2023-11-22T05:20:13.991484832+08:00","level":"INFO","msg":"stream: closing","id":"68lvl3mz"}
+{"time":"2023-11-22T05:20:14.613715872+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:20:17.464881152+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:20:22.967742752+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:20:32.678624416+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:20:49.521088896+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:21:25.571497312+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:22:26.417139008+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:23:27.025634016+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:24:27.679978944+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:25:28.323715616+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:26:28.963362304+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:27:29.594975456+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:28:30.5038736+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:29:31.144705536+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:30:13.991451296+08:00","level":"WARN","msg":"sender: taking a long time","seconds":600.000605312,"work":"RunUpdateWork; Control(mailbox_slot:\"jju6u59dx6zb\" connection_id:\"127.0.0.1:35868\")"}
+{"time":"2023-11-22T05:30:31.771949856+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:31:32.403550112+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:32:33.239276096+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:33:33.873029952+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:34:35.526395712+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:35:36.15435488+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:36:37.038570176+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:36:37.039390464+08:00","level":"ERROR","msg":"runupserter: failed to init run","error":"api: failed sending: POST https://api.wandb.ai/graphql giving up after 21 attempt(s): Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:36:37.040126912+08:00","level":"INFO","msg":"sender: succeeded after taking longer than expected","seconds":983.049191904,"work":"RunUpdateWork; Control(mailbox_slot:\"jju6u59dx6zb\" connection_id:\"127.0.0.1:35868\")"}
+{"time":"2023-11-22T05:36:37.041157536+08:00","level":"ERROR","msg":"sender: uploadConfigFile: stream: no run"}
+{"time":"2023-11-22T05:36:38.633795328+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:36:41.58531856+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:36:47.0019528+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:36:56.866381696+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:37:17.789920032+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:37:55.051943872+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:38:55.689454368+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:39:57.348023488+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:40:57.969582464+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:41:58.9099256+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:42:59.779943296+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:44:00.428130016+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:45:01.076097888+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:46:01.723491264+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:47:02.629497376+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:48:03.25594+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:49:03.904442496+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:50:04.53891008+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:51:05.171657376+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:52:05.8152504+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:53:06.457292992+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:53:06.457972512+08:00","level":"ERROR","msg":"runfiles: CreateRunFiles returned error: api: failed sending: POST https://api.wandb.ai/graphql giving up after 21 attempt(s): Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2023-11-22T05:53:06.477539328+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2023-11-22T05:53:06.477960064+08:00","level":"INFO","msg":"handler: closed","stream_id":"68lvl3mz"}
+{"time":"2023-11-22T05:53:06.478141728+08:00","level":"INFO","msg":"sender: closed","stream_id":"68lvl3mz"}
+{"time":"2023-11-22T05:53:06.47873392+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"68lvl3mz"}
+{"time":"2023-11-22T05:53:06.478814112+08:00","level":"INFO","msg":"stream: closed","id":"68lvl3mz"}

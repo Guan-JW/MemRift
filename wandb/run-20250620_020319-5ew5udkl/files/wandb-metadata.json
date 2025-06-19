@@ -1,0 +1,44 @@
+{
+  "os": "Linux-5.15.148-tegra-aarch64-with-glibc2.39",
+  "python": "CPython 3.12.3",
+  "startedAt": "2025-06-19T18:03:19.434939Z",
+  "args": [
+    "--hook",
+    "--activation"
+  ],
+  "program": "/opt/finetune/MemRift/train_wrapper.py",
+  "codePath": "train_wrapper.py",
+  "git": {
+    "remote": "https://github.com/Guan-JW/MemRift.git",
+    "commit": "420139bfa1bef503c7b4f03a0cc0d6fd40ac9044"
+  },
+  "root": "/opt/finetune/MemRift",
+  "host": "ubuntu",
+  "executable": "/opt/venv/bin/python3",
+  "codePathLocal": "train_wrapper.py",
+  "cpu_count": 8,
+  "cpu_count_logical": 8,
+  "gpu": "Orin (nvgpu)",
+  "gpu_count": 1,
+  "disk": {
+    "/": {
+      "total": "1967813582848",
+      "used": "427911335936"
+    }
+  },
+  "memory": {
+    "total": "32188051456"
+  },
+  "cpu": {
+    "count": 8,
+    "countLogical": 8
+  },
+  "gpu_nvidia": [
+    {
+      "name": "Orin (nvgpu)",
+      "architecture": "Ampere",
+      "uuid": "72136144-6de6-51ba-9974-e3ac199c954a"
+    }
+  ],
+  "cudaVersion": "12.8"
+}

@@ -1,145 +1,143 @@
 
 
-args.model='/opt/models/hf/TinyLlama-1.1B-Chat-v1.0', args.outdir='./weight_comp/prepare_weight/zstd_comped_weights_level21', args.weight=False, args.activation=True, args.max_length=1024
-Peak CPU memory usage: 650.00 MB
+args.model='/opt/models/hf/TinyLlama-1.1B-Chat-v1.0', args.outdir='./weight_comp/prepare_weight/zstd_comped_weights_level21', args.weight=False, args.activation=False, args.max_length=2048
+Peak CPU memory usage: 725.12 MB
 Peak GPU memory usage: 2129.22 MB
 
 
 *************** i=0 ****************
-loss=tensor(6.0450, device='cuda:0', grad_fn=<NllLossBackward0>)
-Round 0: 12632.1 ms , 12632.3 ms , peak Δ=14979.7 MB
-Peak CPU memory usage: 2636.64 MB
-- Fwd time: 5705.5 ms
-- Bwd time: 6926.6 ms
-Compression time: 21608.1 ms
-	Wait comp start time: 7276.2 ms
-Decompression time: 17711.8 ms
-	Wait comp done time: 1244.2 ms
-	Wait decomp done time: 14459.7 ms
-	Wait merge done time: 2007.4 ms
-Pack time: 3557.1 ms
-	Prep time 1: 23.0 ms
-		 - pp1: 0.6 ms
-		 - pp2: 4.7 ms
-		 - pp3: 3.7 ms
-		 - pp4: 0.3 ms
-	Prep time 2: 3460.4 ms
-	Prep time 3: 57.3 ms
-	Prep time 4: 15.5 ms
-Unpack time: 5049.3 ms
-	Post time 1: 80.7 ms
-	Post time 2: 3161.7 ms
-	Post time 3: 1734.1 ms
-reset done, forced gc
+loss=tensor(6.0270, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 0: 4301.4 ms , 4301.6 ms , peak Δ=7393.6 MB
+Peak CPU memory usage: 800.61 MB
+- Fwd time: 2026.0 ms
+- Bwd time: 2275.4 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms
 
 
 *************** i=1 ****************
-loss=tensor(5.7467, device='cuda:0', grad_fn=<NllLossBackward0>)
-Round 1: 10652.6 ms , 11757.6 ms , peak Δ=14713.6 MB
-Peak CPU memory usage: 2860.14 MB
-- Fwd time: 5058.5 ms
-- Bwd time: 5594.1 ms
-Compression time: 41388.0 ms
-	Wait comp start time: 7080.5 ms
-Decompression time: 16817.5 ms
-	Wait comp done time: 145.8 ms
-	Wait decomp done time: 14396.3 ms
-	Wait merge done time: 2274.9 ms
-Pack time: 2921.3 ms
-	Prep time 1: 10.4 ms
-		 - pp1: 0.6 ms
-		 - pp2: 3.4 ms
-		 - pp3: 10.4 ms
-		 - pp4: 0.3 ms
-	Prep time 2: 2836.2 ms
-	Prep time 3: 61.1 ms
-	Prep time 4: 12.7 ms
-Unpack time: 4961.5 ms
-	Post time 1: 80.3 ms
-	Post time 2: 3149.6 ms
-	Post time 3: 1634.9 ms
-reset done, forced gc
+loss=tensor(5.3465, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 1: 3202.5 ms , 3819.4 ms , peak Δ=7463.6 MB
+Peak CPU memory usage: 803.02 MB
+- Fwd time: 1596.6 ms
+- Bwd time: 1605.9 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms
 
 
 *************** i=2 ****************
-loss=tensor(4.9007, device='cuda:0', grad_fn=<NllLossBackward0>)
-Round 2: 10748.6 ms , 11714.1 ms , peak Δ=14821.6 MB
-Peak CPU memory usage: 3348.58 MB
-- Fwd time: 5071.0 ms
-- Bwd time: 5677.6 ms
-Compression time: 61187.6 ms
-	Wait comp start time: 7253.0 ms
-Decompression time: 16854.3 ms
-	Wait comp done time: 185.0 ms
-	Wait decomp done time: 14710.4 ms
-	Wait merge done time: 1958.4 ms
-Pack time: 2804.5 ms
-	Prep time 1: 10.8 ms
-		 - pp1: 0.6 ms
-		 - pp2: 3.5 ms
-		 - pp3: 3.6 ms
-		 - pp4: 0.3 ms
-	Prep time 2: 2716.9 ms
-	Prep time 3: 57.3 ms
-	Prep time 4: 16.2 ms
-Unpack time: 5028.0 ms
-	Post time 1: 77.0 ms
-	Post time 2: 3195.7 ms
-	Post time 3: 1665.4 ms
-reset done, forced gc
+loss=tensor(3.6027, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 2: 3172.0 ms , 3789.5 ms , peak Δ=7463.6 MB
+Peak CPU memory usage: 803.02 MB
+- Fwd time: 1592.0 ms
+- Bwd time: 1580.1 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms
 
 
 *************** i=3 ****************
-loss=tensor(3.7612, device='cuda:0', grad_fn=<NllLossBackward0>)
-Round 3: 10700.5 ms , 11628.5 ms , peak Δ=14821.6 MB
-Peak CPU memory usage: 3405.39 MB
-- Fwd time: 5073.9 ms
-- Bwd time: 5626.6 ms
-Compression time: 80873.5 ms
-	Wait comp start time: 7587.9 ms
-Decompression time: 16545.3 ms
-	Wait comp done time: 159.2 ms
-	Wait decomp done time: 14531.4 ms
-	Wait merge done time: 1854.2 ms
-Pack time: 2729.3 ms
-	Prep time 1: 10.5 ms
-		 - pp1: 0.6 ms
-		 - pp2: 3.4 ms
-		 - pp3: 3.4 ms
-		 - pp4: 0.3 ms
-	Prep time 2: 2648.8 ms
-	Prep time 3: 52.8 ms
-	Prep time 4: 16.3 ms
-Unpack time: 5023.8 ms
-	Post time 1: 72.7 ms
-	Post time 2: 2970.7 ms
-	Post time 3: 1909.2 ms
-reset done, forced gc
+loss=tensor(1.9656, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 3: 3175.6 ms , 3793.2 ms , peak Δ=7463.6 MB
+Peak CPU memory usage: 803.02 MB
+- Fwd time: 1599.5 ms
+- Bwd time: 1576.1 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms
 
 
 *************** i=4 ****************
-loss=tensor(2.7618, device='cuda:0', grad_fn=<NllLossBackward0>)
-Round 4: 10690.9 ms , 11752.0 ms , peak Δ=14761.6 MB
-Peak CPU memory usage: 3640.81 MB
-- Fwd time: 5062.9 ms
-- Bwd time: 5628.0 ms
-Compression time: 100439.5 ms
-	Wait comp start time: 7056.7 ms
-Decompression time: 16653.8 ms
-	Wait comp done time: 197.4 ms
-	Wait decomp done time: 14433.9 ms
-	Wait merge done time: 2022.1 ms
-Pack time: 2725.9 ms
-	Prep time 1: 10.8 ms
-		 - pp1: 0.5 ms
-		 - pp2: 7.5 ms
-		 - pp3: 3.3 ms
-		 - pp4: 0.2 ms
-	Prep time 2: 2642.0 ms
-	Prep time 3: 59.4 ms
-	Prep time 4: 12.7 ms
-Unpack time: 5016.4 ms
-	Post time 1: 72.4 ms
-	Post time 2: 2985.8 ms
-	Post time 3: 1874.9 ms
-reset done, forced gc
+loss=tensor(0.9549, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 4: 3196.4 ms , 3812.1 ms , peak Δ=7463.6 MB
+Peak CPU memory usage: 803.02 MB
+- Fwd time: 1595.4 ms
+- Bwd time: 1601.1 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms
+[1;34mwandb[0m: 
+[1;34mwandb[0m: 🚀 View run [33mstill-dream-3[0m at: [34mhttps://wandb.ai/15692276873/vanilla_jetson/runs/0qpa8wpe[0m
+[1;34mwandb[0m: Find logs at: [1;35mwandb/run-20250618_012446-0qpa8wpe/logs[0m

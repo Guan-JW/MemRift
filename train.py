@@ -21,17 +21,21 @@ import zstandard as zstd
 import lz4.frame as lz4f, lz4.block as lz4b
 import io
 from dataclasses import dataclass
+import wandb, subprocess, re
+from pynvml import nvmlInit, nvmlDeviceGetHandleByIndex, nvmlDeviceGetMemoryInfo
+import torch.cuda.nvtx as nvtx
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--model", default="/opt/models/hf/Mistral-7B-v0.1")
 parser.add_argument("--outdir", default="./weight_comp/prepare_weight/zstd_comped_weights_level21")
 parser.add_argument("--finetune_type", choices=["full", "lora", "qlora"], default="lora", help="Type of finetuning")
+parser.add_argument("--autocast_context", action="store_true", help="Set torch.amp.autocast")
 parser.add_argument("--check_diff", action="store_true",
                     help="同时加载原始模型并比对差值（耗显存）")
 parser.add_argument("--hook", action="store_true", help="Run with compression hooks")
 parser.add_argument("--debug", action="store_true", help="Run with debug")
 parser.add_argument("--print_ratio", action="store_true", help="Print activation's compression ratio")
-parser.add_argument("--print_time", action="store_true", help="Print activation's compression time")
+parser.add_argument("--print_time", action="store_true", help="Print activation's compression ratio")
 parser.add_argument("--weight", default=False, action="store_true", help="Switch on weight compression")
 parser.add_argument("--activation", default=False, action="store_true", help="Switch on activation compression")
 parser.add_argument(
@@ -47,6 +51,68 @@ parser.add_argument(
         "--batch_size", type=int, default=1, help="Input batch size"
     )
 args = parser.parse_args()
+
+
+nvmlInit(); gpu = nvmlDeviceGetHandleByIndex(0)
+if args.hook:
+    if not args.weight:
+        wandb.init(project="memrift_jetson", config=vars(args))  # 把 CLI 参数也存进去
+    else:
+        wandb.init(project="memrift_act_weight_jetson", config=vars(args))  # 把 CLI 参数也存进去
+else:
+    if args.finetune_type == "lora":
+        wandb.init(project="vanilla_jetson", config=vars(args))  # 把 CLI 参数也存进去
+    elif args.finetune_type == "qlora":
+        if args.autocast_context:
+            wandb.init(project="qlora_amp_jetson", config=vars(args))  # 把 CLI 参数也存进去
+        else:
+            wandb.init(project="qlora_jetson", config=vars(args))  # 把 CLI 参数也存进去
+
+wandb.define_metric("timestamp")          # 用绝对时间
+wandb.define_metric("*", step_metric="timestamp")
+
+T0 = time.time()
+# ──────────────────────────────────────────
+# 2.  采样线程：tegrastats + torch
+PAT = re.compile(
+    r'RAM\s+(\d+)/(\d+)MB'           # RAM used / total
+    r'.*?CPU\s+\[([^\]]+)\]'         # 整个  [...]  片段
+    r'.*?GR3D_FREQ\s+(\d+)%',        # GPU util %
+    re.I)
+
+
+def tegra_loop():
+    cmd = ['/usr/bin/tegrastats', '--interval', '500']
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+                            text=True, bufsize=1)
+
+    for line in proc.stdout:
+        m = PAT.search(line)
+        # print(f"{m=}")
+        if not m:
+            continue                          # 依旧安全兜底
+
+        ram_u, ram_t, cpu_blk, gpu_u = m.groups()
+
+        # ① CPU 方括号里提取所有 “99%@freq”
+        cpu_vals = [int(x) for x in re.findall(r'(\d+)%@', cpu_blk)]
+        cpu_avg  = sum(cpu_vals) / len(cpu_vals) if cpu_vals else 0
+
+        wandb.log({
+            "timestamp": int((time.time()-T0)*1000),   # ms step
+            "ram_used_MB": int(ram_u),
+            "ram_total_MB": int(ram_t),
+            "cpu_util":  cpu_avg,                      # 平均 %
+            "gpu_util":  int(gpu_u),
+            "gpu_alloc_MB": torch.cuda.memory_allocated() // 2**20,
+            "gpu_reserved_MB": torch.cuda.memory_reserved() // 2**20 or -1,
+            "cpu_proc_MB": psutil.Process().memory_info().rss // 2**20,
+        }, commit=True)
+    proc.stdout.close()
+
+
+threading.Thread(target=tegra_loop, daemon=True).start()
+
 os.makedirs(args.outdir, exist_ok=True)
 print(f"\n\n{args.model=}, {args.outdir=}, {args.weight=}, {args.activation=}, {args.max_length=}")
 rid = 0
@@ -137,21 +203,10 @@ if args.weight:
         # 模块级别，全局只有这一份；属性却会被线程隔离
     def decompress_into_pinned(bytes_like, numel):
         """把 exponent 压缩数据直接解压到 pinned Tensor"""
-        if args.print_time:
-            t0 = time.time()
+        global decomp_time, decomp_lock
+        t0 = time.time()
         # 1) 申请 pinned buffer
         buf = torch.empty(numel, dtype=torch.uint8, pin_memory=True)
-
-        # 2) 用 streaming API 直接写入
-        # dctx = zstd.ZstdDecompressor()
-        # if not hasattr(_tls, "dctx"):        # 该线程第一次用，创建解压器
-        #     _tls.dctx = zstd.ZstdDecompressor()
-        # zrec = _tls.dctx.decompress(bytes_like)
-        # arr = np.frombuffer(zrec, dtype=np.uint8)
-        
-        # buf = torch.empty(arr.shape, dtype=torch.uint8,
-        #                     device='cpu', pin_memory=True)
-        # buf.numpy()[:] = arr
 
         tls = _tls                          # 取到当前线程的 thread-local 对象
         if not hasattr(tls, "dctx"):        # 该线程第一次用，创建解压器
@@ -162,7 +217,6 @@ if args.weight:
             assert nread == numel, "decompress size mismatch"
 
         if args.print_time:
-            global decomp_time, decomp_lock
             with decomp_lock:
                 decomp_time += (time.time() - t0)
         return buf
@@ -192,12 +246,13 @@ if args.weight:
             self._exp_host = None
             self._bf16     = None
 
-            self.parent, self.attr = parent, attr
             self._ready_event = threading.Event()
             self.CtoD_evt   = None
             self._hooked = False
+            self.stm   = torch.cuda.Stream()
 
             if args.debug:
+                self.parent, self.attr = parent, attr
                 self.layer_id = layer_id
 
         # ------------ on-demand materialize ------------------------
@@ -207,9 +262,6 @@ if args.weight:
             调用方负责与计算流同步（可 wait_stream）。
             """
             try:
-                # if self._bf16 is not None:
-                #     # print(f"Already materialized")
-                #     return self._bf16
 
                 if self._bf16 is not None:
                     return self._bf16   # double-checked
@@ -227,23 +279,20 @@ if args.weight:
 
                 # with torch.cuda.stream(stream):
                 stride = c_contiguous_strides(self.orig_shape)
-                # current_stream = torch.cuda.current_stream()
-                current_stream = torch.cuda.Stream()
-                bf16 = fs_sp.merge(self._exp_host, self.sm_gpu, self.orig_shape, stride, 0, MODEL_TYPE, current_stream.cuda_stream)
+                with torch.cuda.stream(self.stm):
+                    bf16 = fs_sp.merge(self._exp_host, self.sm_gpu, self.orig_shape, stride, 0, MODEL_TYPE, self.stm.cuda_stream)
+                ev = self.stm.record_event()
                 self._bf16 = bf16.view(self.orig_shape)
-                # evt = torch.cuda.Event()
-                # evt.record()          # ensure all copies/kernels before event
-                evt = current_stream.record_event()   # 拷贝结束事件
 
-                self.CtoD_evt = evt
+                # ev = torch.cuda.Event()
+                # ev.record()          # ensure all copies/kernels before event
+                self.CtoD_evt = ev
                 self._ready_event.set()
                 if args.debug:
                     print(f"Setted event! layer={self.layer_id}: {self.parent}-{self.attr}")
 
                 if sync:                       # ------- 同步路径 (漏预取) -------
                     self.CtoD_evt.synchronize()
-
-                # del sign_gpu, exp_gpu, sign_i32, exp_i32
                     
                 return self._bf16
             except Exception as e:
@@ -261,7 +310,8 @@ if args.weight:
             if self._exp_host is not None:
                 del self._exp_host
                 self._exp_host = None
-            self._bf16._source_cp = self
+                
+            self._bf16.record_stream(torch.cuda.current_stream())
             self.data = self._bf16
             _PTR2CP[self._bf16.data_ptr()] = self
 
@@ -278,9 +328,6 @@ if args.weight:
 
             self._bf16 = None
             self.data = torch.empty(0, dtype=torch.bfloat16, device=self.sm_gpu.device)
-            # if self._bf16 is not None:
-            #     del self._bf16
-            #     self._bf16 = None
             self._ready_event.clear()
             self._hooked = False
 
@@ -704,8 +751,8 @@ class TensorLayout:
                 f"offset={self.offset}, dtype={self.dtype})")
 
 class Token:
-    def __init__(self, future, cpu_exp_buf, sm_bits, evt, rid):
-        self.future = future            # 便于重复获取压缩数据
+    def __init__(self, cpu_exp_buf, sm_bits, evt, rid):
+        # self.future = future            # 便于重复获取压缩数据
         self.sm_bits = sm_bits          # 用于恢复数据
         # self.gpu_exp = gpu_exp          # 在数据拷贝期间存放 gpu 上的 exp_bits，防止拷贝出错
         self.cpu_exp_buf = cpu_exp_buf  # 在数据拷贝和压缩期间存放 cpu（pin_memory） 上的 exp_bits，防治拷贝出错
@@ -713,7 +760,7 @@ class Token:
         self.DtoC_copy_evt = evt
 
         self.scheduled = False          # ➜ 已提交 decode 任务？
-        self.lock = threading.Lock()    # ➜ 防止并发重复调度
+        # self.lock = threading.Lock()    # ➜ 防止并发重复调度
         # self.decoded = None
         self.cpu_exp = None # todo : for decompressed data   
         self.st_ref = None  # todo
@@ -739,11 +786,13 @@ class Token:
 
     def free_cpu_exp_buf(self):
         self.cpu_exp_buf = None
-        # self.DtoC_copy_evt = None
+        self.DtoC_copy_evt = None
         
     def release_payload(self):
         self.cpu_exp = None
         self.sm_bits = None
+        self.rst = None
+        self.CtoD_copy_evt = None
     
 def get_model_weight_ptrs(model: torch.nn.Module):
     ptrs = set()
@@ -762,28 +811,18 @@ def is_lora_weight(tensor: torch.Tensor):
         return tensor.is_leaf and tensor.untyped_storage().data_ptr() in model_weight_ptrs
     except Exception:
         return False
+    # return False
 
-def get_cctx(algo="zstd", level=-1):
-    try:
-        return _tls.cctx
-    except AttributeError:
-        if algo == "zstd":
-            _tls.cctx = zstd.ZstdCompressor(level=level)
-        elif algo == "lz4":
-            _tls.cctx = lz4f.LZ4FrameCompressor(compression_level=level)
-        return _tls.cctx
+cctx = zstd.ZstdCompressor(level=args.level, threads=-1, write_checksum=False)
+dctx = zstd.ZstdDecompressor()
 
 def get_dctx(algo="zstd"):
-    try:
-        return _tls.dctx
-    except AttributeError:
-        if algo == "zstd":
-            _tls.dctx = zstd.ZstdDecompressor()
-        elif algo == "lz4":
-            _tls.dctx = lz4f.LZ4FrameDecompressor()
-        return _tls.dctx
+    return dctx
 
+def get_cctx(algo="zstd"):
+    return cctx
 
+comp_done_time = decomp_done_time = merge_time = 0
 class HookRuntime:
     def __init__(self, pool_workers=None, window=None):
         self.pool_workers = pool_workers or os.cpu_count() // 3
@@ -793,15 +832,14 @@ class HookRuntime:
     # ---------------- internal helpers ----------------
     def _build(self):
         # 1. 线程 / 进程池
-        # self.wait_pool    = fut.ThreadPoolExecutor(max_workers=self.pool_workers)
-        self.compress_pool= fut.ThreadPoolExecutor(max_workers=self.pool_workers * 2)
-        self.decode_pool  = fut.ThreadPoolExecutor(max_workers=self.pool_workers)
+        self.compress_pool= fut.ThreadPoolExecutor()
+        self.decode_pool  = fut.ThreadPoolExecutor()
 
         # 2. CUDA stream（必须 *先* 再构造，否则 reset 时还在用旧 stream）
         # self.d2h_stream   = torch.cuda.Stream(priority=0)
         # self.h2d_stream   = torch.cuda.Stream(priority=0)
-        # self.d2h_stream   = torch.cuda.Stream()
-        # self.h2d_stream   = torch.cuda.Stream()
+        self.d2h_stream   = torch.cuda.Stream()
+        self.h2d_stream   = torch.cuda.Stream()
 
         # 3. 运行期状态
         self.tensor_cache = weakref.WeakValueDictionary()   # (ptr,bytes,off) -> Token
@@ -838,7 +876,6 @@ class HookRuntime:
         torch.cuda.reset_peak_memory_stats()
 
         # 可选，主动触发 GC（调试用）
-        import gc
         gc.collect()
         print('reset done, forced gc')
 
@@ -847,25 +884,21 @@ class HookRuntime:
         return self.storage_gen[ptr_key]
     
     # unpack 时调用并挂载到 future 上
-    def _prefetch(self, token, tmeta, seq_id):
+    def _prefetch(self, token, tmeta, seq_id, sync=False):
         fut_jxl = token.future          # 压缩已提交，fut_jxl 完成时拿到 jxl bytes
+        token.scheduled = True
         
-        def _decode_and_copy(fut, algo="zstd"):      # 在线程池中执行
+        def _decode_and_copy(fut, tmeta, algo="zstd", sync=False):      # 在线程池中执行
             try:
-                # global decomp_time, decomp_cnt, wait_comp_done, jxl_decode_done
-                if args.print_time:
-                    start = time.time()
-            
-                current_stream = torch.cuda.Stream()
-                current_stream.wait_event(token.DtoC_copy_evt)
-                
+                global decomp_time, decomp_lock, comp_done_time, decomp_done_time, merge_time
+                start = time.time()
+
                 if args.debug:
                     comped_bytes, exp_arr, numel = fut.result()
                 else:
                     comped_bytes, numel = fut.result()
-                # t1 = time.time()
-                # comp_done_time = t1 - start
-                # token.decode_start_evt.set()    # <- 关键：告诉 _unpack "我开始解压了"
+            
+                t1 = time.time()
                 
                 # --- CPU 解码 ---
                 # print(f"_decode_and_copy: Decompressing {seq_id}")
@@ -876,10 +909,6 @@ class HookRuntime:
                 elif algo == "zstd":
                     # dctx = zstd.ZstdDecompressor()
                     dctx = get_dctx(algo)
-                    # zrec = dctx.decompress(comped_bytes)
-                    # # exp_arr = np.frombuffer(zrec, dtype=np.uint8)
-                    # cpu_exp = torch.frombuffer(zrec, dtype=torch.uint8)
-                    # # cpu_exp = raw.pin_memory()
                     cpu_exp = torch.empty(numel, dtype=torch.uint8,
                                         device='cpu', pin_memory=True)
                     with dctx.stream_reader(memoryview(comped_bytes)) as reader:
@@ -899,73 +928,62 @@ class HookRuntime:
                                         device='cpu', pin_memory=True)
                     cpu_exp.numpy()[:] = arr
 
-                token.free_future() # delete the compression future to free memory
+                t2 = time.time()
 
-                # current_stream = torch.cuda.current_stream()  # 获取当前 stream
-                with torch.cuda.stream(current_stream):
-                    rst = fs_sp.merge(cpu_exp, token.sm_bits, tmeta.shape, tmeta.stride, tmeta.offset, tmeta.dtype, current_stream.cuda_stream)
-                    rst.record_stream(current_stream)
-                # evt = torch.cuda.Event()
-                # evt.record()
-                evt = current_stream.record_event()   # 拷贝结束事件
+                with torch.cuda.stream(self.h2d_stream):
+                    rst = fs_sp.merge(cpu_exp, token.sm_bits, tmeta.shape, tmeta.stride, tmeta.offset, tmeta.dtype, self.h2d_stream.cuda_stream)
+                evt = self.h2d_stream.record_event()
 
-                token.cpu_exp       = cpu_exp     # 为了保险，把 pinned tensor保存到 token，等 copy 结束再删除
-                token.rst           = rst
+                if sync:
+                    evt.synchronize()
+                else:
+                    token.cpu_exp       = cpu_exp     # 为了保险，把 pinned tensor保存到 token，等 copy 结束再删除
+
+                token.rst = rst
                 token.CtoD_copy_evt = evt
                 token.ready_evt.set()             # <- 关键：告诉 _unpack "我好了"
 
-                # assert hasattr(token, "cpu_exp"), "cpu_exp not set!"
-                
+                token.free_future() # delete the compression future to free memory
                 if args.print_time:
-                    global decomp_time, decomp_lock
                     with decomp_lock:
+                        comp_done_time += t1 - start
+                        decomp_done_time += t2 - t1
+                        merge_time += time.time() - t2
                         decomp_time += time.time() - start
-                #     decomp_cnt += 1
-                #     wait_comp_done += comp_done_time
-                #     jxl_decode_done += jxl_decode_time
+                    
             except Exception as e:
                 import traceback, sys
                 traceback.print_exc(file=sys.stderr)
                 raise                # 重新抛给上层，让你能看到
 
-        # 把整个 decode+H2D 拷贝作为回调挂到 fut_jxl 上
-        # fut_jxl.add_done_callback(lambda fut: jpegxl_pool.submit(_decode_and_copy, fut)) # 此处 fut 就是完成了 compress 事件的 fut_jxl 本身
-
-        def _schedule_decode(fut):
-            try:
-                # 压缩完成，删掉 token 中登记的 gpu_exp 和 cpu_exp_buf，节省内存
-                # token.free_gpu_exp()
-                # token.free_cpu_exp_buf()
-                self.decode_pool.submit(_decode_and_copy, fut, "zstd")
-            except Exception as e:
-                print(f"[ERROR] Failed to schedule decode: {e}")
-            
-            
-        fut_jxl.add_done_callback(_schedule_decode)
+        self.decode_pool.submit(_decode_and_copy, fut_jxl, tmeta, "zstd", sync)
 
         return True
 
 
-    def _prefetch_batch(self):
+    def _prefetch_batch(self, set_window=None, sync=True):
         # global PREFETCH_ID
         # ACTIV_Q 尾部 seq 最大
         # lookahead = sorted(ACTIV_Q)[-WINDOW:]   # 取后 WINDOW 个 seq_id
-        lookahead = list(self.activ_q)[-self.window:]    # 取后 WINDOW 个 token
+        window = set_window if set_window is not None else self.window
+        lookahead = list(self.activ_q)[-window:]    # 取后 WINDOW 个 token
         for seq, tmeta, tok in lookahead[::-1]:   # 反向遍历
             if tok.scheduled:
                 # print(f"Already pre-fetched {seq=},")
                 continue
-            self._prefetch(tok, tmeta, seq)
-            with tok.lock:
-                tok.scheduled = True
+            self._prefetch(tok, tmeta, seq, sync=sync)
+            # tok.scheduled = True
+            # PREFETCH_ID -= 1
+            # print(f"_prefetch_batch: {PREFETCH_ID=}")
 
-    def flush_prefetch_tail(self):
+    def flush_prefetch_tail(self, window=10):
         # global PREFETCH_ID
         # PREFETCH_ID = len(ACTIV_Q)
+        return
         with self.q_lock:
             # print(f"flushing tail: {len(ACTIV_Q)}")
             if self.activ_q:                         # 队列非空
-                self._prefetch_batch()
+                self._prefetch_batch(set_window=window, sync=True)
 
     def pop_token(self, seq_id_expected, ensure_prefetch=True):
         """从队尾向前扫描 ≤ WINDOW 步，取到匹配的 seq_id"""
@@ -1001,18 +1019,21 @@ def make_tensor_key(t: torch.Tensor, gen: int):
 #                           Pack & Unpack hooks
 # -------------------------------------------------------------------------
 
-wait_comp_done = 0
+wait_comp_done = wait_comp_start = 0
 jxl_decode_done = 0
-wait_time = decode_time = copy_time = 0
 pack_time = unpack_time = 0
+pp1_time = pp2_time = pp3_time = pp4_time = 0
+wait_time = decode_time = copy_time = 0
 prep_time1 = prep_time2 = prep_time3 = prep_time4 = prep_time5 = 0
 post_time1 = post_time2 = post_time3 = post_time4 = post_time5 = 0
 rid = 0
 
 lid = -1
-uniq_seq_id = 0
 def build_hooks(rt: HookRuntime):
     def _pack(t: torch.Tensor):
+        global prep_time1, prep_time2, prep_time3, prep_time4, pack_time
+        global pp1_time, pp2_time, pp3_time, pp4_time
+        start = time.time()
 
         # ----------------------------------------------------
         #               1. Check frozen weights
@@ -1035,6 +1056,8 @@ def build_hooks(rt: HookRuntime):
 
                     return (cp, t.shape, t.stride())    # 就目前的参数来看，没有对参数做中间 view 的，都是整个转置，故不存 offset
 
+        pp1 = time.time()
+        pp1_time += pp1 - start
 
         # ----------------------------------------------------
         #               2. Check activations
@@ -1045,22 +1068,31 @@ def build_hooks(rt: HookRuntime):
         if is_lora_weight(t):   # 模型权重 tensor
             # print(f"[skip] Detected model weight: shape={t.shape}, dtype={t.dtype}, is_leaf={t.is_leaf}, requires_grad={t.requires_grad}, grad_fn={type(t.grad_fn).__name__ if t.grad_fn else None}")
             return t
+        
+        pp2 = time.time()
+        pp2_time += pp2 - pp1
 
-        if not t.dtype in (torch.float32, torch.bfloat16) or t.numel() < 4096:
+        if not t.dtype in (torch.float32, torch.bfloat16) or t.numel() < 64 * 1024:
             # print(f"Got type {t.dtype} (bytes={t.nbytes}), not fp32 or bf16")
             return t
             # raise TypeError(f"only fp32 / bf16 supported, got {t.dtype}, grad_fn: {type(t.grad_fn).__name__}")
         
-        if not torch.all(torch.isfinite(t)):
-            # print(f"_pack: Found NaN or Inf in unpacked tensor: {t.shape=}")
-            return t
+        pp3 = time.time()
+        pp3_time += pp3 - pp2
+
+        # if not torch.all(torch.isfinite(t)):
+        #     print(f"_pack: Found NaN or Inf in unpacked tensor: {t.shape=}")
+        #     return t
         
-        global prep_time1, prep_time2, prep_time3, prep_time4, pack_time
-        start = time.time()
+        pp4 = time.time()
+        pp4_time += pp4 - pp3
+        start = pp4
 
         ptr_key = make_ptr_key(t)                   # (t.data_ptr(), t.nbytes)
         gen = rt.storage_gen.setdefault(ptr_key, 0)
-        key = make_tensor_key(t, gen)               # (t.data_ptr(), gen, t.nbytes)
+        key = make_tensor_key(t, 0)               # (t.data_ptr(), gen, t.nbytes)
+
+        tmeta = TensorLayout.from_tensor(t)
 
         new_key = True
         if key in rt.tensor_cache:
@@ -1076,119 +1108,42 @@ def build_hooks(rt: HookRuntime):
         p1 = time.time()
         prep_time1 += p1 - start
         
-        orig_t = t
-        # if key not in tensor_cache:
         if new_key:
             key = make_tensor_key(t, gen)   # (t.data_ptr(), gen, t.nbytes), update gen
-
-            global uniq_seq_id
-            uniq_seq_id += 1
-            # print(f"Adding new {key=}")
-
-            # stream = torch.cuda.Stream()
-            # stream.wait_stream(torch.cuda.current_stream())
-            # with torch.cuda.stream(stream):
-            stream = torch.cuda.current_stream()
-            cpu_pin_buf, sm_bits = fs_sp.split(t, stream.cuda_stream)
-            evt = stream.record_event()   # 拷贝结束事件
-            evt.synchronize()
             
+            csm = torch.cuda.current_stream()
+            with torch.cuda.stream(csm):
+                cpu_pin_buf, sm_bits = fs_sp.split(t, csm.cuda_stream)
+            # t.record_stream(csm)
+            evt = csm.record_event()
+            evt.synchronize()
+
+            addr = t.untyped_storage()
+            t.data = t.new_empty(0)
+            # del t
+
             p2 = time.time()
             prep_time2 += p2 - p1   
 
-            def _encode_token(token, algo="JXL"):
+            # arr = cpu_pin_buf.numpy()
+            # numel = arr.size
 
-                # global comp_time, comp_cnt
-                start = time.time()
-                # stream = torch.cuda.Stream()  # 获取当前 stream
-                # stream.wait_event(token.DtoC_copy_evt)  # 等待 DtoC 拷贝完成
-                token.DtoC_copy_evt.synchronize()
-
-                arr = token.cpu_exp_buf.reshape(-1).numpy()
-                numel = arr.size
-
-                if algo == "JXL":
-                    # print("using jxl")
-                    width = 1024    # tunable
-                    pad   = (-arr.size) % width
-                    img   = np.pad(arr, (0, pad)).reshape(-1, width)   # C-contiguous
-                    assert img.dtype == np.uint8, "image must be uint8"
-                    # if not arr.data.contiguous:
-                        # print(f"arr is not contiguous, shape = {arr.shape}, strides = {arr.strides}")
-                    
-                    comped_bytes = imagecodecs.jpegxl_encode(
-                        img,
-                        lossless=1,
-                        bitspersample=8,
-                        photometric='minisblack',        # 1-channel grayscale
-                        # planar=True,                    # default; keep interleaved
-                    )
-                    # # Remember: first view to uint8 then reshape !!!
-                    # rec = imagecodecs.jpegxl_decode(comped_bytes).ravel().view(np.uint8)
-                    # exp_arr = rec[:arr.size].reshape(arr.shape)
-                    # # if not (arr == exp_arr).all():
-                    #     # print(f"{arr.shape=}, {exp_arr.shape=}")
-                    #     # print(f"{arr=}, {exp_arr=}")
-                    #     # exit()
-                    # assert (arr == exp_arr).all(), "JPEG-XL encode error"
-
-                    # ratio = arr.nbytes / len(comped_bytes)
-                    # # print(f"{ratio=}")
-                elif algo == "zstd":
-                    cctx = get_cctx(algo, args.level)
-                    comped_bytes = cctx.compress(arr)
-
-                    if 1:
-                        dctx = get_dctx()
-                        zrec = dctx.decompress(comped_bytes)
-
-                        exp_arr = np.frombuffer(zrec, dtype=np.uint8)
-                        if not (arr == exp_arr).all():
-                            print(f"{arr=}, {exp_arr=}")
-                        assert (arr == exp_arr).all()
-                    
-                elif algo == "lz4":
-                    cctx = get_cctx(algo, args.level)
-                    # cctx = lz4f.LZ4FrameCompressor(compression_level=args.level)
-                    comped_bytes = lz4f.compress(arr)
-
-                    if args.debug:
-                        dctx = lz4f.LZ4FrameDecompressor()
-                        zrec = dctx.decompress(comped_bytes)
-                        exp_arr = np.frombuffer(zrec, dtype=np.uint8)
-                        if not (arr == exp_arr).all():
-                            # print(f"{np.frombuffer(comped_bytes, dtype=np.uint8)=}")
-                            print(f"{arr=}, {exp_arr=}")
-                        assert (arr == exp_arr).all()
-
-                if args.print_ratio:
-                    global orig_len, new_len
-                    orig_len += arr.nbytes
-                    new_len += len(comped_bytes)
-                
-                token.free_cpu_exp_buf()    # 压缩完成，free 掉 cpu 上的 exp_bits 内存
-                
-                if args.debug:
-                    return comped_bytes, arr, numel
-                else:
-                    return comped_bytes, numel
+            # cctx = get_cctx()
+            # comped_bytes = cctx.compress(arr)
+            # del arr
 
             # ---- 3) 生成 token ----
-            token = Token(None, cpu_pin_buf, sm_bits, evt, rid)
-            token.st_ref = weakref.ref(orig_t.untyped_storage())     # weakref to the original "orig_t" (t), not the newly created contiguous t
+            token = Token(cpu_pin_buf, sm_bits, None, rid)
+            # token = Token(None, t, evt, rid)
+            # token.numel = numel
+            token.st_ref = weakref.ref(addr)     # weakref to the original t
             rt.tensor_cache[key] = token
-
-            fut_exp = rt.compress_pool.submit(_encode_token, token, algo="zstd")   # 提交压缩任务
-            token.future = fut_exp
-            if 1:
-                token.t = t
 
             p3 = time.time()
             prep_time3 += p3 - p2
 
         # ---- 4) 生成 tensor 元数据 ----
         p5 = time.time()
-        tmeta = TensorLayout.from_tensor(t)
         with rt.q_lock:
             seq_id = rt.seq_counter
             rt.activ_q.append((seq_id, tmeta, token))   # 记录顺序
@@ -1196,13 +1151,16 @@ def build_hooks(rt: HookRuntime):
         
         meta = {
                 "key": key,
-                # "shape": t.shape,
-                # "stride": t.stride(),
-                # "offset": t.storage_offset(),
-                # "dtype": t.dtype,
+                "tmeta": tmeta,
                 "token": token,  # 把 token 挂在 meta 上，传递给 autograd 进行存储，则不用单独存在 dict 中。用 weakref 将内存管理交给 autograd
                 "seq_id": seq_id,   # 用于恢复顺序
             }
+        # meta = {
+        #     "key": key,
+        #     "tmeta": tmeta,
+        #     "t": t,
+        #     "seq_id": seq_id
+        # }
         prep_time4 += time.time() - p5
 
         # # with pack_lock:
@@ -1249,120 +1207,96 @@ def build_hooks(rt: HookRuntime):
             # print(f"[UNPACK] t.shape={meta.shape}, is_leaf={meta.is_leaf}, grad_fn={type(meta.grad_fn).__name__ if meta.grad_fn else None}, {meta.requires_grad=}")
             return meta
 
+        # torch.cuda.set_device(0)
+
         # global unpack_time, unpack_cnt, wait_time, copy_time, decode_time
-        global post_time1, post_time2, post_time3, post_time4, post_time5, unpack_time
+        global post_time1, post_time2, post_time3, unpack_time
         start = time.time()
 
         seq_id = meta["seq_id"]
+        # print(f"_unpack: {seq_id=}")
         # -------- 3.1 取出当前 token --------
-        with rt.q_lock:
-            token = rt.pop_token(seq_id)
-            # -------- 3.2 peek 下一条并预取 --------
-            if rt.activ_q:                       # 队列非空
-                rt._prefetch_batch()
+        # with rt.q_lock:
+        #     token = rt.pop_token(seq_id)
+        #     # assert token is not None, f"seq_id {seq_id} not found in ACTIV_Q"   # todo: 同步处理兜底
+        #     # -------- 3.2 peek 下一条并预取 --------
+        #     if rt.activ_q:                       # 队列非空
+        #         rt._prefetch_batch()
         p1 = time.time()
         post_time1 += p1 - start
 
-        # ---- 1) 获取 token 元数据 ----
         key = meta['key']
-        # shape = meta['shape']
-        # dtype = meta['dtype']
-        # stride = meta['stride']
-        # offset = meta['offset']
+        token = meta['token']
+        # rst = meta['t']
 
-        token.ready_evt.wait()  # 等待当前 token 解压完成
+        # # ---- 1) 获取 token 元数据 ----
+        tmeta = meta['tmeta']
+        shape = tmeta.shape
+        dtype = tmeta.dtype
+        stride = tmeta.stride
+        offset = tmeta.offset
+        # t = meta['t']
+
+        # comped_bytes = token.cpu_exp_buf
+        # numel = token.numel
+        # dctx = get_dctx()
+        # cpu_exp = torch.empty(numel, dtype=torch.uint8,
+        #                                 device='cpu', pin_memory=True)
+        # with dctx.stream_reader(memoryview(comped_bytes)) as reader:
+        #     view = memoryview(cpu_exp.numpy())
+        #     nread = reader.readinto(view)
+
+        # # token.ready_evt.wait()  # 等待当前 token 解压完成
         ct = time.time()
         post_time2 += ct - p1
 
-        # rst = fs_sp.merge(token.cpu_exp, token.sm_bits, shape, stride, offset, dtype)
+        # if token.sm_bits.dtype == torch.bfloat16:
+        #     cpu_exp = torch.zeros(token.sm_bits.numel(), dtype=torch.uint8, device='cpu', pin_memory=True)
+        #     sm_bits = torch.zeros(token.sm_bits.numel(), dtype=torch.uint8, device='cuda:0')
+        #     rst = fs_sp.merge(cpu_exp, sm_bits, shape, stride, offset, dtype, 0)
+        #     event = torch.cuda.Event()          # ① 创建事件
+        #     event.record()                      # ② 记录到 *当前流*（merge 的 kernel 前面）
+        #     event.synchronize()                 # ③ 等流上所有已排 op 全部完成
+        # elif token.sm_bits.dtype == torch.float32:
+        #     cpu_exp = torch.zeros(token.sm_bits.numel(), dtype=torch.uint8, device='cpu', pin_memory=True)
+        #     sm_bits = torch.zeros(token.sm_bits.numel() * 3, dtype=torch.uint8, device='cuda:0')
+        #     rst = fs_sp.merge(cpu_exp, sm_bits, shape, stride, offset, dtype, 0)
+        #     event = torch.cuda.Event()          # ① 创建事件
+        #     event.record()                      # ② 记录到 *当前流*（merge 的 kernel 前面）
+        #     event.synchronize()                 # ③ 等流上所有已排 op 全部完成
+        # rst = token.sm_bits
 
-        # event = torch.cuda.Event()          # ① 创建事件
-        # event.record()                      # ② 记录到 *当前流*（merge 的 kernel 前面）
-        # event.synchronize()                 # ③ 等流上所有已排 op 全部完成
-        if token.CtoD_copy_evt:
-            # 让主线程当前流等合并完成，但不阻塞 CPU
-            torch.cuda.current_stream().wait_event(token.CtoD_copy_evt)  # 等待 CtoD 拷贝完成
-            # token.CtoD_copy_evt.synchronize()
-            token.CtoD_copy_evt = None
-        rst = token.rst
+        cpu_exp = token.cpu_exp_buf
+        sm_bits = token.sm_bits
+        rst = fs_sp.merge(cpu_exp, sm_bits, shape, stride, offset, dtype, 0)
+        event = torch.cuda.Event()          # ① 创建事件
+        event.record()                      # ② 记录到 *当前流*（merge 的 kernel 前面）
+        event.synchronize()                 # ③ 等流上所有已排 op 全部完成
+
+        # # legacy0 = torch.cuda.default_stream(token.rst.device)
+        # # # legacy0.wait_event(token.CtoD_copy_evt)    # 让 legacy-0 也等 S1
+        # # # torch.cuda.current_stream().wait_event(token.CtoD_copy_evt)
+        # token.CtoD_copy_evt.synchronize()
+        # rst = token.rst
+        # rst.record_stream(torch.cuda.current_stream())
+        # # assert torch.equal(rst, rst1)
 
         post_time3 += time.time() - ct
 
-        # if not args.debug and token.dec_refcount():
-        #     token.release_payload()
+        if token.dec_refcount():
+            token.release_payload()
 
         unpack_time += time.time() - start
-        if 1:
-            t = token.t
-            if 1:
-            # if not torch.allclose(rst, t, rtol=1e-5, atol=1e-8, equal_nan=True):
-            #     # print(f"{seq_id=}, {rst.shape=}, {t.shape=}, {token.refcount=}, {dtype=}")
-            #     print(f"{t.requires_grad=}")
-            #     print(f"{rst=}")
-            #     print(f"{t=}")
-            #     # print(f"{rst.shape=}, {rst.stride()=}, {rst.storage_offset()=}")
-            #     print(f"{t.shape=}, {t.stride()=}, {t.storage_offset()=}")
-            #     print(f"{rst.shape=}, {rst.stride()=}, {rst.storage_offset()=}")
-                current_stream = torch.cuda.current_stream()
-                exp, sm = fs_sp.split(t, current_stream.cuda_stream)
-                rec_t = fs_sp.merge(exp, sm, t.shape, t.stride(), t.storage_offset(), t.dtype, current_stream.cuda_stream)
-
-                # print(f"{torch.equal(exp, token.cpu_exp)=}")
-                if not torch.equal(exp, token.cpu_exp):
-                    print(f"{exp=}")
-                    print(f"{token.cpu_exp=}")
-                    print(f"{exp.shape=}, {token.cpu_exp.shape=}")
-                if not torch.equal(sm, token.sm_bits):
-                    print(f"{sm=}")
-                    print(f"{token.sm_bits=}")
-                # print(f"{torch.equal(sm, token.sm_bits)=}")
-                # print(f"{torch.equal(rec_t, rst)=}")
-                # # print(f"{torch.equal(rec_t, rec_t1)=}")
-                # print(f"{torch.equal(rec_t, t)=}")
-                # print(f"{torch.equal(rec, t)=}")
-                # print()
-                # assert torch.equal(token.exp, exp)
-                # diff_mask = rst != t
-                # diff_indices = torch.nonzero(diff_mask, as_tuple=False)
-                # print(f"{diff_indices.shape=}")
-                # print(f"{rst[diff_indices]=}")
-                # print(f"{t[diff_indices]=}")
-            # assert torch.equal(rst, t)
-            assert torch.allclose(rst, t, rtol=1e-5, atol=1e-8, equal_nan=True)
-
 
         return rst
         # return rec
 
+    # def _pack(t):
+    #     return t
+
+    # def _unpack(t):
+    #     return t
     return _pack, _unpack
-
-
-def build_ptr_tables(model):
-    param_ptr2name  = {}
-    buffer_ptr2name = {}
-    for n, p in model.named_parameters(recurse=True):
-        param_ptr2name[p.untyped_storage().data_ptr()] = n          # e.g. "layers.0.mlp.fc1.weight"
-    for n, b in model.named_buffers(recurse=True):
-        buffer_ptr2name[b.untyped_storage().data_ptr()] = n         # e.g. "layers.0.norm.bias"
-    return param_ptr2name, buffer_ptr2name
-param_ptr2name, buffer_ptr2name = build_ptr_tables(model)
-
-def classify_leaf(t: torch.Tensor) -> str:
-    ptr = t.untyped_storage().data_ptr()
-    if ptr in param_ptr2name:
-        if t.requires_grad:
-            return "trainable_param"
-        else:
-            return "frozen_param"
-
-    if ptr in buffer_ptr2name:
-        return "buffer_const"           # running_mean, running_var, mask…
-    if t.dtype == torch.bool:
-        return "mask"
-    if t.numel() < 1024:
-        return "small_const"            # dropout 比例、eps、γβ view 等
-    return "input_or_detached"
-
 
 
 def attach_live_mem_hooks(model):
@@ -1421,34 +1355,44 @@ EVAL=False
 if EVAL:
     model.eval()
 else:
-    trainable = (
-        p for p in model.parameters()
-        if isinstance(p, torch.nn.Parameter) and p.requires_grad
-    )
     model.train()
-    optimizer = torch.optim.AdamW(trainable, lr=2e-4)
+    if not args.weight:
+        optimizer = torch.optim.AdamW(model.parameters(), lr=2e-4)
+    else:
+        trainable = (
+            p for p in model.parameters()
+            if isinstance(p, torch.nn.Parameter) and p.requires_grad
+        )
+        optimizer = torch.optim.AdamW(trainable, lr=2e-4)
 
 if gradient_checkpointing:
     model.gradient_checkpointing_enable()
     model.enable_input_require_grads()
     model.config.use_cache = False  # for mistral or LLaMA, 在大多数 HuggingFace 的 decoder-only 模型（如 Mistral、LLaMA）中，use_cache=True 会导致模型跳过中间状态保存，从而禁用 gradient checkpointing。
 
+bf16_ctx = torch.amp.autocast(device_type='cuda', dtype=torch.bfloat16) if args.autocast_context and args.finetune_type=="qlora" else contextlib.nullcontext()
+
 def measure(n=args.round):
     if args.weight:
         prefetch_first_layer(layer2cps, layer_names)
+    
+    global decomp_time, comp_time, pack_time, comp_done_time, decomp_done_time, merge_time, prep_time1, prep_time2, prep_time3, prep_time4
+    global unpack_time, post_time1, post_time2, post_time3
+    global pp1_time, pp2_time, pp3_time, pp4_time, wait_comp_start
 
     for i in range(n):
+        # wandb.log({"timestamp": time.time()-T0,
+        #         "phase": "train_start", "round": i})
+
         print(f"\n\n*************** {i=} ****************")
         global rid
         rid = i
         if args.print_ratio:
             global orig_len, new_len
             orig_len = new_len = 0
-        if args.print_time:
-            global decomp_time
-            decomp_time = 0
 
         torch.cuda.empty_cache()
+        gc.collect()
         torch.cuda.reset_peak_memory_stats()
         peak0 = torch.cuda.max_memory_allocated(device)
 
@@ -1456,6 +1400,7 @@ def measure(n=args.round):
             runtime = HookRuntime()
         else:
             runtime = None
+        # runtime = None
         pack_fn, unpack_fn = build_hooks(runtime)
         hook_ctx = saved_tensors_hooks(pack_fn, unpack_fn) if args.hook else contextlib.nullcontext()
 
@@ -1465,15 +1410,17 @@ def measure(n=args.round):
                 with torch.no_grad():
                     loss = model(**inputs).loss
             else:
-                loss = model(**inputs).loss
+                with bf16_ctx:
+                    loss = model(**inputs).loss
 
             print(f"{loss=}")
-            peak1 = torch.cuda.max_memory_allocated(device)
-            print(f"Round {i}: peak1={(peak1)/1024/1024:.1f} MB")
+            tf = time.time()
+            # peak1 = torch.cuda.max_memory_allocated(device)
+            # print(f"Round {i}: peak1={(peak1)/1024/1024:.1f} MB")
 
-            process = psutil.Process(os.getpid())
-            cpu_mem_peak = process.memory_info().rss / 1024 / 1024  # 单位: MB
-            print(f"Peak CPU memory usage: {cpu_mem_peak:.2f} MB")
+            # process = psutil.Process(os.getpid())
+            # cpu_mem_peak = process.memory_info().rss / 1024 / 1024  # 单位: MB
+            # print(f"Peak CPU memory usage: {cpu_mem_peak:.2f} MB")
             
             if not EVAL:
                 if runtime is not None:
@@ -1485,20 +1432,38 @@ def measure(n=args.round):
                 # print(f"After step")
                 optimizer.zero_grad()
                 # print(f"After zero grad")
-                
-            t = (time.time() - t0)
+            tb = time.time()
+            t = (tb - t0)
             torch.cuda.synchronize()
+            t1 = (time.time() - t0)
 
             peak = torch.cuda.max_memory_allocated(device)
+            
+            # 打「训练结束」锚点和 loss
+            # wandb.log({"timestamp": time.time()-T0,
+            #         "phase": "train_end", "round": i,
+            #         "loss": loss.item()})
 
-            print(f"Round {i}: {t*1000:.1f} ms , peak Δ={peak/1024/1024:.1f} MB")
+            print(f"Round {i}: {t*1000:.1f} ms , {t1*1000:.1f} ms , peak Δ={peak/1024/1024:.1f} MB")
 
             cpu_mem_peak = process.memory_info().rss / 1024 / 1024  # 单位: MB
             print(f"Peak CPU memory usage: {(cpu_mem_peak-cpu_mem_peak0):.2f} MB")
-            if args.print_time:
-                print(f"Decompression time: {decomp_time*1000:.1f} ms")
+            print(f"- Fwd time: {(tf - t0)*1000:.1f} ms")
+            print(f"- Bwd time: {(tb - tf)*1000:.1f} ms")
+
+            print(f"Compression time: {comp_time*1000:.1f} ms")
+            print(f"\tWait comp start time: {wait_comp_start*1000:.1f} ms")
+            print(f"Decompression time: {decomp_time*1000:.1f} ms")
+            print(f"\tWait comp done time: {comp_done_time*1000:.1f} ms")
+            print(f"\tWait decomp done time: {decomp_done_time*1000:.1f} ms")
+            print(f"\tWait merge done time: {merge_time*1000:.1f} ms")
+
             print(f"Pack time: {pack_time*1000:.1f} ms")
             print(f"\tPrep time 1: {prep_time1*1000:.1f} ms")
+            print(f"\t\t - pp1: {pp1_time*1000:.1f} ms")
+            print(f"\t\t - pp2: {pp2_time*1000:.1f} ms")
+            print(f"\t\t - pp3: {pp3_time*1000:.1f} ms")
+            print(f"\t\t - pp4: {pp4_time*1000:.1f} ms")
             print(f"\tPrep time 2: {prep_time2*1000:.1f} ms")
             print(f"\tPrep time 3: {prep_time3*1000:.1f} ms")
             print(f"\tPrep time 4: {prep_time4*1000:.1f} ms")
@@ -1509,11 +1474,14 @@ def measure(n=args.round):
             print(f"\tPost time 3: {post_time3*1000:.1f} ms")
             if args.print_ratio and orig_len > 0 and new_len > 0:
                 print(f"{orig_len=}, {new_len=}, ratio={orig_len/new_len}")
+            decomp_time = pack_time = comp_done_time = decomp_done_time = merge_time = prep_time1 = prep_time2 = prep_time3 = prep_time4 = 0
+            unpack_time = post_time1 = post_time2 = post_time3 = 0
+            pp1_time = pp2_time = pp3_time = pp4_time = 0
+            orig_len = new_len = wait_comp_start = 0
         if EVAL:
             break
 
         if runtime is not None:
             runtime.reset() 
         runtime = None
-        uniq_seq_id = 0
 measure()

@@ -21,17 +21,21 @@ import zstandard as zstd
 import lz4.frame as lz4f, lz4.block as lz4b
 import io
 from dataclasses import dataclass
-
+import wandb, subprocess, re
+from pynvml import nvmlInit, nvmlDeviceGetHandleByIndex, nvmlDeviceGetMemoryInfo
+import torch.cuda.nvtx as nvtx
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--model", default="/opt/models/hf/Mistral-7B-v0.1")
 parser.add_argument("--outdir", default="./weight_comp/prepare_weight/zstd_comped_weights_level21")
 parser.add_argument("--finetune_type", choices=["full", "lora", "qlora"], default="lora", help="Type of finetuning")
+parser.add_argument("--autocast_context", action="store_true", help="Set torch.amp.autocast")
 parser.add_argument("--check_diff", action="store_true",
                     help="同时加载原始模型并比对差值（耗显存）")
 parser.add_argument("--hook", action="store_true", help="Run with compression hooks")
 parser.add_argument("--debug", action="store_true", help="Run with debug")
 parser.add_argument("--print_ratio", action="store_true", help="Print activation's compression ratio")
+parser.add_argument("--print_time", action="store_true", help="Print activation's compression ratio")
 parser.add_argument("--weight", default=False, action="store_true", help="Switch on weight compression")
 parser.add_argument("--activation", default=False, action="store_true", help="Switch on activation compression")
 parser.add_argument(
@@ -47,6 +51,68 @@ parser.add_argument(
         "--batch_size", type=int, default=1, help="Input batch size"
     )
 args = parser.parse_args()
+
+
+nvmlInit(); gpu = nvmlDeviceGetHandleByIndex(0)
+if args.hook:
+    if not args.weight:
+        wandb.init(project="memrift_jetson", config=vars(args))  # 把 CLI 参数也存进去
+    else:
+        wandb.init(project="memrift_act_weight_jetson", config=vars(args))  # 把 CLI 参数也存进去
+else:
+    if args.finetune_type == "lora":
+        wandb.init(project="vanilla_jetson", config=vars(args))  # 把 CLI 参数也存进去
+    elif args.finetune_type == "qlora":
+        if args.autocast_context:
+            wandb.init(project="qlora_amp_jetson", config=vars(args))  # 把 CLI 参数也存进去
+        else:
+            wandb.init(project="qlora_jetson", config=vars(args))  # 把 CLI 参数也存进去
+
+wandb.define_metric("timestamp")          # 用绝对时间
+wandb.define_metric("*", step_metric="timestamp")
+
+T0 = time.time()
+# ──────────────────────────────────────────
+# 2.  采样线程：tegrastats + torch
+PAT = re.compile(
+    r'RAM\s+(\d+)/(\d+)MB'           # RAM used / total
+    r'.*?CPU\s+\[([^\]]+)\]'         # 整个  [...]  片段
+    r'.*?GR3D_FREQ\s+(\d+)%',        # GPU util %
+    re.I)
+
+
+def tegra_loop():
+    cmd = ['/usr/bin/tegrastats', '--interval', '500']
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+                            text=True, bufsize=1)
+
+    for line in proc.stdout:
+        m = PAT.search(line)
+        # print(f"{m=}")
+        if not m:
+            continue                          # 依旧安全兜底
+
+        ram_u, ram_t, cpu_blk, gpu_u = m.groups()
+
+        # ① CPU 方括号里提取所有 “99%@freq”
+        cpu_vals = [int(x) for x in re.findall(r'(\d+)%@', cpu_blk)]
+        cpu_avg  = sum(cpu_vals) / len(cpu_vals) if cpu_vals else 0
+
+        wandb.log({
+            "timestamp": int((time.time()-T0)*1000),   # ms step
+            "ram_used_MB": int(ram_u),
+            "ram_total_MB": int(ram_t),
+            "cpu_util":  cpu_avg,                      # 平均 %
+            "gpu_util":  int(gpu_u),
+            "gpu_alloc_MB": torch.cuda.memory_allocated() // 2**20,
+            "gpu_reserved_MB": torch.cuda.memory_reserved() // 2**20 or -1,
+            "cpu_proc_MB": psutil.Process().memory_info().rss // 2**20,
+        }, commit=True)
+    proc.stdout.close()
+
+
+threading.Thread(target=tegra_loop, daemon=True).start()
+
 os.makedirs(args.outdir, exist_ok=True)
 print(f"\n\n{args.model=}, {args.outdir=}, {args.weight=}, {args.activation=}, {args.max_length=}")
 rid = 0
@@ -150,8 +216,9 @@ if args.weight:
             nread = reader.readinto(view)
             assert nread == numel, "decompress size mismatch"
 
-        with decomp_lock:
-            decomp_time += (time.time() - t0)
+        if args.print_time:
+            with decomp_lock:
+                decomp_time += (time.time() - t0)
         return buf
 
     def c_contiguous_strides(shape):
@@ -775,8 +842,8 @@ class HookRuntime:
     # ---------------- internal helpers ----------------
     def _build(self):
         # 1. 线程 / 进程池
-        self.compress_pool= fut.ThreadPoolExecutor(max_workers=self.pool_workers)
-        self.decode_pool  = fut.ThreadPoolExecutor(max_workers=self.pool_workers * 2)
+        self.compress_pool= fut.ThreadPoolExecutor()
+        self.decode_pool  = fut.ThreadPoolExecutor()
 
         # 2. CUDA stream（必须 *先* 再构造，否则 reset 时还在用旧 stream）
         # self.d2h_stream   = torch.cuda.Stream(priority=0)
@@ -828,10 +895,11 @@ class HookRuntime:
         return self.storage_gen[ptr_key]
     
     # unpack 时调用并挂载到 future 上
-    def _prefetch(self, token, tmeta, seq_id):
+    def _prefetch(self, token, tmeta, seq_id, sync=False):
         fut_jxl = token.future          # 压缩已提交，fut_jxl 完成时拿到 jxl bytes
+        token.scheduled = True
         
-        def _decode_and_copy(fut, tmeta, algo="zstd"):      # 在线程池中执行
+        def _decode_and_copy(fut, tmeta, algo="zstd", sync=False):      # 在线程池中执行
             try:
                 global decomp_time, decomp_lock, comp_done_time, decomp_done_time, merge_time
                 start = time.time()
@@ -876,31 +944,35 @@ class HookRuntime:
                 with torch.cuda.stream(self.h2d_stream):
                     rst = fs_sp.merge(cpu_exp, token.sm_bits, tmeta.shape, tmeta.stride, tmeta.offset, tmeta.dtype, self.h2d_stream.cuda_stream)
                 evt = self.h2d_stream.record_event()
-                # evt.synchronize()
+
+                if sync:
+                    evt.synchronize()
+                else:
+                    token.cpu_exp       = cpu_exp     # 为了保险，把 pinned tensor保存到 token，等 copy 结束再删除
 
                 token.rst = rst
-                token.cpu_exp       = cpu_exp     # 为了保险，把 pinned tensor保存到 token，等 copy 结束再删除
                 token.CtoD_copy_evt = evt
                 token.ready_evt.set()             # <- 关键：告诉 _unpack "我好了"
 
                 token.free_future() # delete the compression future to free memory
-                with decomp_lock:
-                    comp_done_time += t1 - start
-                    decomp_done_time += t2 - t1
-                    merge_time += time.time() - t2
-                    decomp_time += time.time() - start
+                if args.print_time:
+                    with decomp_lock:
+                        comp_done_time += t1 - start
+                        decomp_done_time += t2 - t1
+                        merge_time += time.time() - t2
+                        decomp_time += time.time() - start
                     
             except Exception as e:
                 import traceback, sys
                 traceback.print_exc(file=sys.stderr)
                 raise                # 重新抛给上层，让你能看到
 
-        self.decode_pool.submit(_decode_and_copy, fut_jxl, tmeta, "zstd")
+        self.decode_pool.submit(_decode_and_copy, fut_jxl, tmeta, "zstd", sync)
 
         return True
 
 
-    def _prefetch_batch(self, set_window=None):
+    def _prefetch_batch(self, set_window=None, sync=True):
         # global PREFETCH_ID
         # ACTIV_Q 尾部 seq 最大
         # lookahead = sorted(ACTIV_Q)[-WINDOW:]   # 取后 WINDOW 个 seq_id
@@ -910,19 +982,18 @@ class HookRuntime:
             if tok.scheduled:
                 # print(f"Already pre-fetched {seq=},")
                 continue
-            self._prefetch(tok, tmeta, seq)
-            tok.scheduled = True
+            self._prefetch(tok, tmeta, seq, sync=sync)
+            # tok.scheduled = True
             # PREFETCH_ID -= 1
             # print(f"_prefetch_batch: {PREFETCH_ID=}")
-            # tok.ready_evt.wait()
 
-    def flush_prefetch_tail(self):
+    def flush_prefetch_tail(self, window=10):
         # global PREFETCH_ID
         # PREFETCH_ID = len(ACTIV_Q)
         with self.q_lock:
             # print(f"flushing tail: {len(ACTIV_Q)}")
             if self.activ_q:                         # 队列非空
-                self._prefetch_batch(set_window=30)
+                self._prefetch_batch(set_window=window, sync=True)
 
     def pop_token(self, seq_id_expected, ensure_prefetch=True):
         """从队尾向前扫描 ≤ WINDOW 步，取到匹配的 seq_id"""
@@ -1004,6 +1075,8 @@ def build_hooks(rt: HookRuntime):
         if not args.activation:
             return t
 
+        if t.is_leaf:
+            return t
         if is_lora_weight(t):   # 模型权重 tensor
             # print(f"[skip] Detected model weight: shape={t.shape}, dtype={t.dtype}, is_leaf={t.is_leaf}, requires_grad={t.requires_grad}, grad_fn={type(t.grad_fn).__name__ if t.grad_fn else None}")
             return t
@@ -1011,7 +1084,7 @@ def build_hooks(rt: HookRuntime):
         pp2 = time.time()
         pp2_time += pp2 - pp1
 
-        if not t.dtype in (torch.float32, torch.bfloat16) or t.numel() < 4096:
+        if not t.dtype in (torch.float32, torch.bfloat16) or t.numel() < 64 * 1024:
             # print(f"Got type {t.dtype} (bytes={t.nbytes}), not fp32 or bf16")
             return t
             # raise TypeError(f"only fp32 / bf16 supported, got {t.dtype}, grad_fn: {type(t.grad_fn).__name__}")
@@ -1072,27 +1145,16 @@ def build_hooks(rt: HookRuntime):
                     pad   = (-arr.size) % width
                     img   = np.pad(arr, (0, pad)).reshape(-1, width)   # C-contiguous
                     assert img.dtype == np.uint8, "image must be uint8"
-                    # if not arr.data.contiguous:
-                        # print(f"arr is not contiguous, shape = {arr.shape}, strides = {arr.strides}")
-                    
+
                     comped_bytes = imagecodecs.jpegxl_encode(
                         img,
-                        lossless=1,
+                        # lossless=1,
+                        effort=7,          # 编码速度/比率权衡
+                        distance=0.35,      # 0=lossless, 1=visually lossy；0.3≈4–5×
+                        # modular=True,      # 避免重复 DCT，保持幂等误差
                         bitspersample=8,
                         photometric='minisblack',        # 1-channel grayscale
-                        # planar=True,                    # default; keep interleaved
                     )
-                    # # Remember: first view to uint8 then reshape !!!
-                    # rec = imagecodecs.jpegxl_decode(comped_bytes).ravel().view(np.uint8)
-                    # exp_arr = rec[:arr.size].reshape(arr.shape)
-                    # # if not (arr == exp_arr).all():
-                    #     # print(f"{arr.shape=}, {exp_arr.shape=}")
-                    #     # print(f"{arr=}, {exp_arr=}")
-                    #     # exit()
-                    # assert (arr == exp_arr).all(), "JPEG-XL encode error"
-
-                    # ratio = arr.nbytes / len(comped_bytes)
-                    # # print(f"{ratio=}")
                 elif algo == "zstd":
                     # cctx = zstd.ZstdCompressor(level=-1)
                     cctx = get_cctx(algo, args.level)
@@ -1137,8 +1199,9 @@ def build_hooks(rt: HookRuntime):
                 
                 token.free_cpu_exp_buf()    # 压缩完成，free 掉 cpu 上的 exp_bits 内存
                 
-                with decomp_lock:
-                    comp_time += time.time() - start
+                if args.print_time:
+                    with decomp_lock:
+                        comp_time += time.time() - start
                 if args.debug:
                     return comped_bytes, arr, numel
                 else:
@@ -1376,6 +1439,8 @@ if gradient_checkpointing:
     model.enable_input_require_grads()
     model.config.use_cache = False  # for mistral or LLaMA, 在大多数 HuggingFace 的 decoder-only 模型（如 Mistral、LLaMA）中，use_cache=True 会导致模型跳过中间状态保存，从而禁用 gradient checkpointing。
 
+bf16_ctx = torch.amp.autocast(device_type='cuda', dtype=torch.bfloat16) if args.autocast_context and args.finetune_type=="qlora" else contextlib.nullcontext()
+
 def measure(n=args.round):
     if args.weight:
         prefetch_first_layer(layer2cps, layer_names)
@@ -1385,6 +1450,9 @@ def measure(n=args.round):
     global pp1_time, pp2_time, pp3_time, pp4_time, wait_comp_start
 
     for i in range(n):
+        # wandb.log({"timestamp": time.time()-T0,
+        #         "phase": "train_start", "round": i})
+
         print(f"\n\n*************** {i=} ****************")
         global rid
         rid = i
@@ -1409,7 +1477,8 @@ def measure(n=args.round):
                 with torch.no_grad():
                     loss = model(**inputs).loss
             else:
-                loss = model(**inputs).loss
+                with bf16_ctx:
+                    loss = model(**inputs).loss
 
             print(f"{loss=}")
             tf = time.time()
@@ -1436,6 +1505,11 @@ def measure(n=args.round):
             t1 = (time.time() - t0)
 
             peak = torch.cuda.max_memory_allocated(device)
+            
+            # 打「训练结束」锚点和 loss
+            # wandb.log({"timestamp": time.time()-T0,
+            #         "phase": "train_end", "round": i,
+            #         "loss": loss.item()})
 
             print(f"Round {i}: {t*1000:.1f} ms , {t1*1000:.1f} ms , peak Δ={peak/1024/1024:.1f} MB")
 

@@ -1,0 +1,6 @@
+{"time":"2025-06-19T22:40:18.821459056+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250619_224018-ogh170yk/logs/debug-core.log"}
+{"time":"2025-06-19T22:40:19.462245872+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": unexpected EOF"}
+{"time":"2025-06-19T22:40:21.969693296+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": unexpected EOF"}
+{"time":"2025-06-19T22:40:26.887222064+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": unexpected EOF"}
+{"time":"2025-06-19T22:40:36.913021808+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": unexpected EOF"}
+{"time":"2025-06-19T22:40:57.027471376+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": unexpected EOF"}

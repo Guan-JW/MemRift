@@ -20,6 +20,9 @@ import float_split_stride_pin as fs_sp
 import zstandard as zstd
 import lz4.frame as lz4f, lz4.block as lz4b
 import io
+import wandb, subprocess, re
+from pynvml import nvmlInit, nvmlDeviceGetHandleByIndex, nvmlDeviceGetMemoryInfo
+import torch.cuda.nvtx as nvtx
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--model", default="/opt/models/hf/Mistral-7B-v0.1")
@@ -45,6 +48,55 @@ parser.add_argument(
         "--batch_size", type=int, default=1, help="Input batch size"
     )
 args = parser.parse_args()
+
+nvmlInit(); gpu = nvmlDeviceGetHandleByIndex(0)
+if args.hook:
+    wandb.init(project="memrift_together_jetson", config=vars(args))  # 把 CLI 参数也存进去
+else:
+    wandb.init(project="vanilla_jetson", config=vars(args))  # 把 CLI 参数也存进去
+
+wandb.define_metric("timestamp")          # 用绝对时间
+wandb.define_metric("*", step_metric="timestamp")
+
+T0 = time.time()
+# ──────────────────────────────────────────
+# 2.  采样线程：tegrastats + torch
+PAT = re.compile(
+    r'RAM (\d+)/(\d+)MB .*?'              # RAM used / total
+    r'CPU@([0-9]+)% .*?'                  # CPU util
+    r'GPU@([0-9]+)% .*?GR3D_FREQ (\d+)MHz' # GPU util + freq
+    r'(?:.*?NVDEC (\d+)MB)?', re.I)
+
+
+def tegra_loop():
+    cmd = ['/usr/bin/tegrastats', '--interval', '500']   # 0.5 s
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+                            text=True, bufsize=1)
+    for line in proc.stdout:
+        m = PAT.search(line)
+        if not m:
+            continue
+        ram_u, ram_t, cpu_u, gpu_u, gr3d, nvdec = (
+            int(v) if v is not None else 0 for v in m.groups())
+        wandb.log({
+            "timestamp": time.time()-T0,
+            "ram_used_MB": ram_u,
+            "ram_total_MB": ram_t,
+            "cpu_util_%":  cpu_u,
+            "gpu_util_%":  gpu_u,
+            "gr3d_freq_MHz": gr3d,
+            "nvdec_MB": nvdec,
+            # 本进程显存，只需 PyTorch
+            "gpu_alloc_MB": torch.cuda.memory_allocated()//2**20,
+            "gpu_reserved_MB": torch.cuda.memory_reserved()//2**20,
+            "cpu_proc_MB": psutil.Process().memory_info().rss//2**20,
+        }, commit=True)
+    proc.stdout.close()
+
+threading.Thread(target=tegra_loop, daemon=True).start()
+
+
+
 os.makedirs(args.outdir, exist_ok=True)
 print(f"\n\n{args.model=}, {args.outdir=}, {args.weight=}, {args.activation=}, {args.max_length=}")
 rid = 0
@@ -223,7 +275,7 @@ if args.weight:
 
                 # with torch.cuda.stream(stream):
                 stride = c_contiguous_strides(self.orig_shape)
-                bf16 = fs_sp.merge(self._exp_host, self.sm_gpu, self.orig_shape, stride, 0, MODEL_TYPE)
+                bf16 = fs_sp.merge(self._exp_host, self.sm_gpu, self.orig_shape, stride, 0, MODEL_TYPE, 0)
                 self._bf16 = bf16.view(self.orig_shape)
 
                 ev = torch.cuda.Event()
@@ -846,6 +898,7 @@ class HookRuntime:
                 # --- CPU 解码 ---
                 # print(f"_decode_and_copy: Decompressing {seq_id}")
                 if algo == "JXL":
+                    print(f"JXL decompressing {rid} with {numel=}")
                     exp_arr = imagecodecs.jpegxl_decode(comped_bytes).ravel().view(np.uint8) # do not cut here
                     # assert (exp_arr == exp_rec).all(), "JPEG-XL decode error"
                     cpu_exp = torch.from_numpy(exp_arr)
@@ -1051,9 +1104,9 @@ def build_hooks(rt: HookRuntime):
             return t
             # raise TypeError(f"only fp32 / bf16 supported, got {t.dtype}, grad_fn: {type(t.grad_fn).__name__}")
         
-        if not torch.all(torch.isfinite(t)):
-            # print(f"_pack: Found NaN or Inf in unpacked tensor: {t.shape=}")
-            return t
+        # if not torch.all(torch.isfinite(t)):
+        #     # print(f"_pack: Found NaN or Inf in unpacked tensor: {t.shape=}")
+        #     return t
 
         ptr_key = make_ptr_key(t)                   # (t.data_ptr(), t.nbytes)
         gen = rt.storage_gen.setdefault(ptr_key, 0)
@@ -1132,19 +1185,20 @@ def build_hooks(rt: HookRuntime):
 
                 if algo == "JXL":
                     # print("using jxl")
+                    print(f"JXL compressing {rid} with {numel=}")
                     width = 1024    # tunable
                     pad   = (-arr.size) % width
                     img   = np.pad(arr, (0, pad)).reshape(-1, width)   # C-contiguous
                     assert img.dtype == np.uint8, "image must be uint8"
-                    # if not arr.data.contiguous:
-                        # print(f"arr is not contiguous, shape = {arr.shape}, strides = {arr.strides}")
-                    
+
                     comped_bytes = imagecodecs.jpegxl_encode(
                         img,
-                        lossless=1,
+                        # lossless=1,
+                        effort=7,          # 编码速度/比率权衡
+                        distance=0.35,      # 0=lossless, 1=visually lossy；0.3≈4–5×
+                        # modular=True,      # 避免重复 DCT，保持幂等误差
                         bitspersample=8,
                         photometric='minisblack',        # 1-channel grayscale
-                        # planar=True,                    # default; keep interleaved
                     )
                     # # Remember: first view to uint8 then reshape !!!
                     # rec = imagecodecs.jpegxl_decode(comped_bytes).ravel().view(np.uint8)
@@ -1374,7 +1428,7 @@ def build_hooks(rt: HookRuntime):
         # assert gpu_exp.device == "cpu", f"{gpu_exp.device=}"
         # print(f"{token.cpu_exp=}")
         # print(f"{dtype=}")
-        rst = fs_sp.merge(token.cpu_exp, token.sm_bits, shape, stride, offset, dtype)
+        rst = fs_sp.merge(token.cpu_exp, token.sm_bits, shape, stride, offset, dtype, 0)
 
         event = torch.cuda.Event()          # ① 创建事件
         event.record()                      # ② 记录到 *当前流*（merge 的 kernel 前面）
@@ -1544,6 +1598,9 @@ def measure(n=args.round):
         prefetch_first_layer(layer2cps, layer_names)
 
     for i in range(n):
+        wandb.log({"timestamp": time.time()-T0,
+                "phase": "train_start", "round": i})
+
         print(f"\n\n*************** {i=} ****************")
         global rid, decomp_time
         rid = i
@@ -1594,6 +1651,11 @@ def measure(n=args.round):
             torch.cuda.synchronize()
 
             peak = torch.cuda.max_memory_allocated(device)
+            
+            # 打「训练结束」锚点和 loss
+            wandb.log({"timestamp": time.time()-T0,
+                    "phase": "train_end", "round": i,
+                    "loss": loss.item()})
 
             print(f"Round {i}: {t*1000:.1f} ms , peak Δ={peak/1024/1024:.1f} MB")
 

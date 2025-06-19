@@ -1,0 +1,17 @@
+
+
+args.model='/opt/models/hf/TinyLlama-1.1B-Chat-v1.0', args.outdir='./weight_comp/prepare_weight/zstd_comped_weights_level21', args.weight=False, args.activation=True, args.max_length=2048
+init AsyncCompressor
+type(model) = <class 'transformers.models.llama.modeling_llama.LlamaForCausalLM'>
+type(model.model) = <class 'transformers.models.llama.modeling_llama.LlamaModel'>
+type(container) = <class 'transformers.models.llama.modeling_llama.LlamaModel'>
+Peak CPU memory usage: 749.58 MB
+Peak GPU memory usage: 2129.22 MB
+Traceback (most recent call last):
+  File "/opt/finetune/MemRift/train_wrapper.py", line 465, in <module>
+    model_weight_ptrs = get_model_weight_ptrs(model)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/finetune/MemRift/train_wrapper.py", line 452, in get_model_weight_ptrs
+    print(f"[FROZEN] {name} shape={p.shape} requires_grad={p.requires_grad} is_leaf={p.is_leaf}")
+                      ^^^^
+NameError: name 'name' is not defined

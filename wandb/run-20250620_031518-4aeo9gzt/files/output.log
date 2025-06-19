@@ -1,0 +1,358 @@
+
+
+args.model='/opt/models/hf/TinyLlama-1.1B-Chat-v1.0', args.outdir='./weight_comp/prepare_weight/zstd_comped_weights_level21', args.weight=False, args.activation=True, args.max_length=2048
+Peak CPU memory usage: 748.13 MB
+Peak GPU memory usage: 2129.22 MB
+[FROZEN] base_model.model.model.embed_tokens.weight shape=torch.Size([32000, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=4493860864
+[FROZEN] base_model.model.model.layers.0.self_attn.q_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=4702527488
+[FROZEN] base_model.model.model.layers.0.self_attn.k_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6564806656
+[FROZEN] base_model.model.model.layers.0.self_attn.v_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6566895616
+[FROZEN] base_model.model.model.layers.0.self_attn.o_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=4694138880
+[FROZEN] base_model.model.model.layers.0.mlp.gate_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=4648001536
+[LoRA]   base_model.model.model.layers.0.mlp.gate_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.0.mlp.gate_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.0.mlp.up_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=4671070208
+[LoRA]   base_model.model.model.layers.0.mlp.up_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.0.mlp.up_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.0.mlp.down_proj.base_layer.weight shape=torch.Size([2048, 5632]) requires_grad=False is_leaf=True, p.data_ptr()=4624932864
+[LoRA]   base_model.model.model.layers.0.mlp.down_proj.lora_A.default.weight shape=torch.Size([16, 5632]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.0.mlp.down_proj.lora_B.default.weight shape=torch.Size([2048, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.0.input_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6564798464
+[FROZEN] base_model.model.model.layers.0.post_attention_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6564802560
+[FROZEN] base_model.model.model.layers.1.self_attn.q_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=4788510720
+[FROZEN] base_model.model.model.layers.1.self_attn.k_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6567944192
+[FROZEN] base_model.model.model.layers.1.self_attn.v_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6568992768
+[FROZEN] base_model.model.model.layers.1.self_attn.o_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=4780122112
+[FROZEN] base_model.model.model.layers.1.mlp.gate_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=4733984768
+[LoRA]   base_model.model.model.layers.1.mlp.gate_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.1.mlp.gate_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.1.mlp.up_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=4757053440
+[LoRA]   base_model.model.model.layers.1.mlp.up_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.1.mlp.up_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.1.mlp.down_proj.base_layer.weight shape=torch.Size([2048, 5632]) requires_grad=False is_leaf=True, p.data_ptr()=4710916096
+[LoRA]   base_model.model.model.layers.1.mlp.down_proj.lora_A.default.weight shape=torch.Size([16, 5632]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.1.mlp.down_proj.lora_B.default.weight shape=torch.Size([2048, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.1.input_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565855232
+[FROZEN] base_model.model.model.layers.1.post_attention_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565859328
+[FROZEN] base_model.model.model.layers.2.self_attn.q_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5734326272
+[FROZEN] base_model.model.model.layers.2.self_attn.k_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6591012864
+[FROZEN] base_model.model.model.layers.2.self_attn.v_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6592061440
+[FROZEN] base_model.model.model.layers.2.self_attn.o_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5725937664
+[FROZEN] base_model.model.model.layers.2.mlp.gate_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5679800320
+[LoRA]   base_model.model.model.layers.2.mlp.gate_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.2.mlp.gate_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.2.mlp.up_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5702868992
+[LoRA]   base_model.model.model.layers.2.mlp.up_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.2.mlp.up_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.2.mlp.down_proj.base_layer.weight shape=torch.Size([2048, 5632]) requires_grad=False is_leaf=True, p.data_ptr()=5656731648
+[LoRA]   base_model.model.model.layers.2.mlp.down_proj.lora_A.default.weight shape=torch.Size([16, 5632]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.2.mlp.down_proj.lora_B.default.weight shape=torch.Size([2048, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.2.input_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565945344
+[FROZEN] base_model.model.model.layers.2.post_attention_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565949440
+[FROZEN] base_model.model.model.layers.3.self_attn.q_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5992275968
+[FROZEN] base_model.model.model.layers.3.self_attn.k_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6597304320
+[FROZEN] base_model.model.model.layers.3.self_attn.v_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6598352896
+[FROZEN] base_model.model.model.layers.3.self_attn.o_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5983887360
+[FROZEN] base_model.model.model.layers.3.mlp.gate_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5937750016
+[LoRA]   base_model.model.model.layers.3.mlp.gate_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.3.mlp.gate_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.3.mlp.up_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5960818688
+[LoRA]   base_model.model.model.layers.3.mlp.up_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.3.mlp.up_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.3.mlp.down_proj.base_layer.weight shape=torch.Size([2048, 5632]) requires_grad=False is_leaf=True, p.data_ptr()=5914681344
+[LoRA]   base_model.model.model.layers.3.mlp.down_proj.lora_A.default.weight shape=torch.Size([16, 5632]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.3.mlp.down_proj.lora_B.default.weight shape=torch.Size([2048, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.3.input_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565969920
+[FROZEN] base_model.model.model.layers.3.post_attention_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565974016
+[FROZEN] base_model.model.model.layers.4.self_attn.q_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6078259200
+[FROZEN] base_model.model.model.layers.4.self_attn.k_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6599401472
+[FROZEN] base_model.model.model.layers.4.self_attn.v_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6600450048
+[FROZEN] base_model.model.model.layers.4.self_attn.o_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6069870592
+[FROZEN] base_model.model.model.layers.4.mlp.gate_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6023733248
+[LoRA]   base_model.model.model.layers.4.mlp.gate_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.4.mlp.gate_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.4.mlp.up_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6046801920
+[LoRA]   base_model.model.model.layers.4.mlp.up_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.4.mlp.up_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.4.mlp.down_proj.base_layer.weight shape=torch.Size([2048, 5632]) requires_grad=False is_leaf=True, p.data_ptr()=6000664576
+[LoRA]   base_model.model.model.layers.4.mlp.down_proj.lora_A.default.weight shape=torch.Size([16, 5632]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.4.mlp.down_proj.lora_B.default.weight shape=torch.Size([2048, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.4.input_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565978112
+[FROZEN] base_model.model.model.layers.4.post_attention_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565982208
+[FROZEN] base_model.model.model.layers.5.self_attn.q_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6164242432
+[FROZEN] base_model.model.model.layers.5.self_attn.k_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6601498624
+[FROZEN] base_model.model.model.layers.5.self_attn.v_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6602547200
+[FROZEN] base_model.model.model.layers.5.self_attn.o_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6155853824
+[FROZEN] base_model.model.model.layers.5.mlp.gate_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6109716480
+[LoRA]   base_model.model.model.layers.5.mlp.gate_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.5.mlp.gate_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.5.mlp.up_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6132785152
+[LoRA]   base_model.model.model.layers.5.mlp.up_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.5.mlp.up_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.5.mlp.down_proj.base_layer.weight shape=torch.Size([2048, 5632]) requires_grad=False is_leaf=True, p.data_ptr()=6086647808
+[LoRA]   base_model.model.model.layers.5.mlp.down_proj.lora_A.default.weight shape=torch.Size([16, 5632]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.5.mlp.down_proj.lora_B.default.weight shape=torch.Size([2048, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.5.input_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565986304
+[FROZEN] base_model.model.model.layers.5.post_attention_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565990400
+[FROZEN] base_model.model.model.layers.6.self_attn.q_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6250225664
+[FROZEN] base_model.model.model.layers.6.self_attn.k_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6603595776
+[FROZEN] base_model.model.model.layers.6.self_attn.v_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6604644352
+[FROZEN] base_model.model.model.layers.6.self_attn.o_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6241837056
+[FROZEN] base_model.model.model.layers.6.mlp.gate_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6195699712
+[LoRA]   base_model.model.model.layers.6.mlp.gate_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.6.mlp.gate_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.6.mlp.up_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6218768384
+[LoRA]   base_model.model.model.layers.6.mlp.up_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.6.mlp.up_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.6.mlp.down_proj.base_layer.weight shape=torch.Size([2048, 5632]) requires_grad=False is_leaf=True, p.data_ptr()=6172631040
+[LoRA]   base_model.model.model.layers.6.mlp.down_proj.lora_A.default.weight shape=torch.Size([16, 5632]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.6.mlp.down_proj.lora_B.default.weight shape=torch.Size([2048, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.6.input_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565994496
+[FROZEN] base_model.model.model.layers.6.post_attention_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565998592
+[FROZEN] base_model.model.model.layers.7.self_attn.q_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6336208896
+[FROZEN] base_model.model.model.layers.7.self_attn.k_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6605692928
+[FROZEN] base_model.model.model.layers.7.self_attn.v_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6606741504
+[FROZEN] base_model.model.model.layers.7.self_attn.o_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6327820288
+[FROZEN] base_model.model.model.layers.7.mlp.gate_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6281682944
+[LoRA]   base_model.model.model.layers.7.mlp.gate_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.7.mlp.gate_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.7.mlp.up_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6304751616
+[LoRA]   base_model.model.model.layers.7.mlp.up_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.7.mlp.up_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.7.mlp.down_proj.base_layer.weight shape=torch.Size([2048, 5632]) requires_grad=False is_leaf=True, p.data_ptr()=6258614272
+[LoRA]   base_model.model.model.layers.7.mlp.down_proj.lora_A.default.weight shape=torch.Size([16, 5632]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.7.mlp.down_proj.lora_B.default.weight shape=torch.Size([2048, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.7.input_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6566002688
+[FROZEN] base_model.model.model.layers.7.post_attention_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6566006784
+[FROZEN] base_model.model.model.layers.8.self_attn.q_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6422192128
+[FROZEN] base_model.model.model.layers.8.self_attn.k_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6607790080
+[FROZEN] base_model.model.model.layers.8.self_attn.v_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6608838656
+[FROZEN] base_model.model.model.layers.8.self_attn.o_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6413803520
+[FROZEN] base_model.model.model.layers.8.mlp.gate_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6367666176
+[LoRA]   base_model.model.model.layers.8.mlp.gate_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.8.mlp.gate_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.8.mlp.up_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6390734848
+[LoRA]   base_model.model.model.layers.8.mlp.up_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.8.mlp.up_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.8.mlp.down_proj.base_layer.weight shape=torch.Size([2048, 5632]) requires_grad=False is_leaf=True, p.data_ptr()=6344597504
+[LoRA]   base_model.model.model.layers.8.mlp.down_proj.lora_A.default.weight shape=torch.Size([16, 5632]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.8.mlp.down_proj.lora_B.default.weight shape=torch.Size([2048, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.8.input_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6566010880
+[FROZEN] base_model.model.model.layers.8.post_attention_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6566014976
+[FROZEN] base_model.model.model.layers.9.self_attn.q_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6508175360
+[FROZEN] base_model.model.model.layers.9.self_attn.k_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6609887232
+[FROZEN] base_model.model.model.layers.9.self_attn.v_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6610935808
+[FROZEN] base_model.model.model.layers.9.self_attn.o_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6499786752
+[FROZEN] base_model.model.model.layers.9.mlp.gate_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6453649408
+[LoRA]   base_model.model.model.layers.9.mlp.gate_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.9.mlp.gate_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.9.mlp.up_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6476718080
+[LoRA]   base_model.model.model.layers.9.mlp.up_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.9.mlp.up_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.9.mlp.down_proj.base_layer.weight shape=torch.Size([2048, 5632]) requires_grad=False is_leaf=True, p.data_ptr()=6430580736
+[LoRA]   base_model.model.model.layers.9.mlp.down_proj.lora_A.default.weight shape=torch.Size([16, 5632]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.9.mlp.down_proj.lora_B.default.weight shape=torch.Size([2048, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.9.input_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6566019072
+[FROZEN] base_model.model.model.layers.9.post_attention_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6566023168
+[FROZEN] base_model.model.model.layers.10.self_attn.q_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=4874493952
+[FROZEN] base_model.model.model.layers.10.self_attn.k_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6570041344
+[FROZEN] base_model.model.model.layers.10.self_attn.v_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6571089920
+[FROZEN] base_model.model.model.layers.10.self_attn.o_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=4866105344
+[FROZEN] base_model.model.model.layers.10.mlp.gate_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=4819968000
+[LoRA]   base_model.model.model.layers.10.mlp.gate_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.10.mlp.gate_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.10.mlp.up_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=4843036672
+[LoRA]   base_model.model.model.layers.10.mlp.up_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.10.mlp.up_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.10.mlp.down_proj.base_layer.weight shape=torch.Size([2048, 5632]) requires_grad=False is_leaf=True, p.data_ptr()=4796899328
+[LoRA]   base_model.model.model.layers.10.mlp.down_proj.lora_A.default.weight shape=torch.Size([16, 5632]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.10.mlp.down_proj.lora_B.default.weight shape=torch.Size([2048, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.10.input_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565863424
+[FROZEN] base_model.model.model.layers.10.post_attention_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565867520
+[FROZEN] base_model.model.model.layers.11.self_attn.q_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=4960477184
+[FROZEN] base_model.model.model.layers.11.self_attn.k_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6572138496
+[FROZEN] base_model.model.model.layers.11.self_attn.v_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6573187072
+[FROZEN] base_model.model.model.layers.11.self_attn.o_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=4952088576
+[FROZEN] base_model.model.model.layers.11.mlp.gate_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=4905951232
+[LoRA]   base_model.model.model.layers.11.mlp.gate_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.11.mlp.gate_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.11.mlp.up_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=4929019904
+[LoRA]   base_model.model.model.layers.11.mlp.up_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.11.mlp.up_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.11.mlp.down_proj.base_layer.weight shape=torch.Size([2048, 5632]) requires_grad=False is_leaf=True, p.data_ptr()=4882882560
+[LoRA]   base_model.model.model.layers.11.mlp.down_proj.lora_A.default.weight shape=torch.Size([16, 5632]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.11.mlp.down_proj.lora_B.default.weight shape=torch.Size([2048, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.11.input_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565871616
+[FROZEN] base_model.model.model.layers.11.post_attention_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565875712
+[FROZEN] base_model.model.model.layers.12.self_attn.q_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5046460416
+[FROZEN] base_model.model.model.layers.12.self_attn.k_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6574235648
+[FROZEN] base_model.model.model.layers.12.self_attn.v_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6575284224
+[FROZEN] base_model.model.model.layers.12.self_attn.o_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5038071808
+[FROZEN] base_model.model.model.layers.12.mlp.gate_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=4991934464
+[LoRA]   base_model.model.model.layers.12.mlp.gate_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.12.mlp.gate_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.12.mlp.up_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5015003136
+[LoRA]   base_model.model.model.layers.12.mlp.up_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.12.mlp.up_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.12.mlp.down_proj.base_layer.weight shape=torch.Size([2048, 5632]) requires_grad=False is_leaf=True, p.data_ptr()=4968865792
+[LoRA]   base_model.model.model.layers.12.mlp.down_proj.lora_A.default.weight shape=torch.Size([16, 5632]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.12.mlp.down_proj.lora_B.default.weight shape=torch.Size([2048, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.12.input_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565879808
+[FROZEN] base_model.model.model.layers.12.post_attention_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565883904
+[FROZEN] base_model.model.model.layers.13.self_attn.q_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5132443648
+[FROZEN] base_model.model.model.layers.13.self_attn.k_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6576332800
+[FROZEN] base_model.model.model.layers.13.self_attn.v_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6577381376
+[FROZEN] base_model.model.model.layers.13.self_attn.o_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5124055040
+[FROZEN] base_model.model.model.layers.13.mlp.gate_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5077917696
+[LoRA]   base_model.model.model.layers.13.mlp.gate_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.13.mlp.gate_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.13.mlp.up_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5100986368
+[LoRA]   base_model.model.model.layers.13.mlp.up_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.13.mlp.up_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.13.mlp.down_proj.base_layer.weight shape=torch.Size([2048, 5632]) requires_grad=False is_leaf=True, p.data_ptr()=5054849024
+[LoRA]   base_model.model.model.layers.13.mlp.down_proj.lora_A.default.weight shape=torch.Size([16, 5632]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.13.mlp.down_proj.lora_B.default.weight shape=torch.Size([2048, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.13.input_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565888000
+[FROZEN] base_model.model.model.layers.13.post_attention_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565892096
+[FROZEN] base_model.model.model.layers.14.self_attn.q_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5218426880
+[FROZEN] base_model.model.model.layers.14.self_attn.k_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6578429952
+[FROZEN] base_model.model.model.layers.14.self_attn.v_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6579478528
+[FROZEN] base_model.model.model.layers.14.self_attn.o_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5210038272
+[FROZEN] base_model.model.model.layers.14.mlp.gate_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5163900928
+[LoRA]   base_model.model.model.layers.14.mlp.gate_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.14.mlp.gate_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.14.mlp.up_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5186969600
+[LoRA]   base_model.model.model.layers.14.mlp.up_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.14.mlp.up_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.14.mlp.down_proj.base_layer.weight shape=torch.Size([2048, 5632]) requires_grad=False is_leaf=True, p.data_ptr()=5140832256
+[LoRA]   base_model.model.model.layers.14.mlp.down_proj.lora_A.default.weight shape=torch.Size([16, 5632]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.14.mlp.down_proj.lora_B.default.weight shape=torch.Size([2048, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.14.input_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565896192
+[FROZEN] base_model.model.model.layers.14.post_attention_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565900288
+[FROZEN] base_model.model.model.layers.15.self_attn.q_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5304410112
+[FROZEN] base_model.model.model.layers.15.self_attn.k_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6580527104
+[FROZEN] base_model.model.model.layers.15.self_attn.v_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6581575680
+[FROZEN] base_model.model.model.layers.15.self_attn.o_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5296021504
+[FROZEN] base_model.model.model.layers.15.mlp.gate_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5249884160
+[LoRA]   base_model.model.model.layers.15.mlp.gate_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.15.mlp.gate_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.15.mlp.up_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5272952832
+[LoRA]   base_model.model.model.layers.15.mlp.up_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.15.mlp.up_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.15.mlp.down_proj.base_layer.weight shape=torch.Size([2048, 5632]) requires_grad=False is_leaf=True, p.data_ptr()=5226815488
+[LoRA]   base_model.model.model.layers.15.mlp.down_proj.lora_A.default.weight shape=torch.Size([16, 5632]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.15.mlp.down_proj.lora_B.default.weight shape=torch.Size([2048, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.15.input_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565904384
+[FROZEN] base_model.model.model.layers.15.post_attention_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565908480
+[FROZEN] base_model.model.model.layers.16.self_attn.q_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5390393344
+[FROZEN] base_model.model.model.layers.16.self_attn.k_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6582624256
+[FROZEN] base_model.model.model.layers.16.self_attn.v_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6583672832
+[FROZEN] base_model.model.model.layers.16.self_attn.o_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5382004736
+[FROZEN] base_model.model.model.layers.16.mlp.gate_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5335867392
+[LoRA]   base_model.model.model.layers.16.mlp.gate_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.16.mlp.gate_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.16.mlp.up_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5358936064
+[LoRA]   base_model.model.model.layers.16.mlp.up_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.16.mlp.up_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.16.mlp.down_proj.base_layer.weight shape=torch.Size([2048, 5632]) requires_grad=False is_leaf=True, p.data_ptr()=5312798720
+[LoRA]   base_model.model.model.layers.16.mlp.down_proj.lora_A.default.weight shape=torch.Size([16, 5632]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.16.mlp.down_proj.lora_B.default.weight shape=torch.Size([2048, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.16.input_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565912576
+[FROZEN] base_model.model.model.layers.16.post_attention_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565916672
+[FROZEN] base_model.model.model.layers.17.self_attn.q_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5476376576
+[FROZEN] base_model.model.model.layers.17.self_attn.k_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6584721408
+[FROZEN] base_model.model.model.layers.17.self_attn.v_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6585769984
+[FROZEN] base_model.model.model.layers.17.self_attn.o_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5467987968
+[FROZEN] base_model.model.model.layers.17.mlp.gate_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5421850624
+[LoRA]   base_model.model.model.layers.17.mlp.gate_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.17.mlp.gate_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.17.mlp.up_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5444919296
+[LoRA]   base_model.model.model.layers.17.mlp.up_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.17.mlp.up_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.17.mlp.down_proj.base_layer.weight shape=torch.Size([2048, 5632]) requires_grad=False is_leaf=True, p.data_ptr()=5398781952
+[LoRA]   base_model.model.model.layers.17.mlp.down_proj.lora_A.default.weight shape=torch.Size([16, 5632]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.17.mlp.down_proj.lora_B.default.weight shape=torch.Size([2048, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.17.input_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565920768
+[FROZEN] base_model.model.model.layers.17.post_attention_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565924864
+[FROZEN] base_model.model.model.layers.18.self_attn.q_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5562359808
+[FROZEN] base_model.model.model.layers.18.self_attn.k_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6586818560
+[FROZEN] base_model.model.model.layers.18.self_attn.v_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6587867136
+[FROZEN] base_model.model.model.layers.18.self_attn.o_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5553971200
+[FROZEN] base_model.model.model.layers.18.mlp.gate_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5507833856
+[LoRA]   base_model.model.model.layers.18.mlp.gate_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.18.mlp.gate_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.18.mlp.up_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5530902528
+[LoRA]   base_model.model.model.layers.18.mlp.up_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.18.mlp.up_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.18.mlp.down_proj.base_layer.weight shape=torch.Size([2048, 5632]) requires_grad=False is_leaf=True, p.data_ptr()=5484765184
+[LoRA]   base_model.model.model.layers.18.mlp.down_proj.lora_A.default.weight shape=torch.Size([16, 5632]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.18.mlp.down_proj.lora_B.default.weight shape=torch.Size([2048, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.18.input_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565928960
+[FROZEN] base_model.model.model.layers.18.post_attention_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565933056
+[FROZEN] base_model.model.model.layers.19.self_attn.q_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5648343040
+[FROZEN] base_model.model.model.layers.19.self_attn.k_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6588915712
+[FROZEN] base_model.model.model.layers.19.self_attn.v_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6589964288
+[FROZEN] base_model.model.model.layers.19.self_attn.o_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5639954432
+[FROZEN] base_model.model.model.layers.19.mlp.gate_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5593817088
+[LoRA]   base_model.model.model.layers.19.mlp.gate_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.19.mlp.gate_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.19.mlp.up_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5616885760
+[LoRA]   base_model.model.model.layers.19.mlp.up_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.19.mlp.up_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.19.mlp.down_proj.base_layer.weight shape=torch.Size([2048, 5632]) requires_grad=False is_leaf=True, p.data_ptr()=5570748416
+[LoRA]   base_model.model.model.layers.19.mlp.down_proj.lora_A.default.weight shape=torch.Size([16, 5632]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.19.mlp.down_proj.lora_B.default.weight shape=torch.Size([2048, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.19.input_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565937152
+[FROZEN] base_model.model.model.layers.19.post_attention_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565941248
+[FROZEN] base_model.model.model.layers.20.self_attn.q_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5820309504
+[FROZEN] base_model.model.model.layers.20.self_attn.k_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6593110016
+[FROZEN] base_model.model.model.layers.20.self_attn.v_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6594158592
+[FROZEN] base_model.model.model.layers.20.self_attn.o_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5811920896
+[FROZEN] base_model.model.model.layers.20.mlp.gate_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5765783552
+[LoRA]   base_model.model.model.layers.20.mlp.gate_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.20.mlp.gate_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.20.mlp.up_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5788852224
+[LoRA]   base_model.model.model.layers.20.mlp.up_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.20.mlp.up_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.20.mlp.down_proj.base_layer.weight shape=torch.Size([2048, 5632]) requires_grad=False is_leaf=True, p.data_ptr()=5742714880
+[LoRA]   base_model.model.model.layers.20.mlp.down_proj.lora_A.default.weight shape=torch.Size([16, 5632]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.20.mlp.down_proj.lora_B.default.weight shape=torch.Size([2048, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.20.input_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565953536
+[FROZEN] base_model.model.model.layers.20.post_attention_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565957632
+[FROZEN] base_model.model.model.layers.21.self_attn.q_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5906292736
+[FROZEN] base_model.model.model.layers.21.self_attn.k_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6595207168
+[FROZEN] base_model.model.model.layers.21.self_attn.v_proj.weight shape=torch.Size([256, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=6596255744
+[FROZEN] base_model.model.model.layers.21.self_attn.o_proj.weight shape=torch.Size([2048, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5897904128
+[FROZEN] base_model.model.model.layers.21.mlp.gate_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5851766784
+[LoRA]   base_model.model.model.layers.21.mlp.gate_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.21.mlp.gate_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.21.mlp.up_proj.base_layer.weight shape=torch.Size([5632, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=5874835456
+[LoRA]   base_model.model.model.layers.21.mlp.up_proj.lora_A.default.weight shape=torch.Size([16, 2048]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.21.mlp.up_proj.lora_B.default.weight shape=torch.Size([5632, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.21.mlp.down_proj.base_layer.weight shape=torch.Size([2048, 5632]) requires_grad=False is_leaf=True, p.data_ptr()=5828698112
+[LoRA]   base_model.model.model.layers.21.mlp.down_proj.lora_A.default.weight shape=torch.Size([16, 5632]) requires_grad=True is_leaf=True
+[LoRA]   base_model.model.model.layers.21.mlp.down_proj.lora_B.default.weight shape=torch.Size([2048, 16]) requires_grad=True is_leaf=True
+[FROZEN] base_model.model.model.layers.21.input_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565961728
+[FROZEN] base_model.model.model.layers.21.post_attention_layernorm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6565965824
+[FROZEN] base_model.model.model.norm.weight shape=torch.Size([2048]) requires_grad=False is_leaf=True, p.data_ptr()=6566027264
+[FROZEN] base_model.model.lm_head.weight shape=torch.Size([32000, 2048]) requires_grad=False is_leaf=True, p.data_ptr()=4362788864
+init AsyncCompressor
+Using the latest cached version of the dataset since timdettmers/openassistant-guanaco couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /data/models/huggingface/datasets/timdettmers___openassistant-guanaco/default/0.0.0/831dabac2283d99420cda0b673d7a2a43849f17a (last modified on Thu May  1 09:51:59 2025).
+
+
+*************** i=0 ****************
+loss=tensor(6.0270, device='cuda:0', grad_fn=<NllLossBackward0>)
+Traceback (most recent call last):
+  File "/opt/finetune/MemRift/train_wrapper.py", line 656, in <module>
+    measure()
+  File "/opt/finetune/MemRift/train_wrapper.py", line 594, in measure
+    loss.backward()
+  File "/opt/venv/lib/python3.12/site-packages/torch/_tensor.py", line 626, in backward
+    torch.autograd.backward(
+  File "/opt/venv/lib/python3.12/site-packages/torch/autograd/__init__.py", line 347, in backward
+    _engine_run_backward(
+  File "/opt/venv/lib/python3.12/site-packages/torch/autograd/graph.py", line 823, in _engine_run_backward
+    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: mat2 must be a matrix

@@ -2,17 +2,19 @@
 
 args.model='/opt/models/hf/TinyLlama-1.1B-Chat-v1.0', args.outdir='./weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level18', args.weight=False, args.activation=True, args.max_length=2048
 [meta] still 0 tensors on meta device
-Peak CPU memory usage: 751.12 MB
+Peak CPU memory usage: 751.90 MB
 Peak GPU memory usage: 2129.22 MB
 init AsyncCompressor
+Using the latest cached version of the dataset since timdettmers/openassistant-guanaco couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /data/models/huggingface/datasets/timdettmers___openassistant-guanaco/default/0.0.0/831dabac2283d99420cda0b673d7a2a43849f17a (last modified on Mon Jun 23 08:47:36 2025).
 
 
 *************** i=0 ****************
 loss=tensor(0.8168, device='cuda:0', grad_fn=<NllLossBackward0>)
-Round 0: 16842.6 ms , 16842.8 ms , peak Δ=5831.5 MB
-Peak CPU memory usage: 1652.84 MB
-- Fwd time: 12852.2 ms
-- Bwd time: 3990.4 ms
+Round 0: 17646.1 ms , 17646.5 ms , peak Δ=5831.5 MB
+Peak CPU memory usage: 1614.14 MB
+- Fwd time: 12654.7 ms
+- Bwd time: 4991.4 ms
 Compression time: 0.0 ms
 	Wait comp start time: 0.0 ms
 Decompression time: 0.0 ms
@@ -35,11 +37,11 @@ Unpack time: 0.0 ms
 
 
 *************** i=1 ****************
-loss=tensor(0.8047, device='cuda:0', grad_fn=<NllLossBackward0>)
-Round 1: 15017.0 ms , 15018.1 ms , peak Δ=5901.5 MB
-Peak CPU memory usage: 1782.35 MB
-- Fwd time: 11266.0 ms
-- Bwd time: 3751.0 ms
+loss=tensor(0.8040, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 1: 15830.2 ms , 15831.4 ms , peak Δ=5901.5 MB
+Peak CPU memory usage: 1715.94 MB
+- Fwd time: 11121.6 ms
+- Bwd time: 4708.6 ms
 Compression time: 0.0 ms
 	Wait comp start time: 0.0 ms
 Decompression time: 0.0 ms
@@ -62,11 +64,11 @@ Unpack time: 0.0 ms
 
 
 *************** i=2 ****************
-loss=tensor(0.7743, device='cuda:0', grad_fn=<NllLossBackward0>)
-Round 2: 14874.9 ms , 14876.6 ms , peak Δ=5901.5 MB
-Peak CPU memory usage: 1814.39 MB
-- Fwd time: 11283.1 ms
-- Bwd time: 3591.9 ms
+loss=tensor(0.7746, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 2: 15597.8 ms , 15599.6 ms , peak Δ=5901.5 MB
+Peak CPU memory usage: 1761.22 MB
+- Fwd time: 10888.7 ms
+- Bwd time: 4709.1 ms
 Compression time: 0.0 ms
 	Wait comp start time: 0.0 ms
 Decompression time: 0.0 ms
@@ -89,11 +91,11 @@ Unpack time: 0.0 ms
 
 
 *************** i=3 ****************
-loss=tensor(0.7350, device='cuda:0', grad_fn=<NllLossBackward0>)
-Round 3: 14475.2 ms , 14476.9 ms , peak Δ=5901.5 MB
-Peak CPU memory usage: 1833.08 MB
-- Fwd time: 11306.5 ms
-- Bwd time: 3168.6 ms
+loss=tensor(0.7358, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 3: 15619.9 ms , 15621.4 ms , peak Δ=5901.5 MB
+Peak CPU memory usage: 1796.52 MB
+- Fwd time: 10911.4 ms
+- Bwd time: 4708.5 ms
 Compression time: 0.0 ms
 	Wait comp start time: 0.0 ms
 Decompression time: 0.0 ms
@@ -116,11 +118,11 @@ Unpack time: 0.0 ms
 
 
 *************** i=4 ****************
-loss=tensor(0.6958, device='cuda:0', grad_fn=<NllLossBackward0>)
-Round 4: 14438.5 ms , 14439.4 ms , peak Δ=5901.5 MB
-Peak CPU memory usage: 1847.66 MB
-- Fwd time: 11254.8 ms
-- Bwd time: 3183.7 ms
+loss=tensor(0.6960, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 4: 15520.1 ms , 15522.0 ms , peak Δ=5901.5 MB
+Peak CPU memory usage: 1819.09 MB
+- Fwd time: 11016.9 ms
+- Bwd time: 4503.2 ms
 Compression time: 0.0 ms
 	Wait comp start time: 0.0 ms
 Decompression time: 0.0 ms
@@ -140,6 +142,3 @@ Unpack time: 0.0 ms
 	Post time 1: 0.0 ms
 	Post time 2: 0.0 ms
 	Post time 3: 0.0 ms
-[1;34mwandb[0m: 
-[1;34mwandb[0m: 🚀 View run [33mgenerous-sponge-277[0m at: [34mhttps://wandb.ai/15692276873/memrift_act_weight_jetson/runs/bh8ndpsv[0m
-[1;34mwandb[0m: Find logs at: [1;35mwandb/run-20250629_013848-bh8ndpsv/logs[0m

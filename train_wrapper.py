@@ -1073,37 +1073,6 @@ class AsyncCompressor:
         tok.comped_cpu_exp = comped_bytes
         tok.numel = arr.size
 
-        # def _encode_and_free(exp: torch.Tensor, sm: torch.Tensor):
-        #     # comp = jpegxl_zstd_encode(exp, sm)   # 这里内部最好直接用 numpy buffer，别再复制
-        #     # del exp, sm                          # 🔑 立刻释放线程私有引用
-        #     return exp, sm
-
-        # 立即腾显存
-        # t.data = torch.empty(0, device=t.device, dtype=t.dtype)
-        # torch.cuda.empty_cache()
-
-        # tok.cpu_exp = torch.zeros(tok.shape, dtype=torch.uint8, device='cpu', pin_memory=True)
-        # if tok.dtype == torch.bfloat16:
-        #     tok.sm_bits = torch.zeros(tok.shape, dtype=torch.uint8, device=device)
-        # else:
-        #     tok.sm_bits = torch.zeros(tok.cpu_exp.numel() * 3, dtype=torch.uint8, device=device)
-        
-        # tok.future = self.pool.submit(_encode_and_free, cpu_exp, sm_bits)
-        # del cpu_exp, sm_bits
-        # key = (t.data_ptr(), t.nbytes)
-        # key = t.untyped_storage().data_ptr()
-        # self.counter[key] = self.counter.get(key, 0) + 1
-        
-        # equal = 0
-        # for tensor in self.counter.keys():
-        #     if torch.equal(tensor, t):
-        #         equal += 1
-        #         self.counter[tensor] += 1
-        #         break
-        # if equal == 0:
-        #     self.counter[t] = 1
-
-        return 
 
     def decompress_sync(self, 
             tok: PlaceHolderToken,

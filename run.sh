@@ -7,9 +7,10 @@ python3 -u train_wrapper.py --finetune_type qlora --autocast_context --hook --ac
 python3 -u train_multithread.py --finetune_type qlora --autocast_context --hook --activation --asynchronous > rst.txt
 python3 -u train_wrapper.py --hook --weight > rst.txt
 python3 -u train_wrapper.py --hook --activation > rst.txt
+python3 -u train_multithread.py --hook --activation > rst.txt
 python3 -u train_multithread.py --hook --weight > rst.txt
 python3 -u train_multithread.py --hook --activation --asynchronous > rst.txt
-python3 -u train_multithread.py --hook --activation --asynchronous --layerwise > rst.txt
+python3 -u train_multithread.py --hook --weight --activation --asynchronous > rst.txt
 python3 -u train_wrapper.py --hook --weight --activation > rst.txt
 
 # max_length=512

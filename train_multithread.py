@@ -1173,23 +1173,25 @@ class AsyncCompressor:
         # Dedicated stream for D→H copy + encode so we don't block the main
         # compute stream.  Feel free to expose this in your API.
         print("init AsyncCompressor")
-        self.pool_workers = os.cpu_count() - 2
-
-        # --- NEW: Add Semaphores ---
-        # Limit concurrent compressions to control peak CPU/GPU buffer memory
-        concurrency_limit = 3
-        self.comp_semaphore = threading.Semaphore(value=self.pool_workers)
-        self.decomp_semaphore = threading.Semaphore(value=concurrency_limit)
-
-        self._build()
 
         if not args.asynchronous:
             self.cctx = zstd.ZstdCompressor(level=args.level, threads=-1, write_checksum=False)
             self.dctx = zstd.ZstdDecompressor()
+        else:
+            self.pool_workers = os.cpu_count() - 2
+
+            # --- NEW: Add Semaphores ---
+            # Limit concurrent compressions to control peak CPU/GPU buffer memory
+            concurrency_limit = 3
+            self.comp_semaphore = threading.Semaphore(value=self.pool_workers)
+            self.decomp_semaphore = threading.Semaphore(value=concurrency_limit)
+
+        self._build()
 
     def _build(self):
-        self.compress_pool= fut.ThreadPoolExecutor(self.pool_workers)
-        self.decode_pool  = fut.ThreadPoolExecutor(2)
+        if args.asynchronous:
+            self.compress_pool= fut.ThreadPoolExecutor(self.pool_workers)
+            self.decode_pool  = fut.ThreadPoolExecutor(2)
         self.d2h_stream   = torch.cuda.Stream()
         self.h2d_stream   = torch.cuda.Stream()
     
@@ -1225,7 +1227,6 @@ class AsyncCompressor:
         comped_bytes = self.cctx.compress(arr)
         tok.comped_cpu_exp = comped_bytes
         tok.numel = arr.size
-        return
     
     def kickoff_async(self, tok: PlaceHolderToken, t: torch.Tensor):
 
@@ -1278,13 +1279,10 @@ class AsyncCompressor:
         return fut
 
     def decompress_sync(self, 
-            tok: PlaceHolderToken,
-            fut):
+            tok: PlaceHolderToken):
 
-        # comped_bytes, numel = tok.future.result()
-        comped_bytes, numel = fut.result()
-        # comped_bytes = tok.comped_cpu_exp
-        # numel = tok.numel
+        comped_bytes = tok.comped_cpu_exp
+        numel = tok.numel
         cpu_exp = torch.empty(numel, dtype=torch.uint8, pin_memory=True)
         with self.dctx.stream_reader(memoryview(comped_bytes)) as reader:
             view = memoryview(cpu_exp.numpy())   # numpy() 不复制，只拿 data_ptr
@@ -1393,6 +1391,7 @@ def _unpack(tok, compressor):
             if tok.decomped_data is None:
                 # self.comp.decompress_sync(tok)
                 compressor.decompress_sync(tok)
+                tok.decomped_data.record_stream(torch.cuda.current_stream())
         return tok.decomped_data
 
     return tok                    # 反向时会被替换成 token，再解压
@@ -1474,11 +1473,11 @@ class DecoderLayerWrapper(torch.nn.Module):
                 seen[key] = (weakref.ref(tok), weakref.ref(t))
                 if args.asynchronous:
                     fut = self.comp.kickoff_async(tok, t)
+                    self.futures.append(fut)
+                    tok.fut_id = len(self.futures) - 1
                 else:
                     self.comp.kickoff_sync(tok, t)
                 self.tokens.append(weakref.ref(tok))
-                self.futures.append(fut)
-                tok.fut_id = len(self.futures) - 1
                 ts.append(weakref.ref(t))
 
             if args.debug:
@@ -1529,15 +1528,15 @@ class DecoderLayerWrapper(torch.nn.Module):
 
         return out
 
-    def decomp_tokens(self):
-        print(f"{len(self.tokens)=}")
-        for tok_ptr in self.tokens:
-            tok = tok_ptr()
-            if tok is None:
-                continue
-            fut = self.futures[tok.fut_id]
-            compressor.decompress_async(tok, fut)
-            self.futures[tok.fut_id] = None
+    # def decomp_tokens(self):
+    #     print(f"{len(self.tokens)=}")
+    #     for tok_ptr in self.tokens:
+    #         tok = tok_ptr()
+    #         if tok is None:
+    #             continue
+    #         fut = self.futures[tok.fut_id]
+    #         compressor.decompress_async(tok, fut)
+    #         self.futures[tok.fut_id] = None
 
 # Inject before peft
 def inject_async_compression(model: MistralModel | MistralForCausalLM | LlamaModel | LlamaForCausalLM,
@@ -1712,7 +1711,7 @@ def measure(n=args.round):
                 optimizer.step()
                 # print(f"After step")
                 optimizer.zero_grad()
-                if args.hook:
+                if args.hook and args.asynchronous:
                     compressor._reset()
                 # print(f"After zero grad")
             tb = time.time()

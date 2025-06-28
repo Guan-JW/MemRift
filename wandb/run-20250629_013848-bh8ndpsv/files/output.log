@@ -5,6 +5,8 @@ args.model='/opt/models/hf/TinyLlama-1.1B-Chat-v1.0', args.outdir='./weight_comp
 Peak CPU memory usage: 751.12 MB
 Peak GPU memory usage: 2129.22 MB
 init AsyncCompressor
+Using the latest cached version of the dataset since timdettmers/openassistant-guanaco couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /data/models/huggingface/datasets/timdettmers___openassistant-guanaco/default/0.0.0/831dabac2283d99420cda0b673d7a2a43849f17a (last modified on Mon Jun 23 08:47:36 2025).
 
 
 *************** i=0 ****************
@@ -140,6 +142,3 @@ Unpack time: 0.0 ms
 	Post time 1: 0.0 ms
 	Post time 2: 0.0 ms
 	Post time 3: 0.0 ms
-[1;34mwandb[0m: 
-[1;34mwandb[0m: 🚀 View run [33mgenerous-sponge-277[0m at: [34mhttps://wandb.ai/15692276873/memrift_act_weight_jetson/runs/bh8ndpsv[0m
-[1;34mwandb[0m: Find logs at: [1;35mwandb/run-20250629_013848-bh8ndpsv/logs[0m

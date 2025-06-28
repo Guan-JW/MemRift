@@ -1,0 +1,15 @@
+{"time":"2025-06-28T05:01:54.670749984+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250628_050154-dcretywk/logs/debug-core.log"}
+{"time":"2025-06-28T05:01:56.213895808+08:00","level":"INFO","msg":"stream: created new stream","id":"dcretywk"}
+{"time":"2025-06-28T05:01:56.213998944+08:00","level":"INFO","msg":"stream: started","id":"dcretywk"}
+{"time":"2025-06-28T05:01:56.214017632+08:00","level":"INFO","msg":"handler: started","stream_id":"dcretywk"}
+{"time":"2025-06-28T05:01:56.21412464+08:00","level":"INFO","msg":"sender: started","stream_id":"dcretywk"}
+{"time":"2025-06-28T05:01:56.214200384+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"dcretywk"}
+{"time":"2025-06-28T05:01:56.617061728+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-28T05:03:16.4729088+08:00","level":"INFO","msg":"stream: closing","id":"dcretywk"}
+{"time":"2025-06-28T05:03:16.47302112+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-28T05:03:16.47313328+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-28T05:03:17.308232992+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-28T05:03:18.547023552+08:00","level":"INFO","msg":"handler: closed","stream_id":"dcretywk"}
+{"time":"2025-06-28T05:03:18.547390176+08:00","level":"INFO","msg":"sender: closed","stream_id":"dcretywk"}
+{"time":"2025-06-28T05:03:18.5604144+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"dcretywk"}
+{"time":"2025-06-28T05:03:18.560639328+08:00","level":"INFO","msg":"stream: closed","id":"dcretywk"}

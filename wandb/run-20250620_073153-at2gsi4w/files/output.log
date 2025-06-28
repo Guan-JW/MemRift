@@ -1,0 +1,157 @@
+
+
+args.model='/opt/models/hf/TinyLlama-1.1B-Chat-v1.0', args.outdir='./weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level18', args.weight=True, args.activation=True, args.max_length=2048
+[before_inject] GPU: allocated=2129.1 MB, reserved=2178.0 MB | CPU RSS=745.8 MB
+[before inject] logical param size = 2.1 GiB
+/opt/finetune/MemRift/train_wrapper.py:403: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /opt/pytorch/torch/csrc/utils/tensor_numpy.cpp:203.)
+  sm_gpu = torch.as_tensor(sign_np, dtype=torch.uint8, device=device)
+[after_inject] GPU: allocated=1213.0 MB, reserved=2222.0 MB | CPU RSS=1163.2 MB
+[after inject] logical param size = 280.9 MiB
+Peak CPU memory usage: 1163.21 MB
+Peak GPU memory usage: 2321.61 MB
+sign  : 924.1 MiB
+exp   : 304.8 MiB
+bf16  : 0 Bytes
+python: 15.5 KiB
+---------------
+TOTAL : 1.2 GiB
+Peak CPU memory usage: 1163.21 MB
+Peak GPU memory usage: 2321.61 MB
+init AsyncCompressor
+Using the latest cached version of the dataset since timdettmers/openassistant-guanaco couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /data/models/huggingface/datasets/timdettmers___openassistant-guanaco/default/0.0.0/831dabac2283d99420cda0b673d7a2a43849f17a (last modified on Thu May  1 09:51:59 2025).
+
+
+*************** i=0 ****************
+loss=tensor(6.0270, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 0: 20851.7 ms , 20853.3 ms , peak Δ=5007.4 MB
+Peak CPU memory usage: 1347.80 MB
+- Fwd time: 12835.7 ms
+- Bwd time: 8016.0 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms
+
+
+*************** i=1 ****************
+loss=tensor(5.3434, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 1: 18091.5 ms , 18095.9 ms , peak Δ=5077.4 MB
+Peak CPU memory usage: 1644.88 MB
+- Fwd time: 9821.5 ms
+- Bwd time: 8270.0 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms
+
+
+*************** i=2 ****************
+loss=tensor(3.5920, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 2: 17801.8 ms , 17815.2 ms , peak Δ=5077.4 MB
+Peak CPU memory usage: 1770.25 MB
+- Fwd time: 9791.2 ms
+- Bwd time: 8010.6 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms
+
+
+*************** i=3 ****************
+loss=tensor(2.0166, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 3: 18287.3 ms , 18303.6 ms , peak Δ=5077.4 MB
+Peak CPU memory usage: 1853.94 MB
+- Fwd time: 10501.6 ms
+- Bwd time: 7785.7 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms
+
+
+*************** i=4 ****************
+loss=tensor(1.0003, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 4: 17455.1 ms , 17461.8 ms , peak Δ=5077.4 MB
+Peak CPU memory usage: 1894.88 MB
+- Fwd time: 9807.9 ms
+- Bwd time: 7647.3 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms

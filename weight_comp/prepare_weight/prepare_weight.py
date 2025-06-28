@@ -3,6 +3,7 @@ import torch, zstandard as zstd, numpy as np, struct, json, os, argparse
 from transformers import AutoModelForCausalLM
 from peft import LoraConfig, get_peft_model
 import time
+import float_split_stride_pin as fs_sp
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--model", default="/opt/models/hf/Mistral-7B-v0.1")
@@ -11,63 +12,54 @@ parser.add_argument("--level", default=1)
 args = parser.parse_args()
 os.makedirs(args.outdir, exist_ok=True)
 
-compressor = zstd.ZstdCompressor(level=int(args.level))
-index = []                                  # <layer name, binary file, shape, dtype>
-
 print(f"{args.model=}, {args.outdir=}")
-model = AutoModelForCausalLM.from_pretrained(args.model, torch_dtype=torch.bfloat16)
-peft_config = LoraConfig(
-            lora_alpha=16,
-            lora_dropout=0.0,
-            r=16,
-            bias="none",
-            task_type="CAUSAL_LM",
-            target_modules= ["gate_proj", "up_proj", "down_proj"]
-    )
-model = get_peft_model(model, peft_config, 
-                autocast_adapter_dtype=True)   # set this to keep the adapters in bfloat16
-
-# for name, param in model.named_parameters():
-#     if param is None or not isinstance(param, torch.nn.Parameter):
-#         print("Not parameter!")
-#     if not param.requires_grad:
-#         print(f"[FROZEN] {name} shape={param.shape} requires_grad={param.requires_grad} is_leaf={param.is_leaf}")
-#     elif "lora_" in name:
-#         print(f"[LoRA]   {name} shape={param.shape} requires_grad={param.requires_grad} is_leaf={param.is_leaf}")
-#     else:
-#         print(f"[TRAIN]  {name} shape={param.shape} requires_grad={param.requires_grad} is_leaf={param.is_leaf}")
-
+model = AutoModelForCausalLM.from_pretrained(args.model, torch_dtype=torch.bfloat16, device_map={"": 0})
 
 comp_time = 0
-for name, w in model.named_parameters():
-    if w.requires_grad or w.dtype != torch.bfloat16:
-        continue                                # 只处理冻结 bf16
+cpr = zstd.ZstdCompressor(level=int(args.level))
+index = []                                  # <layer name, binary file, shape, dtype>
 
-    w_cpu = w.detach().cpu().contiguous()
-    arr_u16_t = w_cpu.view(torch.uint16)
-    arr = arr_u16_t.numpy()
+for name, p in model.named_parameters():
+    fn  = f"{len(index):06}.bin"
+    out = os.path.join(args.outdir, fn)
 
-    sign = (arr >> 15) & 0x1
-    mant = arr & 0x007F
-    sign_mant = ((sign << 7) | mant).astype(np.uint8)
-    # sign_mant = (arr & 0x807f).astype(np.uint16) # bit15 sign + bit6-0 mantissa
-    exp       = ((arr >> 7) & 0x00ff).astype(np.uint8)
+    # if p.requires_grad:
+    #     continue
 
-    fn = f"{len(index):05d}.bin"
-    path = os.path.join(args.outdir, fn)
-    with open(path, "wb") as f:
-        f.write(struct.pack("<I", arr.size))          # 4B 元素个数
-        f.write(sign_mant.tobytes())                   # 2 bytes/elem
-        t0 = time.time()
-        comped = compressor.compress(exp.tobytes())
-        comp_time += time.time() - t0
-        f.write(comped)          # 压缩后 exponent
+    if p.dtype == torch.float32:
+        print(f"{name=}, {p.shape=}")
+    else:
+        if p.dtype != torch.bfloat16:
+            print(f"{name=}, {p.shape=}, {p.dtype=}")
 
-    index.append(dict(
-        name=name,
-        file=fn,
-        shape=list(w.shape),
-    ))
+    if p.dtype in (torch.bfloat16, torch.float32):
+        # ======= 使用 fs_sp CUDA kernel =======
+        stm = torch.cuda.current_stream()
+        with torch.cuda.stream(stm):
+            cpu_exp, sm_bits = fs_sp.split(p, stm.cuda_stream)
+        stm.synchronize()
+        sm_cpu = sm_bits.cpu().contiguous()
+        del sm_bits
+
+        with open(out, "wb") as f:
+            f.write(struct.pack("<Q", p.numel()))
+            f.write(sm_cpu.numpy().tobytes())
+
+            t0 = time.time()
+            comped_bytes = cpr.compress(cpu_exp.numpy().tobytes())
+            comp_time += time.time() - t0
+
+            f.write(comped_bytes)
+        scheme = "split_zstd"
+    else:
+        torch.save(p.detach().cpu(), out)
+        scheme = "raw_torch"
+
+    index.append(dict(name=name,
+                      file=fn,
+                      shape=list(p.shape),
+                      dtype=str(p.dtype).replace("torch.", ""),
+                      scheme=scheme))
 
 json.dump(index, open(os.path.join(args.outdir, "index.json"), "w"))
 print(f"✅  wrote {len(index)} frozen tensors → “{args.outdir}”, compression time: {comp_time*1000:.2f} ms")

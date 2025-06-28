@@ -1,0 +1,296 @@
+
+
+args.model='/opt/finetune/MemRift/weight_comp/prepare_weight/Llama-3.2-3B-Instruct-zstd-compressed-weights/level9', args.outdir='./weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level18', args.weight=True, args.activation=False, args.max_length=1024
+[before_inject] GPU: allocated=0.0 MB, reserved=0.0 MB | CPU RSS=720.5 MB
+[before inject] logical param size = 312.5 MiB
+dict(model.named_modules())={'': OPTForCausalLM(
+  (model): OPTModel(
+    (decoder): OPTDecoder(
+      (embed_tokens): Embedding(50272, 768, padding_idx=1)
+      (embed_positions): OPTLearnedPositionalEmbedding(2050, 768)
+      (final_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+      (layers): ModuleList(
+        (0-11): 12 x OPTDecoderLayer(
+          (self_attn): OPTAttention(
+            (k_proj): Linear(in_features=768, out_features=768, bias=True)
+            (v_proj): Linear(in_features=768, out_features=768, bias=True)
+            (q_proj): Linear(in_features=768, out_features=768, bias=True)
+            (out_proj): Linear(in_features=768, out_features=768, bias=True)
+          )
+          (activation_fn): ReLU()
+          (self_attn_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+          (fc1): Linear(in_features=768, out_features=3072, bias=True)
+          (fc2): Linear(in_features=3072, out_features=768, bias=True)
+          (final_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+        )
+      )
+    )
+  )
+  (lm_head): Linear(in_features=768, out_features=50272, bias=False)
+), 'model': OPTModel(
+  (decoder): OPTDecoder(
+    (embed_tokens): Embedding(50272, 768, padding_idx=1)
+    (embed_positions): OPTLearnedPositionalEmbedding(2050, 768)
+    (final_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+    (layers): ModuleList(
+      (0-11): 12 x OPTDecoderLayer(
+        (self_attn): OPTAttention(
+          (k_proj): Linear(in_features=768, out_features=768, bias=True)
+          (v_proj): Linear(in_features=768, out_features=768, bias=True)
+          (q_proj): Linear(in_features=768, out_features=768, bias=True)
+          (out_proj): Linear(in_features=768, out_features=768, bias=True)
+        )
+        (activation_fn): ReLU()
+        (self_attn_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+        (fc1): Linear(in_features=768, out_features=3072, bias=True)
+        (fc2): Linear(in_features=3072, out_features=768, bias=True)
+        (final_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+      )
+    )
+  )
+), 'model.decoder': OPTDecoder(
+  (embed_tokens): Embedding(50272, 768, padding_idx=1)
+  (embed_positions): OPTLearnedPositionalEmbedding(2050, 768)
+  (final_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+  (layers): ModuleList(
+    (0-11): 12 x OPTDecoderLayer(
+      (self_attn): OPTAttention(
+        (k_proj): Linear(in_features=768, out_features=768, bias=True)
+        (v_proj): Linear(in_features=768, out_features=768, bias=True)
+        (q_proj): Linear(in_features=768, out_features=768, bias=True)
+        (out_proj): Linear(in_features=768, out_features=768, bias=True)
+      )
+      (activation_fn): ReLU()
+      (self_attn_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+      (fc1): Linear(in_features=768, out_features=3072, bias=True)
+      (fc2): Linear(in_features=3072, out_features=768, bias=True)
+      (final_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+    )
+  )
+), 'model.decoder.embed_tokens': Embedding(50272, 768, padding_idx=1), 'model.decoder.embed_positions': OPTLearnedPositionalEmbedding(2050, 768), 'model.decoder.final_layer_norm': LayerNorm((768,), eps=1e-05, elementwise_affine=True), 'model.decoder.layers': ModuleList(
+  (0-11): 12 x OPTDecoderLayer(
+    (self_attn): OPTAttention(
+      (k_proj): Linear(in_features=768, out_features=768, bias=True)
+      (v_proj): Linear(in_features=768, out_features=768, bias=True)
+      (q_proj): Linear(in_features=768, out_features=768, bias=True)
+      (out_proj): Linear(in_features=768, out_features=768, bias=True)
+    )
+    (activation_fn): ReLU()
+    (self_attn_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+    (fc1): Linear(in_features=768, out_features=3072, bias=True)
+    (fc2): Linear(in_features=3072, out_features=768, bias=True)
+    (final_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+  )
+), 'model.decoder.layers.0': OPTDecoderLayer(
+  (self_attn): OPTAttention(
+    (k_proj): Linear(in_features=768, out_features=768, bias=True)
+    (v_proj): Linear(in_features=768, out_features=768, bias=True)
+    (q_proj): Linear(in_features=768, out_features=768, bias=True)
+    (out_proj): Linear(in_features=768, out_features=768, bias=True)
+  )
+  (activation_fn): ReLU()
+  (self_attn_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+  (fc1): Linear(in_features=768, out_features=3072, bias=True)
+  (fc2): Linear(in_features=3072, out_features=768, bias=True)
+  (final_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+), 'model.decoder.layers.0.self_attn': OPTAttention(
+  (k_proj): Linear(in_features=768, out_features=768, bias=True)
+  (v_proj): Linear(in_features=768, out_features=768, bias=True)
+  (q_proj): Linear(in_features=768, out_features=768, bias=True)
+  (out_proj): Linear(in_features=768, out_features=768, bias=True)
+), 'model.decoder.layers.0.self_attn.k_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.0.self_attn.v_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.0.self_attn.q_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.0.self_attn.out_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.0.activation_fn': ReLU(), 'model.decoder.layers.0.self_attn_layer_norm': LayerNorm((768,), eps=1e-05, elementwise_affine=True), 'model.decoder.layers.0.fc1': Linear(in_features=768, out_features=3072, bias=True), 'model.decoder.layers.0.fc2': Linear(in_features=3072, out_features=768, bias=True), 'model.decoder.layers.0.final_layer_norm': LayerNorm((768,), eps=1e-05, elementwise_affine=True), 'model.decoder.layers.1': OPTDecoderLayer(
+  (self_attn): OPTAttention(
+    (k_proj): Linear(in_features=768, out_features=768, bias=True)
+    (v_proj): Linear(in_features=768, out_features=768, bias=True)
+    (q_proj): Linear(in_features=768, out_features=768, bias=True)
+    (out_proj): Linear(in_features=768, out_features=768, bias=True)
+  )
+  (activation_fn): ReLU()
+  (self_attn_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+  (fc1): Linear(in_features=768, out_features=3072, bias=True)
+  (fc2): Linear(in_features=3072, out_features=768, bias=True)
+  (final_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+), 'model.decoder.layers.1.self_attn': OPTAttention(
+  (k_proj): Linear(in_features=768, out_features=768, bias=True)
+  (v_proj): Linear(in_features=768, out_features=768, bias=True)
+  (q_proj): Linear(in_features=768, out_features=768, bias=True)
+  (out_proj): Linear(in_features=768, out_features=768, bias=True)
+), 'model.decoder.layers.1.self_attn.k_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.1.self_attn.v_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.1.self_attn.q_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.1.self_attn.out_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.1.activation_fn': ReLU(), 'model.decoder.layers.1.self_attn_layer_norm': LayerNorm((768,), eps=1e-05, elementwise_affine=True), 'model.decoder.layers.1.fc1': Linear(in_features=768, out_features=3072, bias=True), 'model.decoder.layers.1.fc2': Linear(in_features=3072, out_features=768, bias=True), 'model.decoder.layers.1.final_layer_norm': LayerNorm((768,), eps=1e-05, elementwise_affine=True), 'model.decoder.layers.2': OPTDecoderLayer(
+  (self_attn): OPTAttention(
+    (k_proj): Linear(in_features=768, out_features=768, bias=True)
+    (v_proj): Linear(in_features=768, out_features=768, bias=True)
+    (q_proj): Linear(in_features=768, out_features=768, bias=True)
+    (out_proj): Linear(in_features=768, out_features=768, bias=True)
+  )
+  (activation_fn): ReLU()
+  (self_attn_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+  (fc1): Linear(in_features=768, out_features=3072, bias=True)
+  (fc2): Linear(in_features=3072, out_features=768, bias=True)
+  (final_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+), 'model.decoder.layers.2.self_attn': OPTAttention(
+  (k_proj): Linear(in_features=768, out_features=768, bias=True)
+  (v_proj): Linear(in_features=768, out_features=768, bias=True)
+  (q_proj): Linear(in_features=768, out_features=768, bias=True)
+  (out_proj): Linear(in_features=768, out_features=768, bias=True)
+), 'model.decoder.layers.2.self_attn.k_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.2.self_attn.v_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.2.self_attn.q_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.2.self_attn.out_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.2.activation_fn': ReLU(), 'model.decoder.layers.2.self_attn_layer_norm': LayerNorm((768,), eps=1e-05, elementwise_affine=True), 'model.decoder.layers.2.fc1': Linear(in_features=768, out_features=3072, bias=True), 'model.decoder.layers.2.fc2': Linear(in_features=3072, out_features=768, bias=True), 'model.decoder.layers.2.final_layer_norm': LayerNorm((768,), eps=1e-05, elementwise_affine=True), 'model.decoder.layers.3': OPTDecoderLayer(
+  (self_attn): OPTAttention(
+    (k_proj): Linear(in_features=768, out_features=768, bias=True)
+    (v_proj): Linear(in_features=768, out_features=768, bias=True)
+    (q_proj): Linear(in_features=768, out_features=768, bias=True)
+    (out_proj): Linear(in_features=768, out_features=768, bias=True)
+  )
+  (activation_fn): ReLU()
+  (self_attn_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+  (fc1): Linear(in_features=768, out_features=3072, bias=True)
+  (fc2): Linear(in_features=3072, out_features=768, bias=True)
+  (final_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+), 'model.decoder.layers.3.self_attn': OPTAttention(
+  (k_proj): Linear(in_features=768, out_features=768, bias=True)
+  (v_proj): Linear(in_features=768, out_features=768, bias=True)
+  (q_proj): Linear(in_features=768, out_features=768, bias=True)
+  (out_proj): Linear(in_features=768, out_features=768, bias=True)
+), 'model.decoder.layers.3.self_attn.k_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.3.self_attn.v_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.3.self_attn.q_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.3.self_attn.out_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.3.activation_fn': ReLU(), 'model.decoder.layers.3.self_attn_layer_norm': LayerNorm((768,), eps=1e-05, elementwise_affine=True), 'model.decoder.layers.3.fc1': Linear(in_features=768, out_features=3072, bias=True), 'model.decoder.layers.3.fc2': Linear(in_features=3072, out_features=768, bias=True), 'model.decoder.layers.3.final_layer_norm': LayerNorm((768,), eps=1e-05, elementwise_affine=True), 'model.decoder.layers.4': OPTDecoderLayer(
+  (self_attn): OPTAttention(
+    (k_proj): Linear(in_features=768, out_features=768, bias=True)
+    (v_proj): Linear(in_features=768, out_features=768, bias=True)
+    (q_proj): Linear(in_features=768, out_features=768, bias=True)
+    (out_proj): Linear(in_features=768, out_features=768, bias=True)
+  )
+  (activation_fn): ReLU()
+  (self_attn_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+  (fc1): Linear(in_features=768, out_features=3072, bias=True)
+  (fc2): Linear(in_features=3072, out_features=768, bias=True)
+  (final_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+), 'model.decoder.layers.4.self_attn': OPTAttention(
+  (k_proj): Linear(in_features=768, out_features=768, bias=True)
+  (v_proj): Linear(in_features=768, out_features=768, bias=True)
+  (q_proj): Linear(in_features=768, out_features=768, bias=True)
+  (out_proj): Linear(in_features=768, out_features=768, bias=True)
+), 'model.decoder.layers.4.self_attn.k_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.4.self_attn.v_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.4.self_attn.q_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.4.self_attn.out_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.4.activation_fn': ReLU(), 'model.decoder.layers.4.self_attn_layer_norm': LayerNorm((768,), eps=1e-05, elementwise_affine=True), 'model.decoder.layers.4.fc1': Linear(in_features=768, out_features=3072, bias=True), 'model.decoder.layers.4.fc2': Linear(in_features=3072, out_features=768, bias=True), 'model.decoder.layers.4.final_layer_norm': LayerNorm((768,), eps=1e-05, elementwise_affine=True), 'model.decoder.layers.5': OPTDecoderLayer(
+  (self_attn): OPTAttention(
+    (k_proj): Linear(in_features=768, out_features=768, bias=True)
+    (v_proj): Linear(in_features=768, out_features=768, bias=True)
+    (q_proj): Linear(in_features=768, out_features=768, bias=True)
+    (out_proj): Linear(in_features=768, out_features=768, bias=True)
+  )
+  (activation_fn): ReLU()
+  (self_attn_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+  (fc1): Linear(in_features=768, out_features=3072, bias=True)
+  (fc2): Linear(in_features=3072, out_features=768, bias=True)
+  (final_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+), 'model.decoder.layers.5.self_attn': OPTAttention(
+  (k_proj): Linear(in_features=768, out_features=768, bias=True)
+  (v_proj): Linear(in_features=768, out_features=768, bias=True)
+  (q_proj): Linear(in_features=768, out_features=768, bias=True)
+  (out_proj): Linear(in_features=768, out_features=768, bias=True)
+), 'model.decoder.layers.5.self_attn.k_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.5.self_attn.v_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.5.self_attn.q_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.5.self_attn.out_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.5.activation_fn': ReLU(), 'model.decoder.layers.5.self_attn_layer_norm': LayerNorm((768,), eps=1e-05, elementwise_affine=True), 'model.decoder.layers.5.fc1': Linear(in_features=768, out_features=3072, bias=True), 'model.decoder.layers.5.fc2': Linear(in_features=3072, out_features=768, bias=True), 'model.decoder.layers.5.final_layer_norm': LayerNorm((768,), eps=1e-05, elementwise_affine=True), 'model.decoder.layers.6': OPTDecoderLayer(
+  (self_attn): OPTAttention(
+    (k_proj): Linear(in_features=768, out_features=768, bias=True)
+    (v_proj): Linear(in_features=768, out_features=768, bias=True)
+    (q_proj): Linear(in_features=768, out_features=768, bias=True)
+    (out_proj): Linear(in_features=768, out_features=768, bias=True)
+  )
+  (activation_fn): ReLU()
+  (self_attn_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+  (fc1): Linear(in_features=768, out_features=3072, bias=True)
+  (fc2): Linear(in_features=3072, out_features=768, bias=True)
+  (final_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+), 'model.decoder.layers.6.self_attn': OPTAttention(
+  (k_proj): Linear(in_features=768, out_features=768, bias=True)
+  (v_proj): Linear(in_features=768, out_features=768, bias=True)
+  (q_proj): Linear(in_features=768, out_features=768, bias=True)
+  (out_proj): Linear(in_features=768, out_features=768, bias=True)
+), 'model.decoder.layers.6.self_attn.k_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.6.self_attn.v_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.6.self_attn.q_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.6.self_attn.out_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.6.activation_fn': ReLU(), 'model.decoder.layers.6.self_attn_layer_norm': LayerNorm((768,), eps=1e-05, elementwise_affine=True), 'model.decoder.layers.6.fc1': Linear(in_features=768, out_features=3072, bias=True), 'model.decoder.layers.6.fc2': Linear(in_features=3072, out_features=768, bias=True), 'model.decoder.layers.6.final_layer_norm': LayerNorm((768,), eps=1e-05, elementwise_affine=True), 'model.decoder.layers.7': OPTDecoderLayer(
+  (self_attn): OPTAttention(
+    (k_proj): Linear(in_features=768, out_features=768, bias=True)
+    (v_proj): Linear(in_features=768, out_features=768, bias=True)
+    (q_proj): Linear(in_features=768, out_features=768, bias=True)
+    (out_proj): Linear(in_features=768, out_features=768, bias=True)
+  )
+  (activation_fn): ReLU()
+  (self_attn_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+  (fc1): Linear(in_features=768, out_features=3072, bias=True)
+  (fc2): Linear(in_features=3072, out_features=768, bias=True)
+  (final_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+), 'model.decoder.layers.7.self_attn': OPTAttention(
+  (k_proj): Linear(in_features=768, out_features=768, bias=True)
+  (v_proj): Linear(in_features=768, out_features=768, bias=True)
+  (q_proj): Linear(in_features=768, out_features=768, bias=True)
+  (out_proj): Linear(in_features=768, out_features=768, bias=True)
+), 'model.decoder.layers.7.self_attn.k_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.7.self_attn.v_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.7.self_attn.q_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.7.self_attn.out_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.7.activation_fn': ReLU(), 'model.decoder.layers.7.self_attn_layer_norm': LayerNorm((768,), eps=1e-05, elementwise_affine=True), 'model.decoder.layers.7.fc1': Linear(in_features=768, out_features=3072, bias=True), 'model.decoder.layers.7.fc2': Linear(in_features=3072, out_features=768, bias=True), 'model.decoder.layers.7.final_layer_norm': LayerNorm((768,), eps=1e-05, elementwise_affine=True), 'model.decoder.layers.8': OPTDecoderLayer(
+  (self_attn): OPTAttention(
+    (k_proj): Linear(in_features=768, out_features=768, bias=True)
+    (v_proj): Linear(in_features=768, out_features=768, bias=True)
+    (q_proj): Linear(in_features=768, out_features=768, bias=True)
+    (out_proj): Linear(in_features=768, out_features=768, bias=True)
+  )
+  (activation_fn): ReLU()
+  (self_attn_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+  (fc1): Linear(in_features=768, out_features=3072, bias=True)
+  (fc2): Linear(in_features=3072, out_features=768, bias=True)
+  (final_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+), 'model.decoder.layers.8.self_attn': OPTAttention(
+  (k_proj): Linear(in_features=768, out_features=768, bias=True)
+  (v_proj): Linear(in_features=768, out_features=768, bias=True)
+  (q_proj): Linear(in_features=768, out_features=768, bias=True)
+  (out_proj): Linear(in_features=768, out_features=768, bias=True)
+), 'model.decoder.layers.8.self_attn.k_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.8.self_attn.v_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.8.self_attn.q_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.8.self_attn.out_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.8.activation_fn': ReLU(), 'model.decoder.layers.8.self_attn_layer_norm': LayerNorm((768,), eps=1e-05, elementwise_affine=True), 'model.decoder.layers.8.fc1': Linear(in_features=768, out_features=3072, bias=True), 'model.decoder.layers.8.fc2': Linear(in_features=3072, out_features=768, bias=True), 'model.decoder.layers.8.final_layer_norm': LayerNorm((768,), eps=1e-05, elementwise_affine=True), 'model.decoder.layers.9': OPTDecoderLayer(
+  (self_attn): OPTAttention(
+    (k_proj): Linear(in_features=768, out_features=768, bias=True)
+    (v_proj): Linear(in_features=768, out_features=768, bias=True)
+    (q_proj): Linear(in_features=768, out_features=768, bias=True)
+    (out_proj): Linear(in_features=768, out_features=768, bias=True)
+  )
+  (activation_fn): ReLU()
+  (self_attn_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+  (fc1): Linear(in_features=768, out_features=3072, bias=True)
+  (fc2): Linear(in_features=3072, out_features=768, bias=True)
+  (final_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+), 'model.decoder.layers.9.self_attn': OPTAttention(
+  (k_proj): Linear(in_features=768, out_features=768, bias=True)
+  (v_proj): Linear(in_features=768, out_features=768, bias=True)
+  (q_proj): Linear(in_features=768, out_features=768, bias=True)
+  (out_proj): Linear(in_features=768, out_features=768, bias=True)
+), 'model.decoder.layers.9.self_attn.k_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.9.self_attn.v_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.9.self_attn.q_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.9.self_attn.out_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.9.activation_fn': ReLU(), 'model.decoder.layers.9.self_attn_layer_norm': LayerNorm((768,), eps=1e-05, elementwise_affine=True), 'model.decoder.layers.9.fc1': Linear(in_features=768, out_features=3072, bias=True), 'model.decoder.layers.9.fc2': Linear(in_features=3072, out_features=768, bias=True), 'model.decoder.layers.9.final_layer_norm': LayerNorm((768,), eps=1e-05, elementwise_affine=True), 'model.decoder.layers.10': OPTDecoderLayer(
+  (self_attn): OPTAttention(
+    (k_proj): Linear(in_features=768, out_features=768, bias=True)
+    (v_proj): Linear(in_features=768, out_features=768, bias=True)
+    (q_proj): Linear(in_features=768, out_features=768, bias=True)
+    (out_proj): Linear(in_features=768, out_features=768, bias=True)
+  )
+  (activation_fn): ReLU()
+  (self_attn_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+  (fc1): Linear(in_features=768, out_features=3072, bias=True)
+  (fc2): Linear(in_features=3072, out_features=768, bias=True)
+  (final_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+), 'model.decoder.layers.10.self_attn': OPTAttention(
+  (k_proj): Linear(in_features=768, out_features=768, bias=True)
+  (v_proj): Linear(in_features=768, out_features=768, bias=True)
+  (q_proj): Linear(in_features=768, out_features=768, bias=True)
+  (out_proj): Linear(in_features=768, out_features=768, bias=True)
+), 'model.decoder.layers.10.self_attn.k_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.10.self_attn.v_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.10.self_attn.q_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.10.self_attn.out_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.10.activation_fn': ReLU(), 'model.decoder.layers.10.self_attn_layer_norm': LayerNorm((768,), eps=1e-05, elementwise_affine=True), 'model.decoder.layers.10.fc1': Linear(in_features=768, out_features=3072, bias=True), 'model.decoder.layers.10.fc2': Linear(in_features=3072, out_features=768, bias=True), 'model.decoder.layers.10.final_layer_norm': LayerNorm((768,), eps=1e-05, elementwise_affine=True), 'model.decoder.layers.11': OPTDecoderLayer(
+  (self_attn): OPTAttention(
+    (k_proj): Linear(in_features=768, out_features=768, bias=True)
+    (v_proj): Linear(in_features=768, out_features=768, bias=True)
+    (q_proj): Linear(in_features=768, out_features=768, bias=True)
+    (out_proj): Linear(in_features=768, out_features=768, bias=True)
+  )
+  (activation_fn): ReLU()
+  (self_attn_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+  (fc1): Linear(in_features=768, out_features=3072, bias=True)
+  (fc2): Linear(in_features=3072, out_features=768, bias=True)
+  (final_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+), 'model.decoder.layers.11.self_attn': OPTAttention(
+  (k_proj): Linear(in_features=768, out_features=768, bias=True)
+  (v_proj): Linear(in_features=768, out_features=768, bias=True)
+  (q_proj): Linear(in_features=768, out_features=768, bias=True)
+  (out_proj): Linear(in_features=768, out_features=768, bias=True)
+), 'model.decoder.layers.11.self_attn.k_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.11.self_attn.v_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.11.self_attn.q_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.11.self_attn.out_proj': Linear(in_features=768, out_features=768, bias=True), 'model.decoder.layers.11.activation_fn': ReLU(), 'model.decoder.layers.11.self_attn_layer_norm': LayerNorm((768,), eps=1e-05, elementwise_affine=True), 'model.decoder.layers.11.fc1': Linear(in_features=768, out_features=3072, bias=True), 'model.decoder.layers.11.fc2': Linear(in_features=3072, out_features=768, bias=True), 'model.decoder.layers.11.final_layer_norm': LayerNorm((768,), eps=1e-05, elementwise_affine=True), 'lm_head': Linear(in_features=768, out_features=50272, bias=False)}
+Traceback (most recent call last):
+  File "/opt/finetune/MemRift/train_wrapper.py", line 623, in <module>
+    layer2cps, max_job_size = inject_from_files(model, args.outdir)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/finetune/MemRift/train_wrapper.py", line 442, in inject_from_files
+    mod = dict(model.named_modules())[module]
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+KeyError: 'model.embed_tokens'

@@ -1,0 +1,21 @@
+2025-06-27 12:00:17,352 INFO    MainThread:1311136 [wandb_setup.py:_flush():81] Current SDK version is 0.20.1
+2025-06-27 12:00:17,353 INFO    MainThread:1311136 [wandb_setup.py:_flush():81] Configure stats pid to 1311136
+2025-06-27 12:00:17,353 INFO    MainThread:1311136 [wandb_setup.py:_flush():81] Loading settings from /root/.config/wandb/settings
+2025-06-27 12:00:17,353 INFO    MainThread:1311136 [wandb_setup.py:_flush():81] Loading settings from /opt/finetune/MemRift/wandb/settings
+2025-06-27 12:00:17,353 INFO    MainThread:1311136 [wandb_setup.py:_flush():81] Loading settings from environment variables
+2025-06-27 12:00:17,354 INFO    MainThread:1311136 [wandb_init.py:setup_run_log_directory():703] Logging user logs to /opt/finetune/MemRift/wandb/run-20250627_120017-1jcy762l/logs/debug.log
+2025-06-27 12:00:17,354 INFO    MainThread:1311136 [wandb_init.py:setup_run_log_directory():704] Logging internal logs to /opt/finetune/MemRift/wandb/run-20250627_120017-1jcy762l/logs/debug-internal.log
+2025-06-27 12:00:17,354 INFO    MainThread:1311136 [wandb_init.py:init():831] calling init triggers
+2025-06-27 12:00:17,354 INFO    MainThread:1311136 [wandb_init.py:init():836] wandb.init called with sweep_config: {}
+config: {'model': '/opt/models/hf/TinyLlama-1.1B-Chat-v1.0', 'outdir': './weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level18', 'finetune_type': 'lora', 'autocast_context': False, 'check_diff': False, 'hook': True, 'debug': False, 'print_ratio': False, 'print_time': False, 'weight': False, 'activation': True, 'layerwise': False, 'asynchronous': True, 'level': 1, 'round': 5, 'max_length': 2048, 'batch_size': 1, '_wandb': {}}
+2025-06-27 12:00:17,354 INFO    MainThread:1311136 [wandb_init.py:init():872] starting backend
+2025-06-27 12:00:17,809 INFO    MainThread:1311136 [wandb_init.py:init():875] sending inform_init request
+2025-06-27 12:00:17,828 INFO    MainThread:1311136 [wandb_init.py:init():883] backend started and connected
+2025-06-27 12:00:17,834 INFO    MainThread:1311136 [wandb_init.py:init():956] updated telemetry
+2025-06-27 12:00:17,853 INFO    MainThread:1311136 [wandb_init.py:init():980] communicating run to backend with 90.0 second timeout
+2025-06-27 12:00:19,753 INFO    MainThread:1311136 [wandb_init.py:init():1032] starting run threads in backend
+2025-06-27 12:00:20,090 INFO    MainThread:1311136 [wandb_run.py:_console_start():2453] atexit reg
+2025-06-27 12:00:20,091 INFO    MainThread:1311136 [wandb_run.py:_redirect():2301] redirect: wrap_raw
+2025-06-27 12:00:20,091 INFO    MainThread:1311136 [wandb_run.py:_redirect():2370] Wrapping output streams.
+2025-06-27 12:00:20,091 INFO    MainThread:1311136 [wandb_run.py:_redirect():2393] Redirects installed.
+2025-06-27 12:00:20,095 INFO    MainThread:1311136 [wandb_init.py:init():1078] run started, returning control to user process

@@ -1,0 +1,15 @@
+{"time":"2025-06-23T23:32:16.511622784+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250623_233216-xaws2qpp/logs/debug-core.log"}
+{"time":"2025-06-23T23:32:20.59996416+08:00","level":"INFO","msg":"stream: created new stream","id":"xaws2qpp"}
+{"time":"2025-06-23T23:32:20.6003672+08:00","level":"INFO","msg":"stream: started","id":"xaws2qpp"}
+{"time":"2025-06-23T23:32:20.600432416+08:00","level":"INFO","msg":"handler: started","stream_id":"xaws2qpp"}
+{"time":"2025-06-23T23:32:20.600538592+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"xaws2qpp"}
+{"time":"2025-06-23T23:32:20.60045248+08:00","level":"INFO","msg":"sender: started","stream_id":"xaws2qpp"}
+{"time":"2025-06-23T23:32:21.303557536+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-23T23:32:46.06716016+08:00","level":"INFO","msg":"stream: closing","id":"xaws2qpp"}
+{"time":"2025-06-23T23:32:46.067280192+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-23T23:32:46.067375552+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-23T23:32:46.896894144+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-23T23:32:51.286445568+08:00","level":"INFO","msg":"handler: closed","stream_id":"xaws2qpp"}
+{"time":"2025-06-23T23:32:51.286527424+08:00","level":"INFO","msg":"sender: closed","stream_id":"xaws2qpp"}
+{"time":"2025-06-23T23:32:51.287151296+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"xaws2qpp"}
+{"time":"2025-06-23T23:32:51.287456096+08:00","level":"INFO","msg":"stream: closed","id":"xaws2qpp"}

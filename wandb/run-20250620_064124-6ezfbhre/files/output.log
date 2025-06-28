@@ -1,0 +1,26 @@
+
+
+args.model='/opt/models/hf/Mistral-7B-v0.1', args.outdir='/opt/finetune/MemRift/weight_comp/prepare_weight/zstd_comped_weights_level21', args.weight=True, args.activation=True, args.max_length=2048
+Loading checkpoint shards: 100%|████████████████████████| 2/2 [00:34<00:00, 17.31s/it]
+[before_inject] GPU: allocated=13920.5 MB, reserved=13926.0 MB | CPU RSS=645.7 MB
+[before inject] logical param size = 13.6 GiB
+/opt/finetune/MemRift/train_wrapper.py:403: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /opt/pytorch/torch/csrc/utils/tensor_numpy.cpp:203.)
+  sm_gpu = torch.as_tensor(sign_np, dtype=torch.uint8, device=device)
+[after_inject] GPU: allocated=7264.3 MB, reserved=14068.0 MB | CPU RSS=2990.4 MB
+[after inject] logical param size = 608.0 MiB
+Peak CPU memory usage: 2990.45 MB
+Peak GPU memory usage: 14312.51 MB
+sign  : 6.5 GiB
+exp   : 2.1 GiB
+bf16  : 0 Bytes
+python: 22.5 KiB
+---------------
+TOTAL : 8.6 GiB
+Peak CPU memory usage: 2990.45 MB
+Peak GPU memory usage: 14312.51 MB
+init AsyncCompressor
+Using the latest cached version of the dataset since timdettmers/openassistant-guanaco couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /data/models/huggingface/datasets/timdettmers___openassistant-guanaco/default/0.0.0/831dabac2283d99420cda0b673d7a2a43849f17a (last modified on Thu May  1 09:51:59 2025).
+
+
+*************** i=0 ****************

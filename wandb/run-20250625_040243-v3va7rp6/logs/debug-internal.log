@@ -1,0 +1,16 @@
+{"time":"2025-06-25T04:02:43.838445824+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250625_040243-v3va7rp6/logs/debug-core.log"}
+{"time":"2025-06-25T04:02:45.31236272+08:00","level":"INFO","msg":"stream: created new stream","id":"v3va7rp6"}
+{"time":"2025-06-25T04:02:45.312443424+08:00","level":"INFO","msg":"stream: started","id":"v3va7rp6"}
+{"time":"2025-06-25T04:02:45.31249264+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"v3va7rp6"}
+{"time":"2025-06-25T04:02:45.312786656+08:00","level":"INFO","msg":"handler: started","stream_id":"v3va7rp6"}
+{"time":"2025-06-25T04:02:45.3128144+08:00","level":"INFO","msg":"sender: started","stream_id":"v3va7rp6"}
+{"time":"2025-06-25T04:02:45.722159968+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-25T04:04:00.96352544+08:00","level":"INFO","msg":"stream: closing","id":"v3va7rp6"}
+{"time":"2025-06-25T04:04:00.96481808+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-25T04:04:00.965475072+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-25T04:04:02.034832704+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-25T04:04:02.360008416+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/15692276873/gemma-2-2b-it_memrift_act_weight_jetson/v3va7rp6/file_stream\": EOF"}
+{"time":"2025-06-25T04:04:07.375234944+08:00","level":"INFO","msg":"handler: closed","stream_id":"v3va7rp6"}
+{"time":"2025-06-25T04:04:07.375389376+08:00","level":"INFO","msg":"sender: closed","stream_id":"v3va7rp6"}
+{"time":"2025-06-25T04:04:07.376285312+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"v3va7rp6"}
+{"time":"2025-06-25T04:04:07.376354144+08:00","level":"INFO","msg":"stream: closed","id":"v3va7rp6"}

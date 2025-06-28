@@ -1,0 +1,44 @@
+
+
+args.model='/opt/models/hf/TinyLlama-1.1B-Chat-v1.0', args.outdir='./weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level18', args.weight=False, args.activation=False, args.max_length=2048
+[meta] still 0 tensors on meta device
+Peak CPU memory usage: 747.91 MB
+Peak GPU memory usage: 2129.22 MB
+Using the latest cached version of the dataset since timdettmers/openassistant-guanaco couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /data/models/huggingface/datasets/timdettmers___openassistant-guanaco/default/0.0.0/831dabac2283d99420cda0b673d7a2a43849f17a (last modified on Mon Jun 23 08:26:44 2025).
+Using the latest cached version of the dataset since timdettmers/openassistant-guanaco couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /data/models/huggingface/datasets/timdettmers___openassistant-guanaco/default/0.0.0/831dabac2283d99420cda0b673d7a2a43849f17a (last modified on Mon Jun 23 08:26:44 2025).
+Traceback (most recent call last):
+  File "/opt/finetune/MemRift/train_wrapper.py", line 1357, in <module>
+    raw_val = load_dataset("timdettmers/openassistant-guanaco",
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.12/site-packages/datasets/load.py", line 2096, in load_dataset
+    ds = builder_instance.as_dataset(split=split, verification_mode=verification_mode, in_memory=keep_in_memory)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.12/site-packages/datasets/builder.py", line 1127, in as_dataset
+    datasets = map_nested(
+               ^^^^^^^^^^^
+  File "/opt/venv/lib/python3.12/site-packages/datasets/utils/py_utils.py", line 494, in map_nested
+    mapped = function(data_struct)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.12/site-packages/datasets/builder.py", line 1157, in _build_single_dataset
+    ds = self._as_dataset(
+         ^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.12/site-packages/datasets/builder.py", line 1231, in _as_dataset
+    dataset_kwargs = ArrowReader(cache_dir, self.info).read(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.12/site-packages/datasets/arrow_reader.py", line 248, in read
+    files = self.get_file_instructions(name, instructions, split_infos)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.12/site-packages/datasets/arrow_reader.py", line 221, in get_file_instructions
+    file_instructions = make_file_instructions(
+                        ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.12/site-packages/datasets/arrow_reader.py", line 130, in make_file_instructions
+    absolute_instructions = instruction.to_absolute(name2len)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.12/site-packages/datasets/arrow_reader.py", line 620, in to_absolute
+    return [_rel_to_abs_instr(rel_instr, name2len) for rel_instr in self._relative_instructions]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.12/site-packages/datasets/arrow_reader.py", line 437, in _rel_to_abs_instr
+    raise ValueError(f'Unknown split "{split}". Should be one of {list(name2len)}.')
+ValueError: Unknown split "validation". Should be one of ['train', 'test'].

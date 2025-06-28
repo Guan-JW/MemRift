@@ -1,0 +1,15 @@
+{"time":"2025-06-28T04:06:39.375286624+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250628_040638-ahdrx5vi/logs/debug-core.log"}
+{"time":"2025-06-28T04:06:40.881985408+08:00","level":"INFO","msg":"stream: created new stream","id":"ahdrx5vi"}
+{"time":"2025-06-28T04:06:40.882276+08:00","level":"INFO","msg":"stream: started","id":"ahdrx5vi"}
+{"time":"2025-06-28T04:06:40.882722816+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"ahdrx5vi"}
+{"time":"2025-06-28T04:06:40.882910496+08:00","level":"INFO","msg":"handler: started","stream_id":"ahdrx5vi"}
+{"time":"2025-06-28T04:06:40.882723968+08:00","level":"INFO","msg":"sender: started","stream_id":"ahdrx5vi"}
+{"time":"2025-06-28T04:06:41.319743808+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-28T04:08:14.204836512+08:00","level":"INFO","msg":"stream: closing","id":"ahdrx5vi"}
+{"time":"2025-06-28T04:08:14.206147808+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-28T04:08:14.207547392+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-28T04:08:15.204180704+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-28T04:08:16.655285856+08:00","level":"INFO","msg":"handler: closed","stream_id":"ahdrx5vi"}
+{"time":"2025-06-28T04:08:16.655441632+08:00","level":"INFO","msg":"sender: closed","stream_id":"ahdrx5vi"}
+{"time":"2025-06-28T04:08:16.6686696+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"ahdrx5vi"}
+{"time":"2025-06-28T04:08:16.669000224+08:00","level":"INFO","msg":"stream: closed","id":"ahdrx5vi"}

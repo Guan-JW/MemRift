@@ -1,0 +1,21 @@
+2025-06-25 04:10:42,859 INFO    MainThread:9047 [wandb_setup.py:_flush():81] Current SDK version is 0.20.1
+2025-06-25 04:10:42,860 INFO    MainThread:9047 [wandb_setup.py:_flush():81] Configure stats pid to 9047
+2025-06-25 04:10:42,860 INFO    MainThread:9047 [wandb_setup.py:_flush():81] Loading settings from /root/.config/wandb/settings
+2025-06-25 04:10:42,860 INFO    MainThread:9047 [wandb_setup.py:_flush():81] Loading settings from /opt/finetune/MemRift/wandb/settings
+2025-06-25 04:10:42,860 INFO    MainThread:9047 [wandb_setup.py:_flush():81] Loading settings from environment variables
+2025-06-25 04:10:42,861 INFO    MainThread:9047 [wandb_init.py:setup_run_log_directory():703] Logging user logs to /opt/finetune/MemRift/wandb/run-20250625_041042-cg233ei1/logs/debug.log
+2025-06-25 04:10:42,861 INFO    MainThread:9047 [wandb_init.py:setup_run_log_directory():704] Logging internal logs to /opt/finetune/MemRift/wandb/run-20250625_041042-cg233ei1/logs/debug-internal.log
+2025-06-25 04:10:42,861 INFO    MainThread:9047 [wandb_init.py:init():831] calling init triggers
+2025-06-25 04:10:42,861 INFO    MainThread:9047 [wandb_init.py:init():836] wandb.init called with sweep_config: {}
+config: {'model': '/opt/models/hf/gemma-2-2b-it', 'outdir': '/opt/finetune/MemRift/weight_comp/prepare_weight/gemma-2-2b-it-zstd-compressed-weights/level21', 'finetune_type': 'lora', 'autocast_context': False, 'check_diff': False, 'hook': True, 'debug': False, 'print_ratio': False, 'print_time': False, 'weight': False, 'activation': True, 'level': 1, 'round': 5, 'max_length': 2048, 'batch_size': 1, '_wandb': {}}
+2025-06-25 04:10:42,862 INFO    MainThread:9047 [wandb_init.py:init():872] starting backend
+2025-06-25 04:10:43,312 INFO    MainThread:9047 [wandb_init.py:init():875] sending inform_init request
+2025-06-25 04:10:43,328 INFO    MainThread:9047 [wandb_init.py:init():883] backend started and connected
+2025-06-25 04:10:43,332 INFO    MainThread:9047 [wandb_init.py:init():956] updated telemetry
+2025-06-25 04:10:43,350 INFO    MainThread:9047 [wandb_init.py:init():980] communicating run to backend with 90.0 second timeout
+2025-06-25 04:10:45,226 INFO    MainThread:9047 [wandb_init.py:init():1032] starting run threads in backend
+2025-06-25 04:10:45,584 INFO    MainThread:9047 [wandb_run.py:_console_start():2453] atexit reg
+2025-06-25 04:10:45,584 INFO    MainThread:9047 [wandb_run.py:_redirect():2301] redirect: wrap_raw
+2025-06-25 04:10:45,584 INFO    MainThread:9047 [wandb_run.py:_redirect():2370] Wrapping output streams.
+2025-06-25 04:10:45,585 INFO    MainThread:9047 [wandb_run.py:_redirect():2393] Redirects installed.
+2025-06-25 04:10:45,588 INFO    MainThread:9047 [wandb_init.py:init():1078] run started, returning control to user process

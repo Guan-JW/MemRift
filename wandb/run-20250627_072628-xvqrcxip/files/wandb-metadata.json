@@ -1,0 +1,20 @@
+{
+  "os": "Linux-5.15.148-tegra-aarch64-with-glibc2.39",
+  "python": "CPython 3.12.3",
+  "startedAt": "2025-06-26T23:26:29.079713Z",
+  "args": [
+    "--hook",
+    "--activation",
+    "--asynchronous"
+  ],
+  "program": "/opt/finetune/MemRift/train_multithread.py",
+  "codePath": "train_multithread.py",
+  "git": {
+    "remote": "https://github.com/Guan-JW/MemRift.git",
+    "commit": "9d6b10cc25f833719f53e84c7b4bec754b5f1abf"
+  },
+  "root": "/opt/finetune/MemRift",
+  "host": "ubuntu",
+  "executable": "/opt/venv/bin/python3",
+  "codePathLocal": "train_multithread.py"
+}

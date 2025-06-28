@@ -1,0 +1,15 @@
+{"time":"2025-06-23T05:52:51.055804064+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250623_055250-ciuagejd/logs/debug-core.log"}
+{"time":"2025-06-23T05:52:52.523903552+08:00","level":"INFO","msg":"stream: created new stream","id":"ciuagejd"}
+{"time":"2025-06-23T05:52:52.523991456+08:00","level":"INFO","msg":"stream: started","id":"ciuagejd"}
+{"time":"2025-06-23T05:52:52.524073248+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"ciuagejd"}
+{"time":"2025-06-23T05:52:52.52408304+08:00","level":"INFO","msg":"handler: started","stream_id":"ciuagejd"}
+{"time":"2025-06-23T05:52:52.524139648+08:00","level":"INFO","msg":"sender: started","stream_id":"ciuagejd"}
+{"time":"2025-06-23T05:52:52.957387008+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-23T05:54:15.207205472+08:00","level":"INFO","msg":"stream: closing","id":"ciuagejd"}
+{"time":"2025-06-23T05:54:15.207286144+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-23T05:54:15.207402464+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-23T05:54:15.967345472+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-23T05:54:17.171975616+08:00","level":"INFO","msg":"handler: closed","stream_id":"ciuagejd"}
+{"time":"2025-06-23T05:54:17.172086208+08:00","level":"INFO","msg":"sender: closed","stream_id":"ciuagejd"}
+{"time":"2025-06-23T05:54:17.184859232+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"ciuagejd"}
+{"time":"2025-06-23T05:54:17.185015328+08:00","level":"INFO","msg":"stream: closed","id":"ciuagejd"}

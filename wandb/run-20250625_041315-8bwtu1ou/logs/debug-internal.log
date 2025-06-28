@@ -1,0 +1,7 @@
+{"time":"2025-06-25T04:13:15.456367392+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250625_041315-8bwtu1ou/logs/debug-core.log"}
+{"time":"2025-06-25T04:13:17.037528768+08:00","level":"INFO","msg":"stream: created new stream","id":"8bwtu1ou"}
+{"time":"2025-06-25T04:13:17.037804128+08:00","level":"INFO","msg":"stream: started","id":"8bwtu1ou"}
+{"time":"2025-06-25T04:13:17.037895648+08:00","level":"INFO","msg":"sender: started","stream_id":"8bwtu1ou"}
+{"time":"2025-06-25T04:13:17.037876224+08:00","level":"INFO","msg":"handler: started","stream_id":"8bwtu1ou"}
+{"time":"2025-06-25T04:13:17.037934112+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"8bwtu1ou"}
+{"time":"2025-06-25T04:13:17.46647216+08:00","level":"INFO","msg":"Starting system monitor"}

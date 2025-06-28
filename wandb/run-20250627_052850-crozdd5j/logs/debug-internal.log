@@ -1,0 +1,15 @@
+{"time":"2025-06-27T05:28:51.424482336+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250627_052850-crozdd5j/logs/debug-core.log"}
+{"time":"2025-06-27T05:28:53.041182112+08:00","level":"INFO","msg":"stream: created new stream","id":"crozdd5j"}
+{"time":"2025-06-27T05:28:53.041269408+08:00","level":"INFO","msg":"stream: started","id":"crozdd5j"}
+{"time":"2025-06-27T05:28:53.04130208+08:00","level":"INFO","msg":"sender: started","stream_id":"crozdd5j"}
+{"time":"2025-06-27T05:28:53.04130256+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"crozdd5j"}
+{"time":"2025-06-27T05:28:53.041746144+08:00","level":"INFO","msg":"handler: started","stream_id":"crozdd5j"}
+{"time":"2025-06-27T05:28:53.501247136+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-27T05:29:48.736854816+08:00","level":"INFO","msg":"stream: closing","id":"crozdd5j"}
+{"time":"2025-06-27T05:29:48.73692496+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-27T05:29:48.737222848+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-27T05:29:49.519935712+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-27T05:29:50.929693376+08:00","level":"INFO","msg":"handler: closed","stream_id":"crozdd5j"}
+{"time":"2025-06-27T05:29:50.929794496+08:00","level":"INFO","msg":"sender: closed","stream_id":"crozdd5j"}
+{"time":"2025-06-27T05:29:50.942536544+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"crozdd5j"}
+{"time":"2025-06-27T05:29:50.942637088+08:00","level":"INFO","msg":"stream: closed","id":"crozdd5j"}

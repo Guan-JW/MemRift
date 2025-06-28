@@ -1,0 +1,15 @@
+{"time":"2025-06-23T08:47:26.105789792+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250623_084725-keil9701/logs/debug-core.log"}
+{"time":"2025-06-23T08:47:27.588044704+08:00","level":"INFO","msg":"stream: created new stream","id":"keil9701"}
+{"time":"2025-06-23T08:47:27.58838528+08:00","level":"INFO","msg":"stream: started","id":"keil9701"}
+{"time":"2025-06-23T08:47:27.58854768+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"keil9701"}
+{"time":"2025-06-23T08:47:27.589272736+08:00","level":"INFO","msg":"handler: started","stream_id":"keil9701"}
+{"time":"2025-06-23T08:47:27.58951344+08:00","level":"INFO","msg":"sender: started","stream_id":"keil9701"}
+{"time":"2025-06-23T08:47:28.055625952+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-23T08:49:20.374580352+08:00","level":"INFO","msg":"stream: closing","id":"keil9701"}
+{"time":"2025-06-23T08:49:20.374662464+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-23T08:49:20.374751488+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-23T08:49:21.365872832+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-23T08:49:22.815397248+08:00","level":"INFO","msg":"handler: closed","stream_id":"keil9701"}
+{"time":"2025-06-23T08:49:22.815753472+08:00","level":"INFO","msg":"sender: closed","stream_id":"keil9701"}
+{"time":"2025-06-23T08:49:22.828703552+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"keil9701"}
+{"time":"2025-06-23T08:49:22.82885616+08:00","level":"INFO","msg":"stream: closed","id":"keil9701"}

@@ -1,0 +1,23 @@
+
+
+args.model='/opt/models/hf/TinyLlama-1.1B-Chat-v1.0', args.outdir='./weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level18', args.weight=False, args.activation=False, args.max_length=2048
+[meta] still 0 tensors on meta device
+Peak CPU memory usage: 748.79 MB
+Peak GPU memory usage: 2129.22 MB
+Using the latest cached version of the dataset since timdettmers/openassistant-guanaco couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /data/models/huggingface/datasets/timdettmers___openassistant-guanaco/default/0.0.0/831dabac2283d99420cda0b673d7a2a43849f17a (last modified on Mon Jun 23 08:26:44 2025).
+
+
+*************** epoch=0 . step=0 ****************
+/opt/venv/lib/python3.12/site-packages/torch/nn/modules/module.py:1813: UserWarning: For backward hooks to be called, module output should be a Tensor or a tuple of Tensors but received <class 'transformers.modeling_outputs.BaseModelOutputWithPast'>
+  warnings.warn("For backward hooks to be called,"
+/opt/venv/lib/python3.12/site-packages/torch/nn/modules/module.py:1813: UserWarning: For backward hooks to be called, module output should be a Tensor or a tuple of Tensors but received <class 'transformers.modeling_outputs.CausalLMOutputWithPast'>
+  warnings.warn("For backward hooks to be called,"
+loss=tensor(1.8386, device='cuda:0', grad_fn=<NllLossBackward0>)
+Traceback (most recent call last):
+  File "/opt/finetune/MemRift/train_wrapper.py", line 1519, in <module>
+    measure()
+  File "/opt/finetune/MemRift/train_wrapper.py", line 1457, in measure
+    print(f"Round {i}: {t*1000:.1f} ms , {t1*1000:.1f} ms , peak Δ={peak/1024/1024:.1f} MB")
+                   ^
+NameError: name 'i' is not defined

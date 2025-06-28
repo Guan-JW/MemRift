@@ -1,0 +1,15 @@
+{"time":"2025-06-20T13:38:24.245650048+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250620_133823-6crtvb85/logs/debug-core.log"}
+{"time":"2025-06-20T13:38:25.99105312+08:00","level":"INFO","msg":"stream: created new stream","id":"6crtvb85"}
+{"time":"2025-06-20T13:38:25.991152864+08:00","level":"INFO","msg":"stream: started","id":"6crtvb85"}
+{"time":"2025-06-20T13:38:25.991168256+08:00","level":"INFO","msg":"handler: started","stream_id":"6crtvb85"}
+{"time":"2025-06-20T13:38:25.991237952+08:00","level":"INFO","msg":"sender: started","stream_id":"6crtvb85"}
+{"time":"2025-06-20T13:38:25.991270016+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"6crtvb85"}
+{"time":"2025-06-20T13:38:26.404758016+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-20T13:38:29.216765856+08:00","level":"INFO","msg":"stream: closing","id":"6crtvb85"}
+{"time":"2025-06-20T13:38:29.216836+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-20T13:38:29.216925632+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-20T13:38:30.401856672+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-20T13:38:31.84345024+08:00","level":"INFO","msg":"handler: closed","stream_id":"6crtvb85"}
+{"time":"2025-06-20T13:38:31.843524544+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"6crtvb85"}
+{"time":"2025-06-20T13:38:31.84367584+08:00","level":"INFO","msg":"sender: closed","stream_id":"6crtvb85"}
+{"time":"2025-06-20T13:38:31.843693568+08:00","level":"INFO","msg":"stream: closed","id":"6crtvb85"}

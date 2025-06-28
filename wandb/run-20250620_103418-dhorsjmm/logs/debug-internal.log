@@ -1,0 +1,14 @@
+{"time":"2025-06-20T10:34:18.759478112+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250620_103418-dhorsjmm/logs/debug-core.log"}
+{"time":"2025-06-20T10:34:20.27098736+08:00","level":"INFO","msg":"stream: created new stream","id":"dhorsjmm"}
+{"time":"2025-06-20T10:34:20.271292352+08:00","level":"INFO","msg":"stream: started","id":"dhorsjmm"}
+{"time":"2025-06-20T10:34:20.271831328+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"dhorsjmm"}
+{"time":"2025-06-20T10:34:20.27185504+08:00","level":"INFO","msg":"handler: started","stream_id":"dhorsjmm"}
+{"time":"2025-06-20T10:34:20.272137792+08:00","level":"INFO","msg":"sender: started","stream_id":"dhorsjmm"}
+{"time":"2025-06-20T10:34:20.768538112+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-20T10:39:17.60561312+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/15692276873/Mistral-7B_memrift_act_weight_jetson/dhorsjmm/file_stream\": EOF"}
+{"time":"2025-06-20T10:43:58.119333824+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/15692276873/Mistral-7B_memrift_act_weight_jetson/dhorsjmm/file_stream\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2025-06-20T10:48:30.175440128+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/15692276873/Mistral-7B_memrift_act_weight_jetson/dhorsjmm/file_stream\": net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2025-06-20T10:49:15.116746752+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2025-06-20T10:51:18.754169408+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2025-06-20T10:52:34.396017696+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/15692276873/Mistral-7B_memrift_act_weight_jetson/dhorsjmm/file_stream\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2025-06-20T10:52:41.80035184+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)"}

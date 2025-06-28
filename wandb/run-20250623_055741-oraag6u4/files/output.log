@@ -1,0 +1,24 @@
+
+
+args.model='/opt/models/hf/Llama-3.1-8B', args.outdir='./weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level18', args.weight=False, args.activation=False, args.max_length=512
+Loading checkpoint shards:   0%|                                                                                          | 0/4 [00:04<?, ?it/s]
+Traceback (most recent call last):
+  File "/opt/finetune/MemRift/train_wrapper.py", line 180, in <module>
+    model = AutoModelForCausalLM.from_pretrained(args.model,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 571, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.12/site-packages/transformers/modeling_utils.py", line 309, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4574, in from_pretrained
+    ) = cls._load_pretrained_model(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.12/site-packages/transformers/modeling_utils.py", line 5020, in _load_pretrained_model
+    state_dict = load_state_dict(
+                 ^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.12/site-packages/transformers/modeling_utils.py", line 530, in load_state_dict
+    with safe_open(checkpoint_file, framework="pt") as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: No such file or directory: "/opt/models/hf/Llama-3.1-8B/model-00001-of-00004.safetensors"

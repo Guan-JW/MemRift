@@ -1,0 +1,17 @@
+/opt/venv/lib/python3.12/site-packages/transformers/utils/hub.py:111: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+usage: prepare_weight.py [-h] [--model MODEL] [--outdir OUTDIR]
+                         [--level LEVEL]
+prepare_weight.py: error: unrecognized arguments: --ourdir /opt/finetune/MemRift/weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level18
+/opt/venv/lib/python3.12/site-packages/transformers/utils/hub.py:111: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+args.model='/opt/models/hf/Mistral-7B-v0.1', args.outdir='/opt/finetune/MemRift/weight_comp/prepare_weight/Mistral-7B-zstd-compressed-weights/level21'
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]/opt/venv/lib/python3.12/site-packages/transformers/utils/hub.py:111: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+args.model='/opt/models/hf/TinyLlama-1.1B-Chat-v1.0', args.outdir='/opt/finetune/MemRift/weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level18'
+✅  wrote 201 frozen tensors → “/opt/finetune/MemRift/weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level18”, compression time: 2162256.58 ms
+/opt/venv/lib/python3.12/site-packages/transformers/utils/hub.py:111: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+args.model='/opt/models/hf/Mistral-7B-v0.1', args.outdir='/opt/finetune/MemRift/weight_comp/prepare_weight/Mistral-7B-zstd-compressed-weights/level21'
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:25<00:25, 25.17s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:35<00:00, 16.18s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:35<00:00, 17.53s/it]
+✅  wrote 291 frozen tensors → “/opt/finetune/MemRift/weight_comp/prepare_weight/Mistral-7B-zstd-compressed-weights/level21”, compression time: 22219868.52 ms

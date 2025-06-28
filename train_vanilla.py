@@ -2,7 +2,7 @@ import os, json, mmap, queue, threading, struct, argparse, gc, humanize, sys, ty
 import numpy as np, torch, zstandard as zstd, psutil, time
 import pandas as pd
 from torch import nn
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, DataCollatorForLanguageModeling
 from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
 from datasets import load_dataset
 from collections import defaultdict
@@ -180,6 +180,9 @@ if EVAL:
 else:
     model.train()
     optimizer = torch.optim.AdamW(model.parameters(), lr=2e-4)
+    if "gemma" in args.model:
+        model.config.attn_implementation = "eager"
+        model.config.return_dict = False
     # optimizer = bnb.optim.Adam8bit(                    # or AdamW8bit
     #     model.parameters(),
     #     lr=2e-4,

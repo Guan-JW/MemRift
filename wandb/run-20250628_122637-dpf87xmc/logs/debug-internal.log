@@ -1,0 +1,15 @@
+{"time":"2025-06-28T12:26:38.344522624+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250628_122637-dpf87xmc/logs/debug-core.log"}
+{"time":"2025-06-28T12:26:39.929938272+08:00","level":"INFO","msg":"stream: created new stream","id":"dpf87xmc"}
+{"time":"2025-06-28T12:26:39.930018432+08:00","level":"INFO","msg":"stream: started","id":"dpf87xmc"}
+{"time":"2025-06-28T12:26:39.930355232+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"dpf87xmc"}
+{"time":"2025-06-28T12:26:39.930375584+08:00","level":"INFO","msg":"sender: started","stream_id":"dpf87xmc"}
+{"time":"2025-06-28T12:26:39.930469056+08:00","level":"INFO","msg":"handler: started","stream_id":"dpf87xmc"}
+{"time":"2025-06-28T12:26:40.360925312+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-28T12:27:11.85156+08:00","level":"INFO","msg":"stream: closing","id":"dpf87xmc"}
+{"time":"2025-06-28T12:27:11.85166416+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-28T12:27:11.85175536+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-28T12:27:12.657396064+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-28T12:27:13.93418624+08:00","level":"INFO","msg":"handler: closed","stream_id":"dpf87xmc"}
+{"time":"2025-06-28T12:27:13.934290816+08:00","level":"INFO","msg":"sender: closed","stream_id":"dpf87xmc"}
+{"time":"2025-06-28T12:27:13.94765232+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"dpf87xmc"}
+{"time":"2025-06-28T12:27:13.94781248+08:00","level":"INFO","msg":"stream: closed","id":"dpf87xmc"}

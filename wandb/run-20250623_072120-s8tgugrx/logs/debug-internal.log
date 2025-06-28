@@ -1,0 +1,14 @@
+{"time":"2025-06-23T07:21:21.189588992+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250623_072120-s8tgugrx/logs/debug-core.log"}
+{"time":"2025-06-23T07:21:23.571557088+08:00","level":"INFO","msg":"stream: created new stream","id":"s8tgugrx"}
+{"time":"2025-06-23T07:21:23.57189392+08:00","level":"INFO","msg":"stream: started","id":"s8tgugrx"}
+{"time":"2025-06-23T07:21:23.572339776+08:00","level":"INFO","msg":"sender: started","stream_id":"s8tgugrx"}
+{"time":"2025-06-23T07:21:23.5724016+08:00","level":"INFO","msg":"handler: started","stream_id":"s8tgugrx"}
+{"time":"2025-06-23T07:21:23.57231552+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"s8tgugrx"}
+{"time":"2025-06-23T07:21:24.00588352+08:00","level":"INFO","msg":"stream: closing","id":"s8tgugrx"}
+{"time":"2025-06-23T07:21:25.794893152+08:00","level":"ERROR","msg":"HTTP error","status":404,"method":"POST","url":"https://api.wandb.ai/graphql"}
+{"time":"2025-06-23T07:21:25.795915296+08:00","level":"ERROR","msg":"runfiles: CreateRunFiles returned error: returned error 404: {\"data\":{\"createRunFiles\":null},\"errors\":[{\"message\":\"project /Llama-3.2-3B-Instruct_memrift_act_weight_jetson_1024 not found during createRunFiles\",\"path\":[\"createRunFiles\"]}]}"}
+{"time":"2025-06-23T07:21:25.799884224+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-23T07:21:25.800355552+08:00","level":"INFO","msg":"handler: closed","stream_id":"s8tgugrx"}
+{"time":"2025-06-23T07:21:25.8004536+08:00","level":"INFO","msg":"sender: closed","stream_id":"s8tgugrx"}
+{"time":"2025-06-23T07:21:25.800487712+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"s8tgugrx"}
+{"time":"2025-06-23T07:21:25.800956448+08:00","level":"INFO","msg":"stream: closed","id":"s8tgugrx"}

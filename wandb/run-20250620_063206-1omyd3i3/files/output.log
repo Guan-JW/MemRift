@@ -1,0 +1,27 @@
+
+
+args.model='/opt/models/hf/TinyLlama-1.1B-Chat-v1.0', args.outdir='./weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level18', args.weight=True, args.activation=True, args.max_length=2048
+Exception in thread Exception in thread Thread-5 (_pref_worker)Traceback (most recent call last):
+Thread-6 (_pref_worker):
+:
+  File "/opt/finetune/MemRift/train_wrapper.py", line 592, in <module>
+    install_fwd_prefetch_hooks(model, layer_names, layer2cps)
+                                                   ^^^^^^^^^
+Traceback (most recent call last):
+Traceback (most recent call last):
+NameError: name 'layer2cps' is not defined
+  File "/usr/lib/python3.12/threading.py", line 1073, in _bootstrap_inner
+  File "/usr/lib/python3.12/threading.py", line 1073, in _bootstrap_inner
+        self.run()self.run()
+
+  File "/usr/lib/python3.12/threading.py", line 1010, in run
+  File "/usr/lib/python3.12/threading.py", line 1010, in run
+    self._target(*self._args, **self._kwargs)
+self._target(*self._args, **self._kwargs)
+  File "/opt/finetune/MemRift/train_wrapper.py", line 457, in _pref_worker
+  File "/opt/finetune/MemRift/train_wrapper.py", line 457, in _pref_worker
+        if not hasattr(_tls, "dctx"):if not hasattr(_tls, "dctx"):
+
+                                      ^^^^^^^^
+
+NameErrorNameError: : name '_tls' is not definedname '_tls' is not defined

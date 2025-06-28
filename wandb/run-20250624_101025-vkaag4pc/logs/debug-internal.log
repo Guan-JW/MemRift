@@ -1,0 +1,15 @@
+{"time":"2025-06-24T10:10:25.746141184+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250624_101025-vkaag4pc/logs/debug-core.log"}
+{"time":"2025-06-24T10:10:27.28089376+08:00","level":"INFO","msg":"stream: created new stream","id":"vkaag4pc"}
+{"time":"2025-06-24T10:10:27.280984512+08:00","level":"INFO","msg":"stream: started","id":"vkaag4pc"}
+{"time":"2025-06-24T10:10:27.281014816+08:00","level":"INFO","msg":"sender: started","stream_id":"vkaag4pc"}
+{"time":"2025-06-24T10:10:27.281007424+08:00","level":"INFO","msg":"handler: started","stream_id":"vkaag4pc"}
+{"time":"2025-06-24T10:10:27.281064832+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"vkaag4pc"}
+{"time":"2025-06-24T10:10:27.678809088+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-24T10:11:58.04221904+08:00","level":"INFO","msg":"stream: closing","id":"vkaag4pc"}
+{"time":"2025-06-24T10:11:58.042298304+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-24T10:11:58.042398976+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-24T10:11:59.689346912+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-24T10:12:01.74780704+08:00","level":"INFO","msg":"handler: closed","stream_id":"vkaag4pc"}
+{"time":"2025-06-24T10:12:01.747904032+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"vkaag4pc"}
+{"time":"2025-06-24T10:12:01.748065088+08:00","level":"INFO","msg":"sender: closed","stream_id":"vkaag4pc"}
+{"time":"2025-06-24T10:12:01.74808512+08:00","level":"INFO","msg":"stream: closed","id":"vkaag4pc"}

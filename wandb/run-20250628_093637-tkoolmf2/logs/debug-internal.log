@@ -1,0 +1,15 @@
+{"time":"2025-06-28T09:36:38.095679104+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250628_093637-tkoolmf2/logs/debug-core.log"}
+{"time":"2025-06-28T09:36:39.780636896+08:00","level":"INFO","msg":"stream: created new stream","id":"tkoolmf2"}
+{"time":"2025-06-28T09:36:39.780763776+08:00","level":"INFO","msg":"stream: started","id":"tkoolmf2"}
+{"time":"2025-06-28T09:36:39.780827712+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"tkoolmf2"}
+{"time":"2025-06-28T09:36:39.78110288+08:00","level":"INFO","msg":"sender: started","stream_id":"tkoolmf2"}
+{"time":"2025-06-28T09:36:39.781195776+08:00","level":"INFO","msg":"handler: started","stream_id":"tkoolmf2"}
+{"time":"2025-06-28T09:36:40.225434656+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-28T09:37:50.535165888+08:00","level":"INFO","msg":"stream: closing","id":"tkoolmf2"}
+{"time":"2025-06-28T09:37:50.535231232+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-28T09:37:50.535361504+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-28T09:37:51.309832064+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-28T09:37:52.544248192+08:00","level":"INFO","msg":"handler: closed","stream_id":"tkoolmf2"}
+{"time":"2025-06-28T09:37:52.544541056+08:00","level":"INFO","msg":"sender: closed","stream_id":"tkoolmf2"}
+{"time":"2025-06-28T09:37:52.5576712+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"tkoolmf2"}
+{"time":"2025-06-28T09:37:52.557869184+08:00","level":"INFO","msg":"stream: closed","id":"tkoolmf2"}

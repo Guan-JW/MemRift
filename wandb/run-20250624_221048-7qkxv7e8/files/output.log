@@ -1,0 +1,14 @@
+
+
+args.model='/opt/models/Llama-3.1-8B', args.outdir='/opt/finetune/MemRift/weight_comp/prepare_weight/Llama-3.1-8B-zstd-compressed-weights/level21', args.weight=False, args.activation=True, args.max_length=1024
+Loading checkpoint shards: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:39<00:00,  9.82s/it]
+[meta] still 0 tensors on meta device
+Peak CPU memory usage: 645.24 MB
+Peak GPU memory usage: 15424.82 MB
+init AsyncCompressor
+Using the latest cached version of the dataset since timdettmers/openassistant-guanaco couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /data/models/huggingface/datasets/timdettmers___openassistant-guanaco/default/0.0.0/831dabac2283d99420cda0b673d7a2a43849f17a (last modified on Mon Jun 23 08:47:36 2025).
+
+
+*************** i=0 ****************
+loss=tensor(1.1973, device='cuda:0', grad_fn=<NllLossBackward0>)

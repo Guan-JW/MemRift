@@ -1,0 +1,16 @@
+{"time":"2025-06-22T00:04:03.414351392+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250622_000402-i8iqad5z/logs/debug-core.log"}
+{"time":"2025-06-22T00:04:10.37795776+08:00","level":"INFO","msg":"stream: created new stream","id":"i8iqad5z"}
+{"time":"2025-06-22T00:04:10.378255776+08:00","level":"INFO","msg":"stream: started","id":"i8iqad5z"}
+{"time":"2025-06-22T00:04:10.378342976+08:00","level":"INFO","msg":"sender: started","stream_id":"i8iqad5z"}
+{"time":"2025-06-22T00:04:10.378373888+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"i8iqad5z"}
+{"time":"2025-06-22T00:04:10.378318944+08:00","level":"INFO","msg":"handler: started","stream_id":"i8iqad5z"}
+{"time":"2025-06-22T00:04:11.462570784+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-22T00:04:49.306685696+08:00","level":"INFO","msg":"stream: closing","id":"i8iqad5z"}
+{"time":"2025-06-22T00:04:49.306773696+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-22T00:04:49.306855072+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-22T00:05:11.858417952+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-22T00:05:37.624353024+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/15692276873/memrift_act_weight_jetson/i8iqad5z/file_stream\": unexpected EOF"}
+{"time":"2025-06-22T00:05:46.87755328+08:00","level":"INFO","msg":"handler: closed","stream_id":"i8iqad5z"}
+{"time":"2025-06-22T00:05:46.87793088+08:00","level":"INFO","msg":"sender: closed","stream_id":"i8iqad5z"}
+{"time":"2025-06-22T00:05:46.879785984+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"i8iqad5z"}
+{"time":"2025-06-22T00:05:46.880069696+08:00","level":"INFO","msg":"stream: closed","id":"i8iqad5z"}

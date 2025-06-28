@@ -1,0 +1,18 @@
+
+
+args.model='/opt/models/hf/TinyLlama-1.1B-Chat-v1.0', args.outdir='/opt/finetune/MemRift/weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level-1', args.weight=True, args.activation=False, args.max_length=2048
+[before_inject] GPU: allocated=0.0 MB, reserved=0.0 MB | CPU RSS=720.1 MB
+[before inject] logical param size = 2.0 GiB
+/opt/finetune/MemRift/train_wrapper.py:398: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /opt/pytorch/torch/csrc/utils/tensor_numpy.cpp:203.)
+  sm_gpu = torch.as_tensor(sm, dtype=torch.uint8, device=device)
+Materializing model.embed_tokens
+Traceback (most recent call last):
+  File "/opt/finetune/MemRift/train_wrapper.py", line 489, in <module>
+    layer2cps, max_job_size = inject_from_files(model, args.outdir)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/finetune/MemRift/train_wrapper.py", line 418, in inject_from_files
+    cp.release_comp()
+  File "/opt/finetune/MemRift/train_wrapper.py", line 319, in release_comp
+    del self.exp_host
+        ^^^^^^^^^^^^^
+AttributeError: 'CompressedParam' object has no attribute 'exp_host'

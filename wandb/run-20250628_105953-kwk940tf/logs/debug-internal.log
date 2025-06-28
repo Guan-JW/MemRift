@@ -1,0 +1,15 @@
+{"time":"2025-06-28T10:59:53.757457984+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250628_105953-kwk940tf/logs/debug-core.log"}
+{"time":"2025-06-28T10:59:55.332749216+08:00","level":"INFO","msg":"stream: created new stream","id":"kwk940tf"}
+{"time":"2025-06-28T10:59:55.33282816+08:00","level":"INFO","msg":"stream: started","id":"kwk940tf"}
+{"time":"2025-06-28T10:59:55.332874944+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"kwk940tf"}
+{"time":"2025-06-28T10:59:55.33297568+08:00","level":"INFO","msg":"handler: started","stream_id":"kwk940tf"}
+{"time":"2025-06-28T10:59:55.332881728+08:00","level":"INFO","msg":"sender: started","stream_id":"kwk940tf"}
+{"time":"2025-06-28T10:59:55.864520352+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-28T11:00:29.596760832+08:00","level":"INFO","msg":"stream: closing","id":"kwk940tf"}
+{"time":"2025-06-28T11:00:29.596897632+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-28T11:00:29.608645856+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-28T11:00:30.4055664+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-28T11:00:33.311401408+08:00","level":"INFO","msg":"handler: closed","stream_id":"kwk940tf"}
+{"time":"2025-06-28T11:00:33.311865888+08:00","level":"INFO","msg":"sender: closed","stream_id":"kwk940tf"}
+{"time":"2025-06-28T11:00:33.3136368+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"kwk940tf"}
+{"time":"2025-06-28T11:00:33.31380864+08:00","level":"INFO","msg":"stream: closed","id":"kwk940tf"}

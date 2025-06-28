@@ -1,0 +1,40 @@
+
+
+args.model='/opt/models/hf/Llama-3.2-3B-Instruct', args.outdir='./weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level18', args.weight=False, args.activation=False, args.max_length=3000
+Loading checkpoint shards: 100%|█████████████████████████████████████████████| 2/2 [00:16<00:00,  8.22s/it]
+[meta] still 0 tensors on meta device
+Peak CPU memory usage: 746.87 MB
+Peak GPU memory usage: 6880.00 MB
+Using the latest cached version of the dataset since timdettmers/openassistant-guanaco couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /data/models/huggingface/datasets/timdettmers___openassistant-guanaco/default/0.0.0/831dabac2283d99420cda0b673d7a2a43849f17a (last modified on Mon Jun 23 08:47:36 2025).
+
+
+*************** i=0 ****************
+/opt/venv/lib/python3.12/site-packages/torch/nn/modules/module.py:1813: UserWarning: For backward hooks to be called, module output should be a Tensor or a tuple of Tensors but received <class 'transformers.modeling_outputs.BaseModelOutputWithPast'>
+  warnings.warn("For backward hooks to be called,"
+/opt/venv/lib/python3.12/site-packages/torch/nn/modules/module.py:1813: UserWarning: For backward hooks to be called, module output should be a Tensor or a tuple of Tensors but received <class 'transformers.modeling_outputs.CausalLMOutputWithPast'>
+  warnings.warn("For backward hooks to be called,"
+loss=tensor(0.8219, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 0: 21574.6 ms , 21578.2 ms , peak Δ=23121.0 MB
+Peak CPU memory usage: 715.61 MB
+- Fwd time: 9625.9 ms
+- Bwd time: 11948.7 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms

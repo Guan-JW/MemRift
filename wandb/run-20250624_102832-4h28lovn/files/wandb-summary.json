@@ -1,0 +1,1 @@
+{"cpu_util":100,"cpu_proc_MB":2745,"_timestamp":1.7507321433113976e+09,"ram_total_MB":30697,"_runtime":30.139123808,"ram_used_MB":15324,"_step":54,"_wandb":{"runtime":30},"gpu_reserved_MB":4476,"timestamp":27931,"gpu_util":0,"gpu_alloc_MB":3386}

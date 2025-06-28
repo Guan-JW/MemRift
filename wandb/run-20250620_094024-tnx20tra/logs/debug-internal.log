@@ -1,0 +1,15 @@
+{"time":"2025-06-20T09:40:24.557267104+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250620_094024-tnx20tra/logs/debug-core.log"}
+{"time":"2025-06-20T09:40:26.409453504+08:00","level":"INFO","msg":"stream: created new stream","id":"tnx20tra"}
+{"time":"2025-06-20T09:40:26.409551616+08:00","level":"INFO","msg":"stream: started","id":"tnx20tra"}
+{"time":"2025-06-20T09:40:26.409600128+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"tnx20tra"}
+{"time":"2025-06-20T09:40:26.409651552+08:00","level":"INFO","msg":"sender: started","stream_id":"tnx20tra"}
+{"time":"2025-06-20T09:40:26.409624896+08:00","level":"INFO","msg":"handler: started","stream_id":"tnx20tra"}
+{"time":"2025-06-20T09:40:26.920347584+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-20T09:40:34.043565728+08:00","level":"INFO","msg":"stream: closing","id":"tnx20tra"}
+{"time":"2025-06-20T09:40:34.043764576+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-20T09:40:34.043920032+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-20T09:40:35.146499648+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-20T09:40:36.96488832+08:00","level":"INFO","msg":"handler: closed","stream_id":"tnx20tra"}
+{"time":"2025-06-20T09:40:36.965012864+08:00","level":"INFO","msg":"sender: closed","stream_id":"tnx20tra"}
+{"time":"2025-06-20T09:40:36.964975904+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"tnx20tra"}
+{"time":"2025-06-20T09:40:36.96538256+08:00","level":"INFO","msg":"stream: closed","id":"tnx20tra"}

@@ -200,7 +200,7 @@ decomp_time = comp_time = 0
 # --------------------------------------------------------------
 if args.weight:
     index = []                                  # <layer name, binary file, shape, dtype>
-        # 模块级别，全局只有这一份；属性却会被线程隔离
+    # 模块级别，全局只有这一份；属性却会被线程隔离
     def decompress_into_pinned(bytes_like, numel):
         """把 exponent 压缩数据直接解压到 pinned Tensor"""
         global decomp_time, decomp_lock

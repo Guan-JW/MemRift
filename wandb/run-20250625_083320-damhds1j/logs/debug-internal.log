@@ -1,0 +1,15 @@
+{"time":"2025-06-25T08:33:21.028613312+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250625_083320-damhds1j/logs/debug-core.log"}
+{"time":"2025-06-25T08:33:22.56992592+08:00","level":"INFO","msg":"stream: created new stream","id":"damhds1j"}
+{"time":"2025-06-25T08:33:22.569997792+08:00","level":"INFO","msg":"stream: started","id":"damhds1j"}
+{"time":"2025-06-25T08:33:22.57049824+08:00","level":"INFO","msg":"sender: started","stream_id":"damhds1j"}
+{"time":"2025-06-25T08:33:22.570558016+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"damhds1j"}
+{"time":"2025-06-25T08:33:22.570480032+08:00","level":"INFO","msg":"handler: started","stream_id":"damhds1j"}
+{"time":"2025-06-25T08:33:22.993296192+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-25T08:36:16.455828992+08:00","level":"INFO","msg":"stream: closing","id":"damhds1j"}
+{"time":"2025-06-25T08:36:16.455906976+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-25T08:36:16.455984576+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-25T08:36:17.36595136+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-25T08:36:18.5677032+08:00","level":"INFO","msg":"handler: closed","stream_id":"damhds1j"}
+{"time":"2025-06-25T08:36:18.567974592+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"damhds1j"}
+{"time":"2025-06-25T08:36:18.568178848+08:00","level":"INFO","msg":"sender: closed","stream_id":"damhds1j"}
+{"time":"2025-06-25T08:36:18.568200512+08:00","level":"INFO","msg":"stream: closed","id":"damhds1j"}

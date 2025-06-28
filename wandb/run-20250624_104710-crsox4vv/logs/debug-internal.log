@@ -1,0 +1,15 @@
+{"time":"2025-06-24T10:47:10.619730144+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250624_104710-crsox4vv/logs/debug-core.log"}
+{"time":"2025-06-24T10:47:12.25145296+08:00","level":"INFO","msg":"stream: created new stream","id":"crsox4vv"}
+{"time":"2025-06-24T10:47:12.251782048+08:00","level":"INFO","msg":"stream: started","id":"crsox4vv"}
+{"time":"2025-06-24T10:47:12.252216288+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"crsox4vv"}
+{"time":"2025-06-24T10:47:12.252215488+08:00","level":"INFO","msg":"handler: started","stream_id":"crsox4vv"}
+{"time":"2025-06-24T10:47:12.2523112+08:00","level":"INFO","msg":"sender: started","stream_id":"crsox4vv"}
+{"time":"2025-06-24T10:47:12.773848768+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-24T10:48:19.459182752+08:00","level":"INFO","msg":"stream: closing","id":"crsox4vv"}
+{"time":"2025-06-24T10:48:19.461062848+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-24T10:48:19.46189488+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-24T10:48:20.374261344+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-24T10:48:21.695003936+08:00","level":"INFO","msg":"handler: closed","stream_id":"crsox4vv"}
+{"time":"2025-06-24T10:48:21.695207552+08:00","level":"INFO","msg":"sender: closed","stream_id":"crsox4vv"}
+{"time":"2025-06-24T10:48:21.696498656+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"crsox4vv"}
+{"time":"2025-06-24T10:48:21.696600736+08:00","level":"INFO","msg":"stream: closed","id":"crsox4vv"}

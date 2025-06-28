@@ -1,0 +1,7 @@
+{"time":"2025-06-27T12:06:10.362630336+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250627_120609-2xez7dpp/logs/debug-core.log"}
+{"time":"2025-06-27T12:06:11.873914304+08:00","level":"INFO","msg":"stream: created new stream","id":"2xez7dpp"}
+{"time":"2025-06-27T12:06:11.874026656+08:00","level":"INFO","msg":"stream: started","id":"2xez7dpp"}
+{"time":"2025-06-27T12:06:11.874257024+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"2xez7dpp"}
+{"time":"2025-06-27T12:06:11.87430992+08:00","level":"INFO","msg":"sender: started","stream_id":"2xez7dpp"}
+{"time":"2025-06-27T12:06:11.8742704+08:00","level":"INFO","msg":"handler: started","stream_id":"2xez7dpp"}
+{"time":"2025-06-27T12:06:12.285840032+08:00","level":"INFO","msg":"Starting system monitor"}

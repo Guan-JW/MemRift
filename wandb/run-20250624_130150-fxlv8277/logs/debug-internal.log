@@ -1,0 +1,15 @@
+{"time":"2025-06-24T13:01:51.458471392+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250624_130150-fxlv8277/logs/debug-core.log"}
+{"time":"2025-06-24T13:01:52.976829248+08:00","level":"INFO","msg":"stream: created new stream","id":"fxlv8277"}
+{"time":"2025-06-24T13:01:52.977151328+08:00","level":"INFO","msg":"stream: started","id":"fxlv8277"}
+{"time":"2025-06-24T13:01:52.97724304+08:00","level":"INFO","msg":"sender: started","stream_id":"fxlv8277"}
+{"time":"2025-06-24T13:01:52.977239328+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"fxlv8277"}
+{"time":"2025-06-24T13:01:52.977309888+08:00","level":"INFO","msg":"handler: started","stream_id":"fxlv8277"}
+{"time":"2025-06-24T13:01:53.44347344+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-24T13:02:29.13213024+08:00","level":"INFO","msg":"stream: closing","id":"fxlv8277"}
+{"time":"2025-06-24T13:02:29.132242528+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-24T13:02:29.132332512+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-24T13:02:29.906376608+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-24T13:02:31.542645664+08:00","level":"INFO","msg":"handler: closed","stream_id":"fxlv8277"}
+{"time":"2025-06-24T13:02:31.543055264+08:00","level":"INFO","msg":"sender: closed","stream_id":"fxlv8277"}
+{"time":"2025-06-24T13:02:31.556178944+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"fxlv8277"}
+{"time":"2025-06-24T13:02:31.556410496+08:00","level":"INFO","msg":"stream: closed","id":"fxlv8277"}

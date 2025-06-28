@@ -1,0 +1,51 @@
+{
+  "os": "Linux-5.15.148-tegra-aarch64-with-glibc2.39",
+  "python": "CPython 3.12.3",
+  "startedAt": "2025-06-24T03:59:42.937395Z",
+  "args": [
+    "--hook",
+    "--weight",
+    "--activation",
+    "--model",
+    "/opt/models/hf/Mistral-7B-v0.1",
+    "--outdir",
+    "/opt/finetune/MemRift/weight_comp/prepare_weight/Mistral-7B-zstd-compressed-weights/level21",
+    "--max_length",
+    "1600"
+  ],
+  "program": "/opt/finetune/MemRift/train_wrapper.py",
+  "codePath": "train_wrapper.py",
+  "git": {
+    "remote": "https://github.com/Guan-JW/MemRift.git",
+    "commit": "9d6b10cc25f833719f53e84c7b4bec754b5f1abf"
+  },
+  "root": "/opt/finetune/MemRift",
+  "host": "ubuntu",
+  "executable": "/opt/venv/bin/python3",
+  "codePathLocal": "train_wrapper.py",
+  "cpu_count": 8,
+  "cpu_count_logical": 8,
+  "gpu": "Orin (nvgpu)",
+  "gpu_count": 1,
+  "disk": {
+    "/": {
+      "total": "1967813582848",
+      "used": "476945022976"
+    }
+  },
+  "memory": {
+    "total": "32188051456"
+  },
+  "cpu": {
+    "count": 8,
+    "countLogical": 8
+  },
+  "gpu_nvidia": [
+    {
+      "name": "Orin (nvgpu)",
+      "architecture": "Ampere",
+      "uuid": "72136144-6de6-51ba-9974-e3ac199c954a"
+    }
+  ],
+  "cudaVersion": "12.8"
+}

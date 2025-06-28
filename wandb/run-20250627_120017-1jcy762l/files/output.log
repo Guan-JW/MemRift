@@ -1,0 +1,47 @@
+
+
+args.model='/opt/models/hf/TinyLlama-1.1B-Chat-v1.0', args.outdir='./weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level18', args.weight=False, args.activation=True, args.max_length=2048
+[meta] still 0 tensors on meta device
+Peak CPU memory usage: 751.14 MB
+Peak GPU memory usage: 2129.22 MB
+init AsyncCompressor
+Using the latest cached version of the dataset since timdettmers/openassistant-guanaco couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /data/models/huggingface/datasets/timdettmers___openassistant-guanaco/default/0.0.0/831dabac2283d99420cda0b673d7a2a43849f17a (last modified on Mon Jun 23 08:47:36 2025).
+
+
+*************** i=0 ****************
+loss=tensor(0.8168, device='cuda:0', grad_fn=<NllLossBackward0>)
+waiting for compressed datawaiting for compressed data
+Got compressed data
+Got compressed data
+
+waiting for compressed data
+Got compressed data
+waiting for compressed datawaiting for compressed data
+
+Got compressed dataGot compressed data
+
+waiting for compressed data
+Got compressed data
+waiting for compressed data
+Got compressed data
+waiting for compressed data
+Got compressed data
+waiting for compressed data
+Got compressed data
+waiting for compressed datawaiting for compressed data
+
+Got compressed dataGot compressed data
+
+waiting for compressed data
+Got compressed data
+waiting for compressed datawaiting for compressed data
+
+Got compressed dataGot compressed data
+
+waiting for compressed data
+Got compressed data
+waiting for compressed data
+Got compressed data
+waiting for compressed data
+Got compressed data

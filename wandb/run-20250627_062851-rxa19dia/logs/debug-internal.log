@@ -1,0 +1,15 @@
+{"time":"2025-06-27T06:28:52.276485664+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250627_062851-rxa19dia/logs/debug-core.log"}
+{"time":"2025-06-27T06:28:53.754693888+08:00","level":"INFO","msg":"stream: created new stream","id":"rxa19dia"}
+{"time":"2025-06-27T06:28:53.755090496+08:00","level":"INFO","msg":"stream: started","id":"rxa19dia"}
+{"time":"2025-06-27T06:28:53.755446816+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"rxa19dia"}
+{"time":"2025-06-27T06:28:53.755671072+08:00","level":"INFO","msg":"handler: started","stream_id":"rxa19dia"}
+{"time":"2025-06-27T06:28:53.755504+08:00","level":"INFO","msg":"sender: started","stream_id":"rxa19dia"}
+{"time":"2025-06-27T06:28:54.20849056+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-27T06:30:22.447796736+08:00","level":"INFO","msg":"stream: closing","id":"rxa19dia"}
+{"time":"2025-06-27T06:30:22.44795952+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-27T06:30:22.448092416+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-27T06:30:23.214093184+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-27T06:30:24.403874848+08:00","level":"INFO","msg":"handler: closed","stream_id":"rxa19dia"}
+{"time":"2025-06-27T06:30:24.40399824+08:00","level":"INFO","msg":"sender: closed","stream_id":"rxa19dia"}
+{"time":"2025-06-27T06:30:24.416739776+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"rxa19dia"}
+{"time":"2025-06-27T06:30:24.416873536+08:00","level":"INFO","msg":"stream: closed","id":"rxa19dia"}

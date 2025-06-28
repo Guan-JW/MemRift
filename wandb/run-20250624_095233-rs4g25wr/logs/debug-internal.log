@@ -1,0 +1,16 @@
+{"time":"2025-06-24T09:52:34.413718176+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250624_095233-rs4g25wr/logs/debug-core.log"}
+{"time":"2025-06-24T09:52:40.837183424+08:00","level":"INFO","msg":"stream: created new stream","id":"rs4g25wr"}
+{"time":"2025-06-24T09:52:40.837967552+08:00","level":"INFO","msg":"stream: started","id":"rs4g25wr"}
+{"time":"2025-06-24T09:52:40.838316544+08:00","level":"INFO","msg":"sender: started","stream_id":"rs4g25wr"}
+{"time":"2025-06-24T09:52:40.838311392+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"rs4g25wr"}
+{"time":"2025-06-24T09:52:40.838288192+08:00","level":"INFO","msg":"handler: started","stream_id":"rs4g25wr"}
+{"time":"2025-06-24T09:52:42.405049152+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-24T09:53:33.981947616+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/15692276873/gemma-2-2b-it_memrift_act_weight_jetson_1024/rs4g25wr/file_stream\": EOF"}
+{"time":"2025-06-24T09:53:55.003655328+08:00","level":"INFO","msg":"stream: closing","id":"rs4g25wr"}
+{"time":"2025-06-24T09:53:55.003816096+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-24T09:53:55.00397488+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-24T09:54:28.523616832+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-24T09:54:47.420690208+08:00","level":"INFO","msg":"handler: closed","stream_id":"rs4g25wr"}
+{"time":"2025-06-24T09:54:47.420851904+08:00","level":"INFO","msg":"sender: closed","stream_id":"rs4g25wr"}
+{"time":"2025-06-24T09:54:47.434159072+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"rs4g25wr"}
+{"time":"2025-06-24T09:54:47.434375616+08:00","level":"INFO","msg":"stream: closed","id":"rs4g25wr"}

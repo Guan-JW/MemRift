@@ -1,0 +1,15 @@
+{"time":"2025-06-24T13:46:42.638070336+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250624_134642-xeprpp4n/logs/debug-core.log"}
+{"time":"2025-06-24T13:46:44.115275744+08:00","level":"INFO","msg":"stream: created new stream","id":"xeprpp4n"}
+{"time":"2025-06-24T13:46:44.115346816+08:00","level":"INFO","msg":"stream: started","id":"xeprpp4n"}
+{"time":"2025-06-24T13:46:44.115598624+08:00","level":"INFO","msg":"handler: started","stream_id":"xeprpp4n"}
+{"time":"2025-06-24T13:46:44.115660704+08:00","level":"INFO","msg":"sender: started","stream_id":"xeprpp4n"}
+{"time":"2025-06-24T13:46:44.11568992+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"xeprpp4n"}
+{"time":"2025-06-24T13:46:44.560061248+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-24T13:47:38.941556608+08:00","level":"INFO","msg":"stream: closing","id":"xeprpp4n"}
+{"time":"2025-06-24T13:47:38.941633536+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-24T13:47:38.941939648+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-24T13:47:39.73632896+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-24T13:47:41.046266112+08:00","level":"INFO","msg":"handler: closed","stream_id":"xeprpp4n"}
+{"time":"2025-06-24T13:47:41.046344352+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"xeprpp4n"}
+{"time":"2025-06-24T13:47:41.046462976+08:00","level":"INFO","msg":"sender: closed","stream_id":"xeprpp4n"}
+{"time":"2025-06-24T13:47:41.046482656+08:00","level":"INFO","msg":"stream: closed","id":"xeprpp4n"}

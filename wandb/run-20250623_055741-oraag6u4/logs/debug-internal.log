@@ -1,0 +1,15 @@
+{"time":"2025-06-23T05:57:41.936902368+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250623_055741-oraag6u4/logs/debug-core.log"}
+{"time":"2025-06-23T05:57:43.480706208+08:00","level":"INFO","msg":"stream: created new stream","id":"oraag6u4"}
+{"time":"2025-06-23T05:57:43.480823296+08:00","level":"INFO","msg":"stream: started","id":"oraag6u4"}
+{"time":"2025-06-23T05:57:43.480879104+08:00","level":"INFO","msg":"handler: started","stream_id":"oraag6u4"}
+{"time":"2025-06-23T05:57:43.480876928+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"oraag6u4"}
+{"time":"2025-06-23T05:57:43.480908032+08:00","level":"INFO","msg":"sender: started","stream_id":"oraag6u4"}
+{"time":"2025-06-23T05:57:43.948301504+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-23T05:57:50.34471584+08:00","level":"INFO","msg":"stream: closing","id":"oraag6u4"}
+{"time":"2025-06-23T05:57:50.344944192+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-23T05:57:50.345087456+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-23T05:57:51.129011552+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-23T05:57:52.319351808+08:00","level":"INFO","msg":"handler: closed","stream_id":"oraag6u4"}
+{"time":"2025-06-23T05:57:52.31967696+08:00","level":"INFO","msg":"sender: closed","stream_id":"oraag6u4"}
+{"time":"2025-06-23T05:57:52.322669888+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"oraag6u4"}
+{"time":"2025-06-23T05:57:52.322776928+08:00","level":"INFO","msg":"stream: closed","id":"oraag6u4"}

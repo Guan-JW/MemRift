@@ -1,0 +1,28 @@
+
+
+args.model='/opt/models/hf/TinyLlama-1.1B-Chat-v1.0', args.outdir='./weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level18', args.weight=True, args.activation=True, args.max_length=2048
+[before_inject] GPU: allocated=2129.1 MB, reserved=2178.0 MB | CPU RSS=747.6 MB
+[before inject] logical param size = 2.1 GiB
+/opt/finetune/MemRift/train_wrapper.py:400: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /opt/pytorch/torch/csrc/utils/tensor_numpy.cpp:203.)
+  sm_gpu = torch.as_tensor(sign_np, dtype=torch.uint8, device=device)
+Traceback (most recent call last):
+  File "/opt/finetune/MemRift/train_wrapper.py", line 261, in materialize
+    self._exp_host = decompress_into_pinned(self.exp_mv, numel)   # uint8 pinned, 记录为 class 成员，防止kernel执行时被释放
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/finetune/MemRift/train_wrapper.py", line 196, in decompress_into_pinned
+    tls = _tls                          # 取到当前线程的 thread-local 对象
+          ^^^^
+NameError: name '_tls' is not defined
+Traceback (most recent call last):
+  File "/opt/finetune/MemRift/train_wrapper.py", line 496, in <module>
+    layer2cps, max_job_size = inject_from_files(model, args.outdir)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/finetune/MemRift/train_wrapper.py", line 429, in inject_from_files
+    cp.materialize(sync=True)
+  File "/opt/finetune/MemRift/train_wrapper.py", line 261, in materialize
+    self._exp_host = decompress_into_pinned(self.exp_mv, numel)   # uint8 pinned, 记录为 class 成员，防止kernel执行时被释放
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/finetune/MemRift/train_wrapper.py", line 196, in decompress_into_pinned
+    tls = _tls                          # 取到当前线程的 thread-local 对象
+          ^^^^
+NameError: name '_tls' is not defined

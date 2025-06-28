@@ -1,0 +1,17 @@
+{"time":"2025-06-25T09:27:06.44740304+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250625_092705-3k0rgbzn/logs/debug-core.log"}
+{"time":"2025-06-25T09:27:16.002934528+08:00","level":"INFO","msg":"stream: created new stream","id":"3k0rgbzn"}
+{"time":"2025-06-25T09:27:16.003022784+08:00","level":"INFO","msg":"stream: started","id":"3k0rgbzn"}
+{"time":"2025-06-25T09:27:16.00304816+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"3k0rgbzn"}
+{"time":"2025-06-25T09:27:16.003309632+08:00","level":"INFO","msg":"handler: started","stream_id":"3k0rgbzn"}
+{"time":"2025-06-25T09:27:16.003365376+08:00","level":"INFO","msg":"sender: started","stream_id":"3k0rgbzn"}
+{"time":"2025-06-25T09:27:18.493156864+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-25T09:27:49.106151968+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/15692276873/Llama-3.2-3B-Instruct_memrift_act_weight_jetson_1024/3k0rgbzn/file_stream\": unexpected EOF"}
+{"time":"2025-06-25T09:28:54.045963424+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/15692276873/Llama-3.2-3B-Instruct_memrift_act_weight_jetson_1024/3k0rgbzn/file_stream\": EOF"}
+{"time":"2025-06-25T09:30:01.937689152+08:00","level":"INFO","msg":"stream: closing","id":"3k0rgbzn"}
+{"time":"2025-06-25T09:30:01.937761472+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-25T09:30:01.938081024+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-25T09:30:03.961016608+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-25T09:30:09.158204896+08:00","level":"INFO","msg":"handler: closed","stream_id":"3k0rgbzn"}
+{"time":"2025-06-25T09:30:09.158513024+08:00","level":"INFO","msg":"sender: closed","stream_id":"3k0rgbzn"}
+{"time":"2025-06-25T09:30:09.171069312+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"3k0rgbzn"}
+{"time":"2025-06-25T09:30:09.171170112+08:00","level":"INFO","msg":"stream: closed","id":"3k0rgbzn"}

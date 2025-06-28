@@ -1,0 +1,16 @@
+{"time":"2025-06-22T00:11:50.217935552+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250622_001149-twcaatu7/logs/debug-core.log"}
+{"time":"2025-06-22T00:12:19.425299328+08:00","level":"INFO","msg":"stream: created new stream","id":"twcaatu7"}
+{"time":"2025-06-22T00:12:19.425627072+08:00","level":"INFO","msg":"stream: started","id":"twcaatu7"}
+{"time":"2025-06-22T00:12:19.42606624+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"twcaatu7"}
+{"time":"2025-06-22T00:12:19.42648848+08:00","level":"INFO","msg":"handler: started","stream_id":"twcaatu7"}
+{"time":"2025-06-22T00:12:19.42663248+08:00","level":"INFO","msg":"sender: started","stream_id":"twcaatu7"}
+{"time":"2025-06-22T00:12:22.295162112+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-22T00:12:24.670496384+08:00","level":"INFO","msg":"stream: closing","id":"twcaatu7"}
+{"time":"2025-06-22T00:12:24.6705744+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-22T00:12:24.671086592+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-22T00:12:33.266951488+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-22T00:12:44.74261328+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/15692276873/memrift_act_weight_jetson/twcaatu7/file_stream\": EOF"}
+{"time":"2025-06-22T00:13:03.506022144+08:00","level":"INFO","msg":"handler: closed","stream_id":"twcaatu7"}
+{"time":"2025-06-22T00:13:03.506156896+08:00","level":"INFO","msg":"sender: closed","stream_id":"twcaatu7"}
+{"time":"2025-06-22T00:13:03.556141152+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"twcaatu7"}
+{"time":"2025-06-22T00:13:03.5563504+08:00","level":"INFO","msg":"stream: closed","id":"twcaatu7"}

@@ -1,0 +1,26 @@
+
+
+args.model='/opt/models/hf/TinyLlama-1.1B-Chat-v1.0', args.outdir='/opt/finetune/MemRift/weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level-1', args.weight=True, args.activation=False, args.max_length=2048
+[before_inject] GPU: allocated=0.0 MB, reserved=0.0 MB | CPU RSS=719.9 MB
+[before inject] logical param size = 2.0 GiB
+/opt/finetune/MemRift/train_wrapper.py:396: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /opt/pytorch/torch/csrc/utils/tensor_numpy.cpp:203.)
+  sm_gpu = torch.as_tensor(sm, dtype=torch.uint8, device=device)
+Materializing model.embed_tokens
+cp.data.shape=torch.Size([32000, 2048])
+Materializing model.norm
+cp.data.shape=torch.Size([2048])
+Materializing lm_head
+cp.data.shape=torch.Size([32000, 2048])
+[after_inject] GPU: allocated=1367.1 MB, reserved=1374.0 MB | CPU RSS=1492.4 MB
+[after inject] logical param size = 250.0 MiB
+Peak CPU memory usage: 1492.37 MB
+Peak GPU memory usage: 1367.09 MB
+[meta] still 0 tensors on meta device
+sign  : 1.0 GiB
+exp   : 634.3 MiB
+bf16  : 0 Bytes
+python: 15.7 KiB
+---------------
+TOTAL : 1.6 GiB
+Peak CPU memory usage: 1497.52 MB
+Peak GPU memory usage: 1398.14 MB

@@ -1,0 +1,164 @@
+
+
+args.model='/opt/models/hf/Mistral-7B-v0.1', args.outdir='/opt/finetune/MemRift/weight_comp/prepare_weight/Mistral-7B-zstd-compressed-weights/level21', args.weight=True, args.activation=False, args.max_length=512
+[before_inject] GPU: allocated=0.0 MB, reserved=0.0 MB | CPU RSS=720.6 MB
+[before inject] logical param size = 13.5 GiB
+/opt/finetune/MemRift/train_wrapper.py:447: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /opt/pytorch/torch/csrc/utils/tensor_numpy.cpp:203.)
+  sm_gpu = torch.as_tensor(sm, dtype=torch.uint8, device=device)
+Materializing model.embed_tokens
+cp.data.shape=torch.Size([32000, 4096])
+Materializing model.norm
+cp.data.shape=torch.Size([4096])
+Materializing lm_head
+cp.data.shape=torch.Size([32000, 4096])
+[after_inject] GPU: allocated=7156.3 MB, reserved=7166.0 MB | CPU RSS=3121.7 MB
+[after inject] logical param size = 500.0 MiB
+Peak CPU memory usage: 3121.71 MB
+Peak GPU memory usage: 7282.26 MB
+[meta] still 0 tensors on meta device
+sign  : 6.5 GiB
+exp   : 2.1 GiB
+bf16  : 0 Bytes
+python: 22.5 KiB
+---------------
+TOTAL : 8.6 GiB
+Peak CPU memory usage: 3126.86 MB
+Peak GPU memory usage: 7282.26 MB
+init AsyncCompressor
+Using the latest cached version of the dataset since timdettmers/openassistant-guanaco couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /data/models/huggingface/datasets/timdettmers___openassistant-guanaco/default/0.0.0/831dabac2283d99420cda0b673d7a2a43849f17a (last modified on Thu May  1 09:51:59 2025).
+
+
+*************** i=0 ****************
+loss=tensor(4.6139, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 0: 27288.9 ms , 27304.6 ms , peak Δ=11671.2 MB
+Peak CPU memory usage: 820.89 MB
+- Fwd time: 14006.8 ms
+- Bwd time: 13282.2 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms
+
+
+*************** i=1 ****************
+loss=tensor(2.0127, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 1: 26072.5 ms , 26103.3 ms , peak Δ=11895.4 MB
+Peak CPU memory usage: 826.24 MB
+- Fwd time: 12955.7 ms
+- Bwd time: 13116.9 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms
+
+
+*************** i=2 ****************
+loss=tensor(1.0847, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 2: 26001.4 ms , 26048.2 ms , peak Δ=11895.4 MB
+Peak CPU memory usage: 826.85 MB
+- Fwd time: 12919.6 ms
+- Bwd time: 13081.8 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms
+
+
+*************** i=3 ****************
+loss=tensor(0.8595, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 3: 26064.2 ms , 26108.3 ms , peak Δ=11895.4 MB
+Peak CPU memory usage: 829.35 MB
+- Fwd time: 12926.0 ms
+- Bwd time: 13138.2 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms
+
+
+*************** i=4 ****************
+loss=tensor(0.7626, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 4: 26052.8 ms , 26080.8 ms , peak Δ=11895.4 MB
+Peak CPU memory usage: 829.86 MB
+- Fwd time: 12902.1 ms
+- Bwd time: 13150.7 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms

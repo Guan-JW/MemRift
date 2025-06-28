@@ -1,0 +1,16 @@
+{"time":"2025-06-25T09:52:40.338929856+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250625_095239-z26x4im8/logs/debug-core.log"}
+{"time":"2025-06-25T09:52:42.911022432+08:00","level":"INFO","msg":"stream: created new stream","id":"z26x4im8"}
+{"time":"2025-06-25T09:52:42.911100224+08:00","level":"INFO","msg":"stream: started","id":"z26x4im8"}
+{"time":"2025-06-25T09:52:42.911407488+08:00","level":"INFO","msg":"handler: started","stream_id":"z26x4im8"}
+{"time":"2025-06-25T09:52:42.911462304+08:00","level":"INFO","msg":"sender: started","stream_id":"z26x4im8"}
+{"time":"2025-06-25T09:52:42.91151408+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"z26x4im8"}
+{"time":"2025-06-25T09:52:49.368930656+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-25T09:53:52.41583424+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/15692276873/Llama-3.2-3B-Instruct_memrift_act_weight_jetson/z26x4im8/file_stream\": EOF"}
+{"time":"2025-06-25T09:54:56.244832096+08:00","level":"INFO","msg":"stream: closing","id":"z26x4im8"}
+{"time":"2025-06-25T09:54:56.244895744+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-25T09:54:56.245175552+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-25T09:54:57.849882144+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-25T09:55:01.28083936+08:00","level":"INFO","msg":"handler: closed","stream_id":"z26x4im8"}
+{"time":"2025-06-25T09:55:01.281164544+08:00","level":"INFO","msg":"sender: closed","stream_id":"z26x4im8"}
+{"time":"2025-06-25T09:55:01.293773248+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"z26x4im8"}
+{"time":"2025-06-25T09:55:01.293854752+08:00","level":"INFO","msg":"stream: closed","id":"z26x4im8"}

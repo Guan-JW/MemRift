@@ -1,0 +1,860 @@
+
+
+args.model='/opt/models/hf/TinyLlama-1.1B-Chat-v1.0', args.outdir='./weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level18', args.weight=False, args.activation=True, args.max_length=2048
+[meta] still 0 tensors on meta device
+Peak CPU memory usage: 749.02 MB
+Peak GPU memory usage: 2129.22 MB
+init AsyncCompressor
+Using the latest cached version of the dataset since timdettmers/openassistant-guanaco couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /data/models/huggingface/datasets/timdettmers___openassistant-guanaco/default/0.0.0/831dabac2283d99420cda0b673d7a2a43849f17a (last modified on Mon Jun 23 08:47:36 2025).
+
+
+*************** i=0 ****************
+start comp.
+finish comp.
+start comp.
+start comp.
+finish comp.finish comp.
+
+start comp.
+start comp.
+start comp.finish comp.
+
+start comp.
+finish comp.
+finish comp.
+start comp.
+finish comp.start comp.
+finish comp.
+
+finish comp.
+start comp.
+start comp.
+start comp.
+start comp.start comp.
+
+start comp.
+finish comp.finish comp.finish comp.
+
+
+start comp.
+start comp.
+finish comp.
+finish comp.
+finish comp.
+finish comp.
+finish comp.
+start comp.
+start comp.
+start comp.
+finish comp.
+finish comp.finish comp.
+start comp.
+
+start comp.
+finish comp.
+start comp.
+start comp.
+finish comp.
+finish comp.
+finish comp.
+start comp.
+start comp.
+finish comp.
+finish comp.
+start comp.
+finish comp.
+start comp.
+start comp.
+finish comp.
+start comp.
+start comp.
+finish comp.start comp.
+
+finish comp.
+start comp.finish comp.
+start comp.
+
+finish comp.
+finish comp.
+start comp.
+start comp.start comp.
+finish comp.
+finish comp.start comp.start comp.
+finish comp.
+
+start comp.finish comp.
+
+start comp.
+
+
+finish comp.
+finish comp.
+start comp.finish comp.
+
+finish comp.
+start comp.
+finish comp.
+finish comp.
+start comp.
+finish comp.
+start comp.
+start comp.
+finish comp.start comp.
+
+start comp.
+start comp.
+finish comp.
+finish comp.
+start comp.
+start comp.
+finish comp.
+finish comp.
+finish comp.
+finish comp.
+start comp.
+start comp.start comp.
+
+finish comp.start comp.finish comp.
+
+
+start comp.
+finish comp.
+start comp.start comp.
+
+finish comp.
+start comp.
+finish comp.
+finish comp.
+start comp.
+finish comp.finish comp.
+
+finish comp.
+start comp.
+start comp.
+start comp.finish comp.
+
+start comp.start comp.
+start comp.finish comp.
+
+
+finish comp.
+finish comp.
+start comp.start comp.
+
+finish comp.
+finish comp.finish comp.
+
+finish comp.
+start comp.
+start comp.
+start comp.
+finish comp.
+start comp.start comp.finish comp.
+
+
+finish comp.
+start comp.
+start comp.
+finish comp.
+finish comp.
+finish comp.start comp.
+
+finish comp.
+start comp.
+finish comp.
+finish comp.
+start comp.
+start comp.
+finish comp.
+start comp.
+start comp.
+finish comp.start comp.
+
+start comp.finish comp.
+
+start comp.
+finish comp.
+start comp.
+finish comp.
+finish comp.
+finish comp.
+start comp.
+finish comp.
+start comp.
+start comp.
+start comp.finish comp.
+
+start comp.finish comp.finish comp.
+
+
+start comp.start comp.
+finish comp.
+
+finish comp.
+finish comp.
+start comp.finish comp.
+
+start comp.
+finish comp.
+start comp.
+finish comp.
+start comp.
+start comp.finish comp.
+start comp.
+
+start comp.
+start comp.
+finish comp.
+finish comp.finish comp.
+
+start comp.start comp.
+finish comp.
+
+finish comp.finish comp.
+
+start comp.
+finish comp.start comp.
+
+start comp.
+finish comp.
+start comp.start comp.finish comp.
+
+
+start comp.
+finish comp.
+start comp.
+finish comp.
+finish comp.start comp.
+
+finish comp.
+start comp.
+finish comp.
+start comp.
+finish comp.finish comp.
+
+start comp.finish comp.
+start comp.
+
+start comp.
+finish comp.
+start comp.
+start comp.
+finish comp.
+finish comp.start comp.start comp.
+
+
+finish comp.finish comp.
+
+finish comp.
+finish comp.
+start comp.
+start comp.
+start comp.
+finish comp.start comp.
+
+start comp.finish comp.
+
+finish comp.
+start comp.
+start comp.
+finish comp.
+finish comp.
+start comp.
+finish comp.
+finish comp.start comp.
+
+finish comp.
+finish comp.
+start comp.
+start comp.
+finish comp.
+start comp.
+start comp.
+start comp.finish comp.
+start comp.
+
+finish comp.
+finish comp.
+start comp.
+start comp.
+finish comp.
+finish comp.
+finish comp.
+finish comp.
+start comp.
+start comp.
+start comp.
+finish comp.
+start comp.finish comp.
+
+start comp.
+finish comp.
+start comp.finish comp.
+
+start comp.
+finish comp.
+finish comp.
+start comp.
+start comp.
+finish comp.
+finish comp.
+start comp.
+finish comp.
+start comp.start comp.
+
+finish comp.start comp.
+start comp.
+
+finish comp.start comp.
+
+finish comp.
+start comp.start comp.
+
+finish comp.
+finish comp.
+finish comp.
+finish comp.
+finish comp.start comp.
+
+start comp.
+start comp.
+finish comp.
+finish comp.finish comp.start comp.start comp.
+
+
+
+start comp.
+start comp.
+finish comp.
+finish comp.
+start comp.
+start comp.
+finish comp.
+finish comp.
+finish comp.
+finish comp.
+start comp.
+start comp.
+start comp.start comp.
+
+finish comp.start comp.finish comp.
+
+
+start comp.
+finish comp.
+finish comp.
+finish comp.
+start comp.start comp.
+
+finish comp.
+finish comp.
+start comp.
+finish comp.
+start comp.
+start comp.
+finish comp.
+start comp.
+start comp.finish comp.finish comp.
+
+
+start comp.start comp.
+
+finish comp.
+finish comp.
+finish comp.start comp.
+
+start comp.
+finish comp.
+finish comp.
+start comp.
+finish comp.
+start comp.start comp.
+
+finish comp.
+start comp.
+start comp.
+finish comp.
+start comp.
+finish comp.
+finish comp.
+finish comp.
+finish comp.
+start comp.start comp.
+
+finish comp.
+finish comp.
+start comp.
+start comp.start comp.
+
+finish comp.
+start comp.start comp.
+finish comp.
+finish comp.
+start comp.
+start comp.finish comp.
+
+
+finish comp.
+finish comp.
+start comp.
+start comp.
+finish comp.finish comp.
+
+finish comp.
+start comp.
+start comp.
+finish comp.
+start comp.
+finish comp.start comp.start comp.
+start comp.
+
+
+finish comp.
+finish comp.
+start comp.start comp.
+
+finish comp.
+finish comp.
+finish comp.
+start comp.
+finish comp.
+start comp.
+start comp.
+finish comp.
+start comp.
+finish comp.start comp.finish comp.
+
+
+start comp.start comp.
+
+finish comp.finish comp.
+
+start comp.
+start comp.
+finish comp.
+finish comp.
+finish comp.
+start comp.
+finish comp.
+start comp.
+start comp.
+finish comp.
+start comp.
+finish comp.
+start comp.
+start comp.
+finish comp.
+finish comp.
+start comp.start comp.
+
+finish comp.finish comp.
+
+finish comp.
+start comp.finish comp.
+
+start comp.start comp.
+
+start comp.start comp.finish comp.
+
+finish comp.
+
+finish comp.start comp.
+
+start comp.
+finish comp.
+finish comp.
+finish comp.
+finish comp.start comp.
+
+start comp.
+finish comp.
+start comp.
+start comp.
+finish comp.start comp.start comp.
+
+
+start comp.start comp.
+finish comp.
+
+finish comp.
+finish comp.
+finish comp.start comp.start comp.
+
+
+finish comp.
+finish comp.
+start comp.
+finish comp.finish comp.
+
+start comp.
+start comp.
+finish comp.
+finish comp.start comp.
+
+finish comp.
+start comp.
+start comp.
+start comp.
+finish comp.
+finish comp.
+start comp.
+finish comp.
+start comp.
+finish comp.
+finish comp.
+finish comp.
+start comp.
+start comp.
+finish comp.start comp.
+
+finish comp.
+start comp.start comp.start comp.
+
+
+finish comp.
+start comp.start comp.
+
+finish comp.
+finish comp.
+finish comp.finish comp.
+
+start comp.
+finish comp.
+start comp.
+finish comp.start comp.start comp.finish comp.
+
+
+
+finish comp.
+start comp.
+start comp.
+start comp.
+finish comp.
+finish comp.
+start comp.
+start comp.
+finish comp.
+finish comp.finish comp.
+
+start comp.
+finish comp.
+start comp.
+finish comp.start comp.
+
+start comp.finish comp.start comp.
+
+
+start comp.
+finish comp.
+finish comp.
+start comp.
+finish comp.start comp.
+
+finish comp.
+finish comp.
+finish comp.
+start comp.
+start comp.
+start comp.
+finish comp.
+start comp.start comp.
+
+finish comp.
+start comp.finish comp.start comp.
+
+
+finish comp.
+finish comp.
+finish comp.start comp.
+
+start comp.
+finish comp.
+start comp.
+finish comp.start comp.start comp.
+
+start comp.finish comp.
+finish comp.
+start comp.
+start comp.
+finish comp.
+
+
+finish comp.
+start comp.start comp.
+
+finish comp.finish comp.
+
+finish comp.
+finish comp.
+finish comp.
+start comp.
+start comp.
+start comp.finish comp.
+
+finish comp.start comp.finish comp.
+start comp.
+
+
+start comp.start comp.
+
+finish comp.
+start comp.
+finish comp.start comp.
+
+finish comp.
+finish comp.
+start comp.finish comp.
+
+start comp.finish comp.
+start comp.
+finish comp.
+
+start comp.
+finish comp.
+start comp.
+start comp.
+finish comp.
+start comp.start comp.
+
+finish comp.finish comp.
+
+finish comp.
+finish comp.
+start comp.finish comp.
+
+start comp.start comp.
+
+finish comp.
+start comp.
+finish comp.start comp.finish comp.start comp.
+
+
+
+start comp.
+finish comp.
+finish comp.start comp.
+
+start comp.
+finish comp.
+finish comp.
+finish comp.
+finish comp.
+start comp.
+start comp.finish comp.
+
+start comp.
+start comp.
+start comp.finish comp.start comp.
+
+
+finish comp.
+finish comp.
+start comp.start comp.
+
+finish comp.
+finish comp.
+finish comp.
+finish comp.start comp.
+
+start comp.
+start comp.
+finish comp.
+finish comp.finish comp.
+start comp.
+
+start comp.
+start comp.
+start comp.
+finish comp.
+finish comp.finish comp.
+
+start comp.
+start comp.
+finish comp.
+finish comp.
+start comp.finish comp.
+
+start comp.
+start comp.finish comp.start comp.
+
+start comp.
+start comp.
+finish comp.
+
+finish comp.
+start comp.start comp.
+
+finish comp.
+finish comp.
+finish comp.
+finish comp.
+start comp.
+finish comp.
+start comp.
+start comp.
+finish comp.
+start comp.finish comp.start comp.
+
+
+finish comp.
+start comp.
+finish comp.
+start comp.
+finish comp.finish comp.start comp.
+
+
+start comp.
+finish comp.
+finish comp.
+start comp.
+start comp.
+finish comp.
+start comp.
+start comp.
+finish comp.
+finish comp.
+start comp.
+start comp.
+finish comp.finish comp.
+
+finish comp.
+start comp.start comp.
+
+finish comp.
+finish comp.
+start comp.
+finish comp.
+start comp.start comp.
+
+start comp.
+finish comp.
+start comp.
+start comp.
+finish comp.
+start comp.
+finish comp.
+finish comp.
+finish comp.
+finish comp.
+finish comp.
+loss=tensor(0.8168, device='cuda:0', grad_fn=<NllLossBackward0>)
+waiting for compressed datawaiting for compressed data
+Wait for ready_evt
+Got compressed data
+Got compressed data
+
+finish decomp.
+finish merge.
+finish decodingWait for CtoD_copy_evt
+
+waiting for compressed data
+Got compressed data
+before return
+Wait for ready_evt
+finish decomp.
+finish decomp.finish merge.
+
+finish merge.finish decodingWait for CtoD_copy_evt
+
+
+finish decodingwaiting for compressed data
+
+before returnwaiting for compressed dataGot compressed data
+
+
+Got compressed data
+finish decomp.
+finish merge.
+finish decoding
+waiting for compressed data
+Got compressed data
+Wait for ready_evt
+finish decomp.
+finish merge.
+finish decoding
+waiting for compressed data
+Got compressed data
+finish decomp.
+finish merge.
+finish decodingWait for CtoD_copy_evt
+
+waiting for compressed data
+Got compressed data
+before returnfinish decomp.
+
+Wait for ready_evtfinish merge.
+
+Wait for CtoD_copy_evtfinish decoding
+
+waiting for compressed data
+before returnGot compressed data
+
+Wait for ready_evt
+Wait for CtoD_copy_evt
+before return
+finish decomp.Wait for ready_evt
+
+finish merge.Wait for CtoD_copy_evt
+
+finish decoding
+waiting for compressed data
+before returnGot compressed data
+
+finish decomp.
+finish decomp.finish merge.
+
+finish merge.finish decoding
+
+finish decodingwaiting for compressed data
+
+waiting for compressed dataGot compressed data
+
+Wait for ready_evtGot compressed data
+
+Wait for CtoD_copy_evt
+before return
+Wait for ready_evt
+Wait for CtoD_copy_evt
+before return
+Wait for ready_evt
+Wait for CtoD_copy_evt
+before return
+finish decomp.
+finish merge.
+finish decoding
+finish decomp.waiting for compressed data
+
+finish merge.Got compressed dataWait for ready_evt
+
+
+finish decodingWait for CtoD_copy_evt
+
+waiting for compressed data
+Got compressed data
+before returnfinish decomp.
+
+Wait for ready_evtfinish merge.
+
+Wait for CtoD_copy_evtfinish decoding
+
+waiting for compressed data
+before returnGot compressed data
+
+Wait for ready_evt
+finish decomp.
+finish merge.
+finish decoding
+waiting for compressed data
+Got compressed data
+finish decomp.
+finish merge.
+finish decomp.finish decoding
+
+finish merge.waiting for compressed data
+
+finish decodingGot compressed data
+
+finish decomp.
+finish merge.
+finish decoding

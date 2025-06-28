@@ -1,0 +1,2 @@
+python3 -u prepare_weight.py --model /opt/models/hf/TinyLlama-1.1B-Chat-v1.0 --outdir /opt/finetune/MemRift/weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level18 --level 18
+python3 -u prepare_weight.py --outdir /opt/finetune/MemRift/weight_comp/prepare_weight/Mistral-7B-zstd-compressed-weights/level21 --level 21

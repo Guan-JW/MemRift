@@ -1,0 +1,145 @@
+
+
+args.model='/opt/models/hf/Llama-3.2-3B-Instruct', args.outdir='./weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level18', args.weight=False, args.activation=True, args.max_length=3000
+Loading checkpoint shards: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 2/2 [00:15<00:00,  7.94s/it]
+[meta] still 0 tensors on meta device
+Peak CPU memory usage: 745.83 MB
+Peak GPU memory usage: 6880.00 MB
+init AsyncCompressor
+Using the latest cached version of the dataset since timdettmers/openassistant-guanaco couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /data/models/huggingface/datasets/timdettmers___openassistant-guanaco/default/0.0.0/831dabac2283d99420cda0b673d7a2a43849f17a (last modified on Mon Jun 23 08:47:36 2025).
+
+
+*************** i=0 ****************
+loss=tensor(0.8219, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 0: 14896.8 ms , 14897.0 ms , peak Δ=6317.4 MB
+Peak CPU memory usage: 780.43 MB
+- Fwd time: 7243.7 ms
+- Bwd time: 7653.1 ms
+Compression time: 0.0 ms
+	Wait comp start time: 12732.4 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms
+
+
+*************** i=1 ****************
+loss=tensor(0.8089, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 1: 13540.4 ms , 13540.5 ms , peak Δ=6317.4 MB
+Peak CPU memory usage: 817.71 MB
+- Fwd time: 6420.7 ms
+- Bwd time: 7119.7 ms
+Compression time: 0.0 ms
+	Wait comp start time: 14385.7 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms
+
+
+*************** i=2 ****************
+loss=tensor(0.7747, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 2: 13987.1 ms , 13987.3 ms , peak Δ=6317.4 MB
+Peak CPU memory usage: 900.70 MB
+- Fwd time: 6470.9 ms
+- Bwd time: 7516.2 ms
+Compression time: 0.0 ms
+	Wait comp start time: 14453.5 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms
+
+
+*************** i=3 ****************
+loss=tensor(0.7317, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 3: 13969.2 ms , 13969.4 ms , peak Δ=6317.4 MB
+Peak CPU memory usage: 900.42 MB
+- Fwd time: 6461.6 ms
+- Bwd time: 7507.6 ms
+Compression time: 0.0 ms
+	Wait comp start time: 13848.6 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms
+
+
+*************** i=4 ****************
+loss=tensor(0.6877, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 4: 14113.5 ms , 14113.7 ms , peak Δ=6317.4 MB
+Peak CPU memory usage: 945.57 MB
+- Fwd time: 6462.5 ms
+- Bwd time: 7651.0 ms
+Compression time: 0.0 ms
+	Wait comp start time: 14285.9 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms

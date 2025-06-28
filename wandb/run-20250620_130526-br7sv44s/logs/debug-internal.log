@@ -1,0 +1,6 @@
+{"time":"2025-06-20T13:05:26.948958912+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250620_130526-br7sv44s/logs/debug-core.log"}
+{"time":"2025-06-20T13:05:31.820896992+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": EOF"}
+{"time":"2025-06-20T13:05:34.652362144+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2025-06-20T13:05:39.572188288+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2025-06-20T13:05:49.56921088+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}
+{"time":"2025-06-20T13:06:07.917287968+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": http: server gave HTTP response to HTTPS client"}

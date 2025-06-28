@@ -1,0 +1,15 @@
+{"time":"2025-06-21T23:35:33.491585344+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250621_233532-z41dvrs4/logs/debug-core.log"}
+{"time":"2025-06-21T23:35:39.064229312+08:00","level":"INFO","msg":"stream: created new stream","id":"z41dvrs4"}
+{"time":"2025-06-21T23:35:39.06434064+08:00","level":"INFO","msg":"stream: started","id":"z41dvrs4"}
+{"time":"2025-06-21T23:35:39.064384576+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"z41dvrs4"}
+{"time":"2025-06-21T23:35:39.064403456+08:00","level":"INFO","msg":"handler: started","stream_id":"z41dvrs4"}
+{"time":"2025-06-21T23:35:39.0644432+08:00","level":"INFO","msg":"sender: started","stream_id":"z41dvrs4"}
+{"time":"2025-06-21T23:35:42.7467768+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-21T23:35:51.966709312+08:00","level":"INFO","msg":"stream: closing","id":"z41dvrs4"}
+{"time":"2025-06-21T23:35:51.96682896+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-21T23:35:51.966960448+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-21T23:35:58.1259152+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-21T23:36:12.104798528+08:00","level":"INFO","msg":"handler: closed","stream_id":"z41dvrs4"}
+{"time":"2025-06-21T23:36:12.10521552+08:00","level":"INFO","msg":"sender: closed","stream_id":"z41dvrs4"}
+{"time":"2025-06-21T23:36:12.11896544+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"z41dvrs4"}
+{"time":"2025-06-21T23:36:12.119540288+08:00","level":"INFO","msg":"stream: closed","id":"z41dvrs4"}

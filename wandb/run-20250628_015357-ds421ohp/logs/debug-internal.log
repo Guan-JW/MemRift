@@ -1,0 +1,15 @@
+{"time":"2025-06-28T01:53:57.685650848+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250628_015357-ds421ohp/logs/debug-core.log"}
+{"time":"2025-06-28T01:53:59.358743968+08:00","level":"INFO","msg":"stream: created new stream","id":"ds421ohp"}
+{"time":"2025-06-28T01:53:59.359060768+08:00","level":"INFO","msg":"stream: started","id":"ds421ohp"}
+{"time":"2025-06-28T01:53:59.359150336+08:00","level":"INFO","msg":"sender: started","stream_id":"ds421ohp"}
+{"time":"2025-06-28T01:53:59.359138688+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"ds421ohp"}
+{"time":"2025-06-28T01:53:59.359293632+08:00","level":"INFO","msg":"handler: started","stream_id":"ds421ohp"}
+{"time":"2025-06-28T01:53:59.823275424+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-28T01:54:29.21899936+08:00","level":"INFO","msg":"stream: closing","id":"ds421ohp"}
+{"time":"2025-06-28T01:54:29.219107584+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-28T01:54:29.219193056+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-28T01:54:30.130404608+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-28T01:54:31.556393056+08:00","level":"INFO","msg":"handler: closed","stream_id":"ds421ohp"}
+{"time":"2025-06-28T01:54:31.556495328+08:00","level":"INFO","msg":"sender: closed","stream_id":"ds421ohp"}
+{"time":"2025-06-28T01:54:31.556493344+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"ds421ohp"}
+{"time":"2025-06-28T01:54:31.55703856+08:00","level":"INFO","msg":"stream: closed","id":"ds421ohp"}

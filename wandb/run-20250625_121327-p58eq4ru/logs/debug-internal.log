@@ -1,0 +1,15 @@
+{"time":"2025-06-25T12:13:27.582435392+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250625_121327-p58eq4ru/logs/debug-core.log"}
+{"time":"2025-06-25T12:13:29.234527296+08:00","level":"INFO","msg":"stream: created new stream","id":"p58eq4ru"}
+{"time":"2025-06-25T12:13:29.234682912+08:00","level":"INFO","msg":"stream: started","id":"p58eq4ru"}
+{"time":"2025-06-25T12:13:29.23475792+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"p58eq4ru"}
+{"time":"2025-06-25T12:13:29.234930176+08:00","level":"INFO","msg":"sender: started","stream_id":"p58eq4ru"}
+{"time":"2025-06-25T12:13:29.235027456+08:00","level":"INFO","msg":"handler: started","stream_id":"p58eq4ru"}
+{"time":"2025-06-25T12:13:29.785291808+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-25T12:16:12.42774464+08:00","level":"INFO","msg":"stream: closing","id":"p58eq4ru"}
+{"time":"2025-06-25T12:16:12.427889056+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-25T12:16:12.428016576+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-25T12:16:13.251283712+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-25T12:16:14.608532064+08:00","level":"INFO","msg":"handler: closed","stream_id":"p58eq4ru"}
+{"time":"2025-06-25T12:16:14.608586656+08:00","level":"INFO","msg":"sender: closed","stream_id":"p58eq4ru"}
+{"time":"2025-06-25T12:16:14.610009536+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"p58eq4ru"}
+{"time":"2025-06-25T12:16:14.610090464+08:00","level":"INFO","msg":"stream: closed","id":"p58eq4ru"}

@@ -1,0 +1,7 @@
+{"time":"2025-06-24T00:08:32.482894368+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250624_000832-npjm4ifj/logs/debug-core.log"}
+{"time":"2025-06-24T00:08:34.960843648+08:00","level":"INFO","msg":"stream: created new stream","id":"npjm4ifj"}
+{"time":"2025-06-24T00:08:34.961127904+08:00","level":"INFO","msg":"stream: started","id":"npjm4ifj"}
+{"time":"2025-06-24T00:08:34.96118512+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"npjm4ifj"}
+{"time":"2025-06-24T00:08:34.961168512+08:00","level":"INFO","msg":"handler: started","stream_id":"npjm4ifj"}
+{"time":"2025-06-24T00:08:34.961254848+08:00","level":"INFO","msg":"sender: started","stream_id":"npjm4ifj"}
+{"time":"2025-06-24T00:08:35.464598048+08:00","level":"INFO","msg":"Starting system monitor"}

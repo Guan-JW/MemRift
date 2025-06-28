@@ -1,0 +1,9 @@
+{"time":"2025-06-27T09:42:46.636568352+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250627_094246-b4rmfatj/logs/debug-core.log"}
+{"time":"2025-06-27T09:42:48.160133952+08:00","level":"INFO","msg":"stream: created new stream","id":"b4rmfatj"}
+{"time":"2025-06-27T09:42:48.160235136+08:00","level":"INFO","msg":"stream: started","id":"b4rmfatj"}
+{"time":"2025-06-27T09:42:48.160253568+08:00","level":"INFO","msg":"handler: started","stream_id":"b4rmfatj"}
+{"time":"2025-06-27T09:42:48.160254752+08:00","level":"INFO","msg":"sender: started","stream_id":"b4rmfatj"}
+{"time":"2025-06-27T09:42:48.160284064+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"b4rmfatj"}
+{"time":"2025-06-27T09:42:48.576739456+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-27T09:45:50.62387088+08:00","level":"ERROR","msg":"HTTP error","status":404,"method":"POST","url":"https://api.wandb.ai/files/15692276873/memrift_act_weight_jetson/b4rmfatj/file_stream"}
+{"time":"2025-06-27T09:45:50.624477344+08:00","level":"ERROR+4","msg":"filestream: fatal error: filestream: failed to upload: 404 Not Found path=files/15692276873/memrift_act_weight_jetson/b4rmfatj/file_stream: {\"error\":\"run memrift_act_weight_jetson/b4rmfatj not found while streaming file\"}"}

@@ -1,0 +1,15 @@
+{"time":"2025-06-28T13:24:00.524071168+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250628_132400-nixga84y/logs/debug-core.log"}
+{"time":"2025-06-28T13:24:02.26277968+08:00","level":"INFO","msg":"stream: created new stream","id":"nixga84y"}
+{"time":"2025-06-28T13:24:02.262864448+08:00","level":"INFO","msg":"stream: started","id":"nixga84y"}
+{"time":"2025-06-28T13:24:02.262916928+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"nixga84y"}
+{"time":"2025-06-28T13:24:02.262985856+08:00","level":"INFO","msg":"sender: started","stream_id":"nixga84y"}
+{"time":"2025-06-28T13:24:02.26294272+08:00","level":"INFO","msg":"handler: started","stream_id":"nixga84y"}
+{"time":"2025-06-28T13:24:02.73773008+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-28T13:25:52.465321376+08:00","level":"INFO","msg":"stream: closing","id":"nixga84y"}
+{"time":"2025-06-28T13:25:52.466407136+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-28T13:25:52.467007072+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-28T13:25:53.3720376+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-28T13:25:54.671481856+08:00","level":"INFO","msg":"sender: closed","stream_id":"nixga84y"}
+{"time":"2025-06-28T13:25:54.684460448+08:00","level":"INFO","msg":"handler: closed","stream_id":"nixga84y"}
+{"time":"2025-06-28T13:25:54.684464928+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"nixga84y"}
+{"time":"2025-06-28T13:25:54.684648288+08:00","level":"INFO","msg":"stream: closed","id":"nixga84y"}

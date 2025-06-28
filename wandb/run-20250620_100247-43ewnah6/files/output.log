@@ -1,0 +1,361 @@
+
+
+args.model='/opt/models/hf/TinyLlama-1.1B-Chat-v1.0', args.outdir='/opt/finetune/MemRift/weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level-1', args.weight=True, args.activation=False, args.max_length=2048
+[before_inject] GPU: allocated=0.0 MB, reserved=0.0 MB | CPU RSS=725.6 MB
+[before inject] logical param size = 2.0 GiB
+/opt/finetune/MemRift/train_wrapper.py:396: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /opt/pytorch/torch/csrc/utils/tensor_numpy.cpp:203.)
+  sm_gpu = torch.as_tensor(sm, dtype=torch.uint8, device=device)
+Materializing model.embed_tokens
+cp.data.shape=torch.Size([32000, 2048])
+layer_name='base_model.model.model.layers.0'
+layer_name='base_model.model.model.layers.0'
+layer_name='base_model.model.model.layers.0'
+layer_name='base_model.model.model.layers.0'
+layer_name='base_model.model.model.layers.0'
+layer_name='base_model.model.model.layers.0'
+layer_name='base_model.model.model.layers.0'
+layer_name='base_model.model.model.layers.0'
+layer_name='base_model.model.model.layers.0'
+layer_name='base_model.model.model.layers.1'
+layer_name='base_model.model.model.layers.1'
+layer_name='base_model.model.model.layers.1'
+layer_name='base_model.model.model.layers.1'
+layer_name='base_model.model.model.layers.1'
+layer_name='base_model.model.model.layers.1'
+layer_name='base_model.model.model.layers.1'
+layer_name='base_model.model.model.layers.1'
+layer_name='base_model.model.model.layers.1'
+layer_name='base_model.model.model.layers.2'
+layer_name='base_model.model.model.layers.2'
+layer_name='base_model.model.model.layers.2'
+layer_name='base_model.model.model.layers.2'
+layer_name='base_model.model.model.layers.2'
+layer_name='base_model.model.model.layers.2'
+layer_name='base_model.model.model.layers.2'
+layer_name='base_model.model.model.layers.2'
+layer_name='base_model.model.model.layers.2'
+layer_name='base_model.model.model.layers.3'
+layer_name='base_model.model.model.layers.3'
+layer_name='base_model.model.model.layers.3'
+layer_name='base_model.model.model.layers.3'
+layer_name='base_model.model.model.layers.3'
+layer_name='base_model.model.model.layers.3'
+layer_name='base_model.model.model.layers.3'
+layer_name='base_model.model.model.layers.3'
+layer_name='base_model.model.model.layers.3'
+layer_name='base_model.model.model.layers.4'
+layer_name='base_model.model.model.layers.4'
+layer_name='base_model.model.model.layers.4'
+layer_name='base_model.model.model.layers.4'
+layer_name='base_model.model.model.layers.4'
+layer_name='base_model.model.model.layers.4'
+layer_name='base_model.model.model.layers.4'
+layer_name='base_model.model.model.layers.4'
+layer_name='base_model.model.model.layers.4'
+layer_name='base_model.model.model.layers.5'
+layer_name='base_model.model.model.layers.5'
+layer_name='base_model.model.model.layers.5'
+layer_name='base_model.model.model.layers.5'
+layer_name='base_model.model.model.layers.5'
+layer_name='base_model.model.model.layers.5'
+layer_name='base_model.model.model.layers.5'
+layer_name='base_model.model.model.layers.5'
+layer_name='base_model.model.model.layers.5'
+layer_name='base_model.model.model.layers.6'
+layer_name='base_model.model.model.layers.6'
+layer_name='base_model.model.model.layers.6'
+layer_name='base_model.model.model.layers.6'
+layer_name='base_model.model.model.layers.6'
+layer_name='base_model.model.model.layers.6'
+layer_name='base_model.model.model.layers.6'
+layer_name='base_model.model.model.layers.6'
+layer_name='base_model.model.model.layers.6'
+layer_name='base_model.model.model.layers.7'
+layer_name='base_model.model.model.layers.7'
+layer_name='base_model.model.model.layers.7'
+layer_name='base_model.model.model.layers.7'
+layer_name='base_model.model.model.layers.7'
+layer_name='base_model.model.model.layers.7'
+layer_name='base_model.model.model.layers.7'
+layer_name='base_model.model.model.layers.7'
+layer_name='base_model.model.model.layers.7'
+layer_name='base_model.model.model.layers.8'
+layer_name='base_model.model.model.layers.8'
+layer_name='base_model.model.model.layers.8'
+layer_name='base_model.model.model.layers.8'
+layer_name='base_model.model.model.layers.8'
+layer_name='base_model.model.model.layers.8'
+layer_name='base_model.model.model.layers.8'
+layer_name='base_model.model.model.layers.8'
+layer_name='base_model.model.model.layers.8'
+layer_name='base_model.model.model.layers.9'
+layer_name='base_model.model.model.layers.9'
+layer_name='base_model.model.model.layers.9'
+layer_name='base_model.model.model.layers.9'
+layer_name='base_model.model.model.layers.9'
+layer_name='base_model.model.model.layers.9'
+layer_name='base_model.model.model.layers.9'
+layer_name='base_model.model.model.layers.9'
+layer_name='base_model.model.model.layers.9'
+layer_name='base_model.model.model.layers.10'
+layer_name='base_model.model.model.layers.10'
+layer_name='base_model.model.model.layers.10'
+layer_name='base_model.model.model.layers.10'
+layer_name='base_model.model.model.layers.10'
+layer_name='base_model.model.model.layers.10'
+layer_name='base_model.model.model.layers.10'
+layer_name='base_model.model.model.layers.10'
+layer_name='base_model.model.model.layers.10'
+layer_name='base_model.model.model.layers.11'
+layer_name='base_model.model.model.layers.11'
+layer_name='base_model.model.model.layers.11'
+layer_name='base_model.model.model.layers.11'
+layer_name='base_model.model.model.layers.11'
+layer_name='base_model.model.model.layers.11'
+layer_name='base_model.model.model.layers.11'
+layer_name='base_model.model.model.layers.11'
+layer_name='base_model.model.model.layers.11'
+layer_name='base_model.model.model.layers.12'
+layer_name='base_model.model.model.layers.12'
+layer_name='base_model.model.model.layers.12'
+layer_name='base_model.model.model.layers.12'
+layer_name='base_model.model.model.layers.12'
+layer_name='base_model.model.model.layers.12'
+layer_name='base_model.model.model.layers.12'
+layer_name='base_model.model.model.layers.12'
+layer_name='base_model.model.model.layers.12'
+layer_name='base_model.model.model.layers.13'
+layer_name='base_model.model.model.layers.13'
+layer_name='base_model.model.model.layers.13'
+layer_name='base_model.model.model.layers.13'
+layer_name='base_model.model.model.layers.13'
+layer_name='base_model.model.model.layers.13'
+layer_name='base_model.model.model.layers.13'
+layer_name='base_model.model.model.layers.13'
+layer_name='base_model.model.model.layers.13'
+layer_name='base_model.model.model.layers.14'
+layer_name='base_model.model.model.layers.14'
+layer_name='base_model.model.model.layers.14'
+layer_name='base_model.model.model.layers.14'
+layer_name='base_model.model.model.layers.14'
+layer_name='base_model.model.model.layers.14'
+layer_name='base_model.model.model.layers.14'
+layer_name='base_model.model.model.layers.14'
+layer_name='base_model.model.model.layers.14'
+layer_name='base_model.model.model.layers.15'
+layer_name='base_model.model.model.layers.15'
+layer_name='base_model.model.model.layers.15'
+layer_name='base_model.model.model.layers.15'
+layer_name='base_model.model.model.layers.15'
+layer_name='base_model.model.model.layers.15'
+layer_name='base_model.model.model.layers.15'
+layer_name='base_model.model.model.layers.15'
+layer_name='base_model.model.model.layers.15'
+layer_name='base_model.model.model.layers.16'
+layer_name='base_model.model.model.layers.16'
+layer_name='base_model.model.model.layers.16'
+layer_name='base_model.model.model.layers.16'
+layer_name='base_model.model.model.layers.16'
+layer_name='base_model.model.model.layers.16'
+layer_name='base_model.model.model.layers.16'
+layer_name='base_model.model.model.layers.16'
+layer_name='base_model.model.model.layers.16'
+layer_name='base_model.model.model.layers.17'
+layer_name='base_model.model.model.layers.17'
+layer_name='base_model.model.model.layers.17'
+layer_name='base_model.model.model.layers.17'
+layer_name='base_model.model.model.layers.17'
+layer_name='base_model.model.model.layers.17'
+layer_name='base_model.model.model.layers.17'
+layer_name='base_model.model.model.layers.17'
+layer_name='base_model.model.model.layers.17'
+layer_name='base_model.model.model.layers.18'
+layer_name='base_model.model.model.layers.18'
+layer_name='base_model.model.model.layers.18'
+layer_name='base_model.model.model.layers.18'
+layer_name='base_model.model.model.layers.18'
+layer_name='base_model.model.model.layers.18'
+layer_name='base_model.model.model.layers.18'
+layer_name='base_model.model.model.layers.18'
+layer_name='base_model.model.model.layers.18'
+layer_name='base_model.model.model.layers.19'
+layer_name='base_model.model.model.layers.19'
+layer_name='base_model.model.model.layers.19'
+layer_name='base_model.model.model.layers.19'
+layer_name='base_model.model.model.layers.19'
+layer_name='base_model.model.model.layers.19'
+layer_name='base_model.model.model.layers.19'
+layer_name='base_model.model.model.layers.19'
+layer_name='base_model.model.model.layers.19'
+layer_name='base_model.model.model.layers.20'
+layer_name='base_model.model.model.layers.20'
+layer_name='base_model.model.model.layers.20'
+layer_name='base_model.model.model.layers.20'
+layer_name='base_model.model.model.layers.20'
+layer_name='base_model.model.model.layers.20'
+layer_name='base_model.model.model.layers.20'
+layer_name='base_model.model.model.layers.20'
+layer_name='base_model.model.model.layers.20'
+layer_name='base_model.model.model.layers.21'
+layer_name='base_model.model.model.layers.21'
+layer_name='base_model.model.model.layers.21'
+layer_name='base_model.model.model.layers.21'
+layer_name='base_model.model.model.layers.21'
+layer_name='base_model.model.model.layers.21'
+layer_name='base_model.model.model.layers.21'
+layer_name='base_model.model.model.layers.21'
+layer_name='base_model.model.model.layers.21'
+Materializing model.norm
+cp.data.shape=torch.Size([2048])
+Materializing lm_head
+cp.data.shape=torch.Size([32000, 2048])
+[after_inject] GPU: allocated=1367.1 MB, reserved=1374.0 MB | CPU RSS=1497.9 MB
+[after inject] logical param size = 250.0 MiB
+Peak CPU memory usage: 1497.94 MB
+Peak GPU memory usage: 1367.09 MB
+[meta] still 0 tensors on meta device
+sign  : 1.0 GiB
+exp   : 634.3 MiB
+bf16  : 0 Bytes
+python: 15.7 KiB
+---------------
+TOTAL : 1.6 GiB
+Peak CPU memory usage: 1501.17 MB
+Peak GPU memory usage: 1398.14 MB
+Using the latest cached version of the dataset since timdettmers/openassistant-guanaco couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /data/models/huggingface/datasets/timdettmers___openassistant-guanaco/default/0.0.0/831dabac2283d99420cda0b673d7a2a43849f17a (last modified on Thu May  1 09:51:59 2025).
+
+
+*************** i=0 ****************
+loss=tensor(6.0270, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 0: 8301.8 ms , 8301.9 ms , peak Δ=8448.5 MB
+Peak CPU memory usage: 764.56 MB
+- Fwd time: 4984.3 ms
+- Bwd time: 3317.5 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 3613.5 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms
+
+
+*************** i=1 ****************
+loss=tensor(5.3461, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 1: 6819.0 ms , 6836.5 ms , peak Δ=8518.5 MB
+Peak CPU memory usage: 767.95 MB
+- Fwd time: 3715.5 ms
+- Bwd time: 3103.5 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 3273.7 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms
+
+
+*************** i=2 ****************
+loss=tensor(3.5768, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 2: 6801.9 ms , 6820.2 ms , peak Δ=8518.5 MB
+Peak CPU memory usage: 768.21 MB
+- Fwd time: 3696.7 ms
+- Bwd time: 3105.3 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 3273.7 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms
+
+
+*************** i=3 ****************
+loss=tensor(1.9491, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 3: 6739.2 ms , 6758.4 ms , peak Δ=8518.5 MB
+Peak CPU memory usage: 768.46 MB
+- Fwd time: 3634.8 ms
+- Bwd time: 3104.4 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 3264.8 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms
+
+
+*************** i=4 ****************
+loss=tensor(0.9522, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 4: 6755.3 ms , 6773.3 ms , peak Δ=8518.5 MB
+Peak CPU memory usage: 768.98 MB
+- Fwd time: 3657.5 ms
+- Bwd time: 3097.8 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 3264.5 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms

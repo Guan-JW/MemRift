@@ -1,0 +1,16 @@
+{"time":"2025-06-29T00:32:46.10610672+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250629_003245-ihsyu980/logs/debug-core.log"}
+{"time":"2025-06-29T00:32:52.161577344+08:00","level":"INFO","msg":"stream: created new stream","id":"ihsyu980"}
+{"time":"2025-06-29T00:32:52.161862976+08:00","level":"INFO","msg":"stream: started","id":"ihsyu980"}
+{"time":"2025-06-29T00:32:52.161939008+08:00","level":"INFO","msg":"handler: started","stream_id":"ihsyu980"}
+{"time":"2025-06-29T00:32:52.162132+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"ihsyu980"}
+{"time":"2025-06-29T00:32:52.161967264+08:00","level":"INFO","msg":"sender: started","stream_id":"ihsyu980"}
+{"time":"2025-06-29T00:32:52.659096128+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-29T00:34:39.893919936+08:00","level":"INFO","msg":"stream: closing","id":"ihsyu980"}
+{"time":"2025-06-29T00:34:39.894023648+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-29T00:34:39.894182912+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-29T00:34:51.472229472+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/15692276873/memrift_act_weight_jetson/ihsyu980/file_stream\": unexpected EOF"}
+{"time":"2025-06-29T00:34:51.898583552+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-29T00:35:02.948511808+08:00","level":"INFO","msg":"handler: closed","stream_id":"ihsyu980"}
+{"time":"2025-06-29T00:35:02.948607744+08:00","level":"INFO","msg":"sender: closed","stream_id":"ihsyu980"}
+{"time":"2025-06-29T00:35:02.948572192+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"ihsyu980"}
+{"time":"2025-06-29T00:35:02.949172768+08:00","level":"INFO","msg":"stream: closed","id":"ihsyu980"}

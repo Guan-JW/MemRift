@@ -1,0 +1,15 @@
+
+
+args.model='/opt/models/Llama-3.1-8B', args.outdir='/opt/finetune/MemRift/weight_comp/prepare_weight/Llama-3.1-8B-zstd-compressed-weights/level21', args.weight=True, args.activation=False, args.max_length=512
+[before_inject] GPU: allocated=0.0 MB, reserved=0.0 MB | CPU RSS=721.6 MB
+[before inject] logical param size = 15.0 GiB
+/opt/finetune/MemRift/train_wrapper.py:516: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /opt/pytorch/torch/csrc/utils/tensor_numpy.cpp:203.)
+  sm_gpu = torch.as_tensor(sign_np, dtype=torch.uint8, device=device)
+Traceback (most recent call last):
+  File "/opt/finetune/MemRift/train_wrapper.py", line 612, in <module>
+    layer2cps, max_job_size = inject_from_files(model, args.outdir)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/finetune/MemRift/train_wrapper.py", line 527, in inject_from_files
+    module = rm_prefixes(module)
+             ^^^^^^^^^^^
+NameError: name 'rm_prefixes' is not defined

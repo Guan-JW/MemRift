@@ -1,0 +1,13 @@
+
+
+args.model='/opt/models/Llama-3.1-8B', args.outdir='/opt/finetune/MemRift/weight_comp/prepare_weight/Llama-3.1-8B-zstd-compressed-weights/level21', args.weight=True, args.activation=True, args.max_length=1024
+[before_inject] GPU: allocated=0.0 MB, reserved=0.0 MB | CPU RSS=722.0 MB
+[before inject] logical param size = 15.0 GiB
+Traceback (most recent call last):
+  File "/opt/finetune/MemRift/train_wrapper.py", line 629, in <module>
+    layer2cps, max_job_size = inject_from_files(model, args.outdir)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/finetune/MemRift/train_wrapper.py", line 448, in inject_from_files
+    mod = dict(model.named_modules())[module]
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+KeyError: 'base_model.model.model.embed_tokens'

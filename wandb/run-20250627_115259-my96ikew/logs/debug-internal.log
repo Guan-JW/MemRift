@@ -1,0 +1,7 @@
+{"time":"2025-06-27T11:52:59.612143104+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250627_115259-my96ikew/logs/debug-core.log"}
+{"time":"2025-06-27T11:53:01.08359744+08:00","level":"INFO","msg":"stream: created new stream","id":"my96ikew"}
+{"time":"2025-06-27T11:53:01.083696896+08:00","level":"INFO","msg":"stream: started","id":"my96ikew"}
+{"time":"2025-06-27T11:53:01.08373536+08:00","level":"INFO","msg":"handler: started","stream_id":"my96ikew"}
+{"time":"2025-06-27T11:53:01.083875936+08:00","level":"INFO","msg":"sender: started","stream_id":"my96ikew"}
+{"time":"2025-06-27T11:53:01.083942336+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"my96ikew"}
+{"time":"2025-06-27T11:53:01.46218112+08:00","level":"INFO","msg":"Starting system monitor"}

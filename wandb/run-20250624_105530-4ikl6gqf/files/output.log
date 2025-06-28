@@ -1,0 +1,23 @@
+
+
+args.model='/opt/models/hf/TinyLlama-1.1B-Chat-v1.0', args.outdir='./weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level18', args.weight=False, args.activation=False, args.max_length=2048
+[meta] still 0 tensors on meta device
+Peak CPU memory usage: 751.88 MB
+Peak GPU memory usage: 2129.22 MB
+Using the latest cached version of the dataset since timdettmers/openassistant-guanaco couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /data/models/huggingface/datasets/timdettmers___openassistant-guanaco/default/0.0.0/831dabac2283d99420cda0b673d7a2a43849f17a (last modified on Mon Jun 23 08:47:36 2025).
+Traceback (most recent call last):
+  File "/opt/finetune/MemRift/train_wrapper.py", line 1336, in <module>
+    texts = dataset['train']['text']
+            ~~~~~~~^^^^^^^^^
+  File "/opt/venv/lib/python3.12/site-packages/datasets/arrow_dataset.py", line 2777, in __getitem__
+    return self._getitem(key)
+           ^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.12/site-packages/datasets/arrow_dataset.py", line 2761, in _getitem
+    pa_subtable = query_table(self._data, key, indices=self._indices)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.12/site-packages/datasets/formatting/formatting.py", line 604, in query_table
+    _check_valid_column_key(key, table.column_names)
+  File "/opt/venv/lib/python3.12/site-packages/datasets/formatting/formatting.py", line 541, in _check_valid_column_key
+    raise KeyError(f"Column {key} not in the dataset. Current columns in the dataset: {columns}")
+KeyError: "Column train not in the dataset. Current columns in the dataset: ['text']"

@@ -1,0 +1,15 @@
+{
+  "os": "Linux-5.15.148-tegra-aarch64-with-glibc2.39",
+  "python": "CPython 3.12.3",
+  "startedAt": "2025-06-26T23:39:35.996438Z",
+  "program": "/opt/finetune/MemRift/train_wrapper.py",
+  "codePath": "train_wrapper.py",
+  "git": {
+    "remote": "https://github.com/Guan-JW/MemRift.git",
+    "commit": "9d6b10cc25f833719f53e84c7b4bec754b5f1abf"
+  },
+  "root": "/opt/finetune/MemRift",
+  "host": "ubuntu",
+  "executable": "/opt/venv/bin/python3",
+  "codePathLocal": "train_wrapper.py"
+}

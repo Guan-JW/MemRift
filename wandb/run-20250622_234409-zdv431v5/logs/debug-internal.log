@@ -1,0 +1,15 @@
+{"time":"2025-06-22T23:44:09.965484224+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250622_234409-zdv431v5/logs/debug-core.log"}
+{"time":"2025-06-22T23:44:13.804628384+08:00","level":"INFO","msg":"stream: created new stream","id":"zdv431v5"}
+{"time":"2025-06-22T23:44:13.804968+08:00","level":"INFO","msg":"stream: started","id":"zdv431v5"}
+{"time":"2025-06-22T23:44:13.805535456+08:00","level":"INFO","msg":"sender: started","stream_id":"zdv431v5"}
+{"time":"2025-06-22T23:44:13.805535744+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"zdv431v5"}
+{"time":"2025-06-22T23:44:13.805636832+08:00","level":"INFO","msg":"handler: started","stream_id":"zdv431v5"}
+{"time":"2025-06-22T23:44:14.928200576+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-22T23:45:07.163997952+08:00","level":"INFO","msg":"stream: closing","id":"zdv431v5"}
+{"time":"2025-06-22T23:45:07.164086144+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-22T23:45:07.16419904+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-22T23:45:08.154231744+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-22T23:45:11.5209736+08:00","level":"INFO","msg":"handler: closed","stream_id":"zdv431v5"}
+{"time":"2025-06-22T23:45:11.521128864+08:00","level":"INFO","msg":"sender: closed","stream_id":"zdv431v5"}
+{"time":"2025-06-22T23:45:11.523011776+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"zdv431v5"}
+{"time":"2025-06-22T23:45:11.523244992+08:00","level":"INFO","msg":"stream: closed","id":"zdv431v5"}

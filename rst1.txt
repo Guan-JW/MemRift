@@ -1,18 +1,20 @@
 
 
-args.model='/opt/models/hf/TinyLlama-1.1B-Chat-v1.0', args.outdir='./weight_comp/prepare_weight/zstd_comped_weights_level21', args.weight=False, args.activation=False, args.max_length=2048
-Peak CPU memory usage: 725.12 MB
-Peak GPU memory usage: 2129.22 MB
+args.model='/opt/models/hf/Mistral-7B-v0.1', args.outdir='./weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level18', args.weight=False, args.activation=True, args.max_length=512
+[meta] still 0 tensors on meta device
+Peak CPU memory usage: 647.37 MB
+Peak GPU memory usage: 13920.82 MB
+init AsyncCompressor
 
 
 *************** i=0 ****************
-loss=tensor(6.0270, device='cuda:0', grad_fn=<NllLossBackward0>)
-Round 0: 4301.4 ms , 4301.6 ms , peak Δ=7393.6 MB
-Peak CPU memory usage: 800.61 MB
-- Fwd time: 2026.0 ms
-- Bwd time: 2275.4 ms
+loss=tensor(1.4526, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 0: 6772.4 ms , 6772.6 ms , peak Δ=14152.8 MB
+Peak CPU memory usage: 825.82 MB
+- Fwd time: 3531.3 ms
+- Bwd time: 3241.1 ms
 Compression time: 0.0 ms
-	Wait comp start time: 0.0 ms
+	Wait comp start time: 3434.8 ms
 Decompression time: 0.0 ms
 	Wait comp done time: 0.0 ms
 	Wait decomp done time: 0.0 ms
@@ -33,13 +35,13 @@ Unpack time: 0.0 ms
 
 
 *************** i=1 ****************
-loss=tensor(5.3465, device='cuda:0', grad_fn=<NllLossBackward0>)
-Round 1: 3202.5 ms , 3819.4 ms , peak Δ=7463.6 MB
-Peak CPU memory usage: 803.02 MB
-- Fwd time: 1596.6 ms
-- Bwd time: 1605.9 ms
+loss=tensor(1.2257, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 1: 5539.0 ms , 5539.2 ms , peak Δ=14152.8 MB
+Peak CPU memory usage: 841.86 MB
+- Fwd time: 2657.0 ms
+- Bwd time: 2882.0 ms
 Compression time: 0.0 ms
-	Wait comp start time: 0.0 ms
+	Wait comp start time: 5391.0 ms
 Decompression time: 0.0 ms
 	Wait comp done time: 0.0 ms
 	Wait decomp done time: 0.0 ms
@@ -60,13 +62,13 @@ Unpack time: 0.0 ms
 
 
 *************** i=2 ****************
-loss=tensor(3.6027, device='cuda:0', grad_fn=<NllLossBackward0>)
-Round 2: 3172.0 ms , 3789.5 ms , peak Δ=7463.6 MB
-Peak CPU memory usage: 803.02 MB
-- Fwd time: 1592.0 ms
-- Bwd time: 1580.1 ms
+loss=tensor(0.9365, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 2: 5573.3 ms , 5573.5 ms , peak Δ=14152.8 MB
+Peak CPU memory usage: 828.09 MB
+- Fwd time: 2712.3 ms
+- Bwd time: 2861.0 ms
 Compression time: 0.0 ms
-	Wait comp start time: 0.0 ms
+	Wait comp start time: 5481.3 ms
 Decompression time: 0.0 ms
 	Wait comp done time: 0.0 ms
 	Wait decomp done time: 0.0 ms
@@ -87,13 +89,13 @@ Unpack time: 0.0 ms
 
 
 *************** i=3 ****************
-loss=tensor(1.9656, device='cuda:0', grad_fn=<NllLossBackward0>)
-Round 3: 3175.6 ms , 3793.2 ms , peak Δ=7463.6 MB
-Peak CPU memory usage: 803.02 MB
-- Fwd time: 1599.5 ms
-- Bwd time: 1576.1 ms
+loss=tensor(0.6358, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 3: 5509.5 ms , 5509.7 ms , peak Δ=14152.8 MB
+Peak CPU memory usage: 834.48 MB
+- Fwd time: 2640.7 ms
+- Bwd time: 2868.8 ms
 Compression time: 0.0 ms
-	Wait comp start time: 0.0 ms
+	Wait comp start time: 5662.8 ms
 Decompression time: 0.0 ms
 	Wait comp done time: 0.0 ms
 	Wait decomp done time: 0.0 ms
@@ -114,13 +116,13 @@ Unpack time: 0.0 ms
 
 
 *************** i=4 ****************
-loss=tensor(0.9549, device='cuda:0', grad_fn=<NllLossBackward0>)
-Round 4: 3196.4 ms , 3812.1 ms , peak Δ=7463.6 MB
-Peak CPU memory usage: 803.02 MB
-- Fwd time: 1595.4 ms
-- Bwd time: 1601.1 ms
+loss=tensor(0.3173, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 4: 5481.0 ms , 5481.1 ms , peak Δ=14152.8 MB
+Peak CPU memory usage: 856.85 MB
+- Fwd time: 2629.1 ms
+- Bwd time: 2851.8 ms
 Compression time: 0.0 ms
-	Wait comp start time: 0.0 ms
+	Wait comp start time: 5514.7 ms
 Decompression time: 0.0 ms
 	Wait comp done time: 0.0 ms
 	Wait decomp done time: 0.0 ms
@@ -139,5 +141,5 @@ Unpack time: 0.0 ms
 	Post time 2: 0.0 ms
 	Post time 3: 0.0 ms
 [1;34mwandb[0m: 
-[1;34mwandb[0m: 🚀 View run [33mstill-dream-3[0m at: [34mhttps://wandb.ai/15692276873/vanilla_jetson/runs/0qpa8wpe[0m
-[1;34mwandb[0m: Find logs at: [1;35mwandb/run-20250618_012446-0qpa8wpe/logs[0m
+[1;34mwandb[0m: 🚀 View run [33msoft-donkey-36[0m at: [34mhttps://wandb.ai/15692276873/Mistral-7B_memrift_act_weight_jetson_512/runs/tcb0vquv[0m
+[1;34mwandb[0m: Find logs at: [1;35mwandb/run-20250628_130705-tcb0vquv/logs[0m

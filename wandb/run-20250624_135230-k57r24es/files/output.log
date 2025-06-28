@@ -1,0 +1,305 @@
+
+
+args.model='/opt/models/hf/Mistral-7B-v0.1', args.outdir='./weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level18', args.weight=False, args.activation=True, args.max_length=1024
+Loading checkpoint shards: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████| 2/2 [00:49<00:00, 24.68s/it]
+[meta] still 0 tensors on meta device
+Peak CPU memory usage: 815.94 MB
+Peak GPU memory usage: 6906.25 MB
+init AsyncCompressor
+Using the latest cached version of the dataset since timdettmers/openassistant-guanaco couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /data/models/huggingface/datasets/timdettmers___openassistant-guanaco/default/0.0.0/831dabac2283d99420cda0b673d7a2a43849f17a (last modified on Mon Jun 23 08:47:36 2025).
+
+
+*************** i=0 ****************
+len(ts)=11
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+loss=tensor(1.0723, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 0: 32801.1 ms , 32802.1 ms , peak Δ=11473.5 MB
+Peak CPU memory usage: 1098.82 MB
+- Fwd time: 21973.6 ms
+- Bwd time: 10827.6 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms
+
+
+*************** i=1 ****************
+len(ts)=11
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+loss=tensor(0.9146, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 1: 30118.4 ms , 30132.0 ms , peak Δ=11697.6 MB
+Peak CPU memory usage: 2054.21 MB
+- Fwd time: 19770.7 ms
+- Bwd time: 10347.7 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms
+
+
+*************** i=2 ****************
+len(ts)=11
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+loss=tensor(0.7522, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 2: 29529.8 ms , 29535.9 ms , peak Δ=11697.6 MB
+Peak CPU memory usage: 2124.16 MB
+- Fwd time: 19233.2 ms
+- Bwd time: 10296.6 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms
+
+
+*************** i=3 ****************
+len(ts)=11
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+loss=tensor(0.5638, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 3: 31226.3 ms , 31235.9 ms , peak Δ=11697.6 MB
+Peak CPU memory usage: 1966.56 MB
+- Fwd time: 20080.7 ms
+- Bwd time: 11145.6 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms
+
+
+*************** i=4 ****************
+len(ts)=11
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+len(ts)=23
+loss=tensor(0.4783, device='cuda:0', grad_fn=<NllLossBackward0>)
+Round 4: 29473.2 ms , 29482.7 ms , peak Δ=11697.6 MB
+Peak CPU memory usage: 2049.92 MB
+- Fwd time: 19341.1 ms
+- Bwd time: 10132.1 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms

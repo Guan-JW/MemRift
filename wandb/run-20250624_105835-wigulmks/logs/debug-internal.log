@@ -1,0 +1,15 @@
+{"time":"2025-06-24T10:58:35.539708736+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250624_105835-wigulmks/logs/debug-core.log"}
+{"time":"2025-06-24T10:58:37.097045152+08:00","level":"INFO","msg":"stream: created new stream","id":"wigulmks"}
+{"time":"2025-06-24T10:58:37.097134208+08:00","level":"INFO","msg":"stream: started","id":"wigulmks"}
+{"time":"2025-06-24T10:58:37.097146784+08:00","level":"INFO","msg":"handler: started","stream_id":"wigulmks"}
+{"time":"2025-06-24T10:58:37.097203904+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"wigulmks"}
+{"time":"2025-06-24T10:58:37.097190976+08:00","level":"INFO","msg":"sender: started","stream_id":"wigulmks"}
+{"time":"2025-06-24T10:58:37.580023072+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-24T11:00:28.884012928+08:00","level":"INFO","msg":"stream: closing","id":"wigulmks"}
+{"time":"2025-06-24T11:00:28.884123584+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-24T11:00:28.884276352+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-24T11:00:29.95266704+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-24T11:00:31.903842688+08:00","level":"INFO","msg":"handler: closed","stream_id":"wigulmks"}
+{"time":"2025-06-24T11:00:31.903955808+08:00","level":"INFO","msg":"sender: closed","stream_id":"wigulmks"}
+{"time":"2025-06-24T11:00:31.917392032+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"wigulmks"}
+{"time":"2025-06-24T11:00:31.917658272+08:00","level":"INFO","msg":"stream: closed","id":"wigulmks"}

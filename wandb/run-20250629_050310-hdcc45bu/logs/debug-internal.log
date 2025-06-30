@@ -1,0 +1,15 @@
+{"time":"2025-06-29T05:03:11.2380672+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250629_050310-hdcc45bu/logs/debug-core.log"}
+{"time":"2025-06-29T05:03:12.724055456+08:00","level":"INFO","msg":"stream: created new stream","id":"hdcc45bu"}
+{"time":"2025-06-29T05:03:12.724168704+08:00","level":"INFO","msg":"stream: started","id":"hdcc45bu"}
+{"time":"2025-06-29T05:03:12.724201952+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"hdcc45bu"}
+{"time":"2025-06-29T05:03:12.724245408+08:00","level":"INFO","msg":"sender: started","stream_id":"hdcc45bu"}
+{"time":"2025-06-29T05:03:12.724242688+08:00","level":"INFO","msg":"handler: started","stream_id":"hdcc45bu"}
+{"time":"2025-06-29T05:03:13.25203056+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-29T05:04:06.632810432+08:00","level":"INFO","msg":"stream: closing","id":"hdcc45bu"}
+{"time":"2025-06-29T05:04:06.632948256+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-29T05:04:06.633068352+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-29T05:04:07.38665232+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-29T05:04:08.727515168+08:00","level":"INFO","msg":"handler: closed","stream_id":"hdcc45bu"}
+{"time":"2025-06-29T05:04:08.727730368+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"hdcc45bu"}
+{"time":"2025-06-29T05:04:08.727821152+08:00","level":"INFO","msg":"sender: closed","stream_id":"hdcc45bu"}
+{"time":"2025-06-29T05:04:08.7283976+08:00","level":"INFO","msg":"stream: closed","id":"hdcc45bu"}

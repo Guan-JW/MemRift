@@ -1,0 +1,8 @@
+{"time":"2025-06-30T09:14:35.510812736+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250630_091435-u9wwjxrr/logs/debug-core.log"}
+{"time":"2025-06-30T09:14:37.028692672+08:00","level":"INFO","msg":"stream: created new stream","id":"u9wwjxrr"}
+{"time":"2025-06-30T09:14:37.029997728+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"u9wwjxrr"}
+{"time":"2025-06-30T09:14:37.030140992+08:00","level":"INFO","msg":"sender: started","stream_id":"u9wwjxrr"}
+{"time":"2025-06-30T09:14:37.030052832+08:00","level":"INFO","msg":"stream: started","id":"u9wwjxrr"}
+{"time":"2025-06-30T09:14:37.030062944+08:00","level":"INFO","msg":"handler: started","stream_id":"u9wwjxrr"}
+{"time":"2025-06-30T09:14:37.466103936+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-30T09:15:22.515358848+08:00","level":"ERROR","msg":"monitor: error sampling metrics: open /proc/3358305/statm: no such file or directory\nopen /proc/3358305/stat: no such file or directory\nopen /proc/3358305/status: no such file or directory"}

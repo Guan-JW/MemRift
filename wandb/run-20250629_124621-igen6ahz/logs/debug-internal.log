@@ -1,0 +1,15 @@
+{"time":"2025-06-29T12:46:21.715482656+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250629_124621-igen6ahz/logs/debug-core.log"}
+{"time":"2025-06-29T12:46:23.226295904+08:00","level":"INFO","msg":"stream: created new stream","id":"igen6ahz"}
+{"time":"2025-06-29T12:46:23.226597952+08:00","level":"INFO","msg":"stream: started","id":"igen6ahz"}
+{"time":"2025-06-29T12:46:23.226988352+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"igen6ahz"}
+{"time":"2025-06-29T12:46:23.227162816+08:00","level":"INFO","msg":"handler: started","stream_id":"igen6ahz"}
+{"time":"2025-06-29T12:46:23.226990656+08:00","level":"INFO","msg":"sender: started","stream_id":"igen6ahz"}
+{"time":"2025-06-29T12:46:23.771502336+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-29T12:49:04.124291936+08:00","level":"INFO","msg":"stream: closing","id":"igen6ahz"}
+{"time":"2025-06-29T12:49:04.124404896+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-29T12:49:04.12449056+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-29T12:49:05.743671744+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-29T12:49:09.044752224+08:00","level":"INFO","msg":"handler: closed","stream_id":"igen6ahz"}
+{"time":"2025-06-29T12:49:09.044942048+08:00","level":"INFO","msg":"sender: closed","stream_id":"igen6ahz"}
+{"time":"2025-06-29T12:49:09.0583384+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"igen6ahz"}
+{"time":"2025-06-29T12:49:09.058505504+08:00","level":"INFO","msg":"stream: closed","id":"igen6ahz"}

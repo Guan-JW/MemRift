@@ -1,0 +1,7 @@
+{"time":"2025-06-30T03:27:16.822315392+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250630_032716-mn7no2fs/logs/debug-core.log"}
+{"time":"2025-06-30T03:27:18.440104672+08:00","level":"INFO","msg":"stream: created new stream","id":"mn7no2fs"}
+{"time":"2025-06-30T03:27:18.440543264+08:00","level":"INFO","msg":"stream: started","id":"mn7no2fs"}
+{"time":"2025-06-30T03:27:18.440602304+08:00","level":"INFO","msg":"handler: started","stream_id":"mn7no2fs"}
+{"time":"2025-06-30T03:27:18.440710592+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"mn7no2fs"}
+{"time":"2025-06-30T03:27:18.4406616+08:00","level":"INFO","msg":"sender: started","stream_id":"mn7no2fs"}
+{"time":"2025-06-30T03:27:19.078794048+08:00","level":"INFO","msg":"Starting system monitor"}

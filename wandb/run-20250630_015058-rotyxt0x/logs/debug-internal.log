@@ -1,0 +1,15 @@
+{"time":"2025-06-30T01:50:59.33714512+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250630_015058-rotyxt0x/logs/debug-core.log"}
+{"time":"2025-06-30T01:51:01.146429824+08:00","level":"INFO","msg":"stream: created new stream","id":"rotyxt0x"}
+{"time":"2025-06-30T01:51:01.146718368+08:00","level":"INFO","msg":"stream: started","id":"rotyxt0x"}
+{"time":"2025-06-30T01:51:01.146784736+08:00","level":"INFO","msg":"handler: started","stream_id":"rotyxt0x"}
+{"time":"2025-06-30T01:51:01.146969216+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"rotyxt0x"}
+{"time":"2025-06-30T01:51:01.1468472+08:00","level":"INFO","msg":"sender: started","stream_id":"rotyxt0x"}
+{"time":"2025-06-30T01:51:01.627051776+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-30T01:52:03.434663136+08:00","level":"INFO","msg":"stream: closing","id":"rotyxt0x"}
+{"time":"2025-06-30T01:52:03.434720992+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-30T01:52:03.434912032+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-30T01:52:04.932494592+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-30T01:52:06.34678304+08:00","level":"INFO","msg":"handler: closed","stream_id":"rotyxt0x"}
+{"time":"2025-06-30T01:52:06.34688592+08:00","level":"INFO","msg":"sender: closed","stream_id":"rotyxt0x"}
+{"time":"2025-06-30T01:52:06.348466848+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"rotyxt0x"}
+{"time":"2025-06-30T01:52:06.348711552+08:00","level":"INFO","msg":"stream: closed","id":"rotyxt0x"}

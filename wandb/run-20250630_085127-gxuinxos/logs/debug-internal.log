@@ -1,0 +1,15 @@
+{"time":"2025-06-30T08:51:28.11499648+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250630_085127-gxuinxos/logs/debug-core.log"}
+{"time":"2025-06-30T08:51:29.612640928+08:00","level":"INFO","msg":"stream: created new stream","id":"gxuinxos"}
+{"time":"2025-06-30T08:51:29.612932352+08:00","level":"INFO","msg":"stream: started","id":"gxuinxos"}
+{"time":"2025-06-30T08:51:29.613371168+08:00","level":"INFO","msg":"handler: started","stream_id":"gxuinxos"}
+{"time":"2025-06-30T08:51:29.613366432+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"gxuinxos"}
+{"time":"2025-06-30T08:51:29.613547264+08:00","level":"INFO","msg":"sender: started","stream_id":"gxuinxos"}
+{"time":"2025-06-30T08:51:30.091650496+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-30T08:52:29.383418304+08:00","level":"INFO","msg":"stream: closing","id":"gxuinxos"}
+{"time":"2025-06-30T08:52:29.383521632+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-30T08:52:29.3836496+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-30T08:52:30.616625696+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-30T08:52:32.28774144+08:00","level":"INFO","msg":"handler: closed","stream_id":"gxuinxos"}
+{"time":"2025-06-30T08:52:32.287856+08:00","level":"INFO","msg":"sender: closed","stream_id":"gxuinxos"}
+{"time":"2025-06-30T08:52:32.300624576+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"gxuinxos"}
+{"time":"2025-06-30T08:52:32.30073552+08:00","level":"INFO","msg":"stream: closed","id":"gxuinxos"}

@@ -1,0 +1,48 @@
+
+
+args.model='/opt/models/hf/TinyLlama-1.1B-Chat-v1.0', args.outdir='./weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level18', args.weight=False, args.activation=True, args.max_length=2048
+init AsyncCompressor
+Peak CPU memory usage: 753.04 MB
+Peak GPU memory usage: 2129.22 MB
+Using the latest cached version of the dataset since timdettmers/openassistant-guanaco couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /data/models/huggingface/datasets/timdettmers___openassistant-guanaco/default/0.0.0/831dabac2283d99420cda0b673d7a2a43849f17a (last modified on Mon Jun 23 08:47:36 2025).
+
+
+*************** i=0 ****************
+loss=tensor(0.8168, device='cuda:0', grad_fn=<NllLossBackward0>)
+
+
+*************** i=1 ****************
+loss=tensor(0.8047, device='cuda:0', grad_fn=<NllLossBackward0>)
+
+
+*************** i=2 ****************
+loss=tensor(0.7744, device='cuda:0', grad_fn=<NllLossBackward0>)
+
+
+*************** i=3 ****************
+loss=tensor(0.7360, device='cuda:0', grad_fn=<NllLossBackward0>)
+
+
+*************** i=4 ****************
+loss=tensor(0.6961, device='cuda:0', grad_fn=<NllLossBackward0>)
+
+
+*************** i=5 ****************
+loss=tensor(0.6583, device='cuda:0', grad_fn=<NllLossBackward0>)
+
+
+*************** i=6 ****************
+loss=tensor(0.6218, device='cuda:0', grad_fn=<NllLossBackward0>)
+
+
+*************** i=7 ****************
+loss=tensor(0.5853, device='cuda:0', grad_fn=<NllLossBackward0>)
+
+
+*************** i=8 ****************
+loss=tensor(0.5488, device='cuda:0', grad_fn=<NllLossBackward0>)
+
+
+*************** i=9 ****************
+loss=tensor(0.5120, device='cuda:0', grad_fn=<NllLossBackward0>)

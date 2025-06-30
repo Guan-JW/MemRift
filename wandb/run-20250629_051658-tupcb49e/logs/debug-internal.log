@@ -1,0 +1,15 @@
+{"time":"2025-06-29T05:16:58.630921248+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250629_051658-tupcb49e/logs/debug-core.log"}
+{"time":"2025-06-29T05:17:00.269049792+08:00","level":"INFO","msg":"stream: created new stream","id":"tupcb49e"}
+{"time":"2025-06-29T05:17:00.26935904+08:00","level":"INFO","msg":"stream: started","id":"tupcb49e"}
+{"time":"2025-06-29T05:17:00.269507168+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"tupcb49e"}
+{"time":"2025-06-29T05:17:00.269568+08:00","level":"INFO","msg":"sender: started","stream_id":"tupcb49e"}
+{"time":"2025-06-29T05:17:00.26948304+08:00","level":"INFO","msg":"handler: started","stream_id":"tupcb49e"}
+{"time":"2025-06-29T05:17:00.672202656+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-29T05:17:37.929487104+08:00","level":"INFO","msg":"stream: closing","id":"tupcb49e"}
+{"time":"2025-06-29T05:17:37.929592864+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-29T05:17:37.929749312+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-29T05:17:38.693249152+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-29T05:17:40.07009392+08:00","level":"INFO","msg":"handler: closed","stream_id":"tupcb49e"}
+{"time":"2025-06-29T05:17:40.070369824+08:00","level":"INFO","msg":"sender: closed","stream_id":"tupcb49e"}
+{"time":"2025-06-29T05:17:40.07235552+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"tupcb49e"}
+{"time":"2025-06-29T05:17:40.07267072+08:00","level":"INFO","msg":"stream: closed","id":"tupcb49e"}

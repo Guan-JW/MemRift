@@ -1,0 +1,12 @@
+
+
+args.model='/opt/models/hf/TinyLlama-1.1B-Chat-v1.0', args.outdir='./weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level18', args.weight=True, args.activation=False, args.max_length=2048
+init AsyncCompressor
+Traceback (most recent call last):
+  File "/opt/finetune/MemRift/train_multithread.py", line 861, in <module>
+    runtime = HookRuntime(model, compressor)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/finetune/MemRift/train_multithread.py", line 672, in __init__
+    self.layer2cps, max_job_size = inject_from_files(args.outdir)
+                                   ^^^^^^^^^^^^^^^^^
+NameError: name 'inject_from_files' is not defined. Did you mean: 'self.inject_from_files'?

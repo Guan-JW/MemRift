@@ -1,0 +1,17 @@
+
+
+args.model='/opt/models/hf/TinyLlama-1.1B-Chat-v1.0', args.outdir='./weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level18', args.weight=False, args.activation=True, args.max_length=2048
+[meta] still 0 tensors on meta device
+Peak CPU memory usage: 752.57 MB
+Peak GPU memory usage: 2129.22 MB
+init AsyncCompressor
+Traceback (most recent call last):
+  File "/opt/finetune/MemRift/train_multithread.py", line 1531, in <module>
+    compressor = AsyncCompressor()
+                 ^^^^^^^^^^^^^^^^^
+  File "/opt/finetune/MemRift/train_multithread.py", line 1025, in __init__
+    self._build()
+  File "/opt/finetune/MemRift/train_multithread.py", line 1029, in _build
+    self.compress_pool= fut.ThreadPoolExecutor(self.pool_workers)
+                                               ^^^^^^^^^^^^^^^^^
+AttributeError: 'AsyncCompressor' object has no attribute 'pool_workers'

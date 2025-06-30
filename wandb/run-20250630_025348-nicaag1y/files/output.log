@@ -1,0 +1,14 @@
+
+
+args.model='/opt/models/hf/TinyLlama-1.1B-Chat-v1.0', args.outdir='./weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level18', args.weight=True, args.activation=False, args.max_length=2048
+init AsyncCompressor
+Traceback (most recent call last):
+  File "/opt/finetune/MemRift/train_multithread.py", line 1238, in <module>
+    runtime = HookRuntime(model, compressor)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/finetune/MemRift/train_multithread.py", line 913, in __init__
+    self.layer2cps, max_numel = self.inject_from_files(args.outdir)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/finetune/MemRift/train_multithread.py", line 986, in inject_from_files
+    max_numel
+UnboundLocalError: cannot access local variable 'max_numel' where it is not associated with a value

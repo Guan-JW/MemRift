@@ -1,0 +1,27 @@
+
+
+args.model='/opt/models/hf/TinyLlama-1.1B-Chat-v1.0', args.outdir='./weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level18', args.weight=True, args.activation=True, args.max_length=2048
+init AsyncCompressor
+/opt/finetune/MemRift/train_multithread.py:756: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /opt/pytorch/torch/csrc/utils/tensor_numpy.cpp:203.)
+  sm_gpu = torch.as_tensor(sm, dtype=torch.uint8, device=device)
+Materializing model.embed_tokens
+cp.data.shape=torch.Size([32000, 2048])
+Materializing model.norm
+cp.data.shape=torch.Size([2048])
+Materializing lm_head
+cp.data.shape=torch.Size([32000, 2048])
+[meta] still 0 tensors on meta device
+sign  : 924.1 MiB
+exp   : 304.8 MiB
+bf16  : 0 Bytes
+python: 15.5 KiB
+---------------
+TOTAL : 1.2 GiB
+self.layer_names=['base_model.model.model.layers.0', 'base_model.model.model.layers.1', 'base_model.model.model.layers.2', 'base_model.model.model.layers.3', 'base_model.model.model.layers.4', 'base_model.model.model.layers.5', 'base_model.model.model.layers.6', 'base_model.model.model.layers.7', 'base_model.model.model.layers.8', 'base_model.model.model.layers.9', 'base_model.model.model.layers.10', 'base_model.model.model.layers.11', 'base_model.model.model.layers.12', 'base_model.model.model.layers.13', 'base_model.model.model.layers.14', 'base_model.model.model.layers.15', 'base_model.model.model.layers.16', 'base_model.model.model.layers.17', 'base_model.model.model.layers.18', 'base_model.model.model.layers.19', 'base_model.model.model.layers.20', 'base_model.model.model.layers.21']
+Traceback (most recent call last):
+  File "/opt/finetune/MemRift/train_multithread.py", line 1068, in <module>
+    runtime.install_fwd_prefetch_hooks()
+  File "/opt/finetune/MemRift/train_multithread.py", line 910, in install_fwd_prefetch_hooks
+    name2layer[cur].register_forward_pre_hook(_hook_pre)    # overlap current layer's computation with next layer's decompression
+    ~~~~~~~~~~^^^^^
+KeyError: 'base_model.model.model.layers.0'

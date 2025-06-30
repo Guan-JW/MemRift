@@ -1,0 +1,368 @@
+
+
+args.model='/opt/models/hf/TinyLlama-1.1B-Chat-v1.0', args.outdir='./weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level18', args.weight=True, args.activation=False, args.max_length=2048
+init AsyncCompressor
+/opt/finetune/MemRift/train_multithread.py:969: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /opt/pytorch/torch/csrc/utils/tensor_numpy.cpp:203.)
+  sm_gpu = torch.as_tensor(sm, dtype=torch.uint8, device=device)
+Materializing model.embed_tokens
+cp.data.shape=torch.Size([32000, 2048])
+Materializing model.norm
+cp.data.shape=torch.Size([2048])
+Materializing lm_head
+cp.data.shape=torch.Size([32000, 2048])
+[meta] still 0 tensors on meta device
+sign  : 924.1 MiB
+exp   : 304.8 MiB
+bf16  : 0 Bytes
+python: 15.5 KiB
+---------------
+TOTAL : 1.2 GiB
+Peak CPU memory usage: 1177.12 MB
+Peak GPU memory usage: 1300.59 MB
+Using the latest cached version of the dataset since timdettmers/openassistant-guanaco couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /data/models/huggingface/datasets/timdettmers___openassistant-guanaco/default/0.0.0/831dabac2283d99420cda0b673d7a2a43849f17a (last modified on Mon Jun 23 08:47:36 2025).
+
+
+*************** i=0 ****************
+Fwd hook pre base_model.model.model.layers.0
+Fwd hook pre base_model.model.model.layers.1
+Fwd hook pre base_model.model.model.layers.2
+Fwd hook pre base_model.model.model.layers.3
+Fwd hook pre base_model.model.model.layers.4
+Fwd hook pre base_model.model.model.layers.5
+Fwd hook pre base_model.model.model.layers.6
+Fwd hook pre base_model.model.model.layers.7
+Fwd hook pre base_model.model.model.layers.8
+Fwd hook pre base_model.model.model.layers.9
+Fwd hook pre base_model.model.model.layers.10
+Fwd hook pre base_model.model.model.layers.11
+Fwd hook pre base_model.model.model.layers.12
+Fwd hook pre base_model.model.model.layers.13
+Fwd hook pre base_model.model.model.layers.14
+Fwd hook pre base_model.model.model.layers.15
+Fwd hook pre base_model.model.model.layers.16
+Fwd hook pre base_model.model.model.layers.17
+Fwd hook pre base_model.model.model.layers.18
+Fwd hook pre base_model.model.model.layers.19
+Fwd hook pre base_model.model.model.layers.20
+loss=tensor(0.8168, device='cuda:0', grad_fn=<NllLossBackward0>)
+Bwd hook pre base_model.model.model.layers.21
+Bwd hook pre base_model.model.model.layers.20
+Bwd hook pre base_model.model.model.layers.19
+Bwd hook pre base_model.model.model.layers.18
+Bwd hook pre base_model.model.model.layers.17
+Bwd hook pre base_model.model.model.layers.16
+Bwd hook pre base_model.model.model.layers.15
+Bwd hook pre base_model.model.model.layers.14
+Bwd hook pre base_model.model.model.layers.13
+Bwd hook pre base_model.model.model.layers.12
+Bwd hook pre base_model.model.model.layers.11
+Bwd hook pre base_model.model.model.layers.10
+Bwd hook pre base_model.model.model.layers.9
+Bwd hook pre base_model.model.model.layers.8
+Bwd hook pre base_model.model.model.layers.7
+Bwd hook pre base_model.model.model.layers.6
+Bwd hook pre base_model.model.model.layers.5
+Bwd hook pre base_model.model.model.layers.4
+Bwd hook pre base_model.model.model.layers.3
+Bwd hook pre base_model.model.model.layers.2
+Bwd hook pre base_model.model.model.layers.1
+Round 0: 8662.7 ms , 8662.9 ms , peak Δ=8311.5 MB
+Peak CPU memory usage: 712.81 MB
+- Fwd time: 4688.1 ms
+- Bwd time: 3974.6 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms
+
+
+*************** i=1 ****************
+Fwd hook pre base_model.model.model.layers.0
+Fwd hook pre base_model.model.model.layers.1
+Fwd hook pre base_model.model.model.layers.2
+Fwd hook pre base_model.model.model.layers.3
+Fwd hook pre base_model.model.model.layers.4
+Fwd hook pre base_model.model.model.layers.5
+Fwd hook pre base_model.model.model.layers.6
+Fwd hook pre base_model.model.model.layers.7
+Fwd hook pre base_model.model.model.layers.8
+Fwd hook pre base_model.model.model.layers.9
+Fwd hook pre base_model.model.model.layers.10
+Fwd hook pre base_model.model.model.layers.11
+Fwd hook pre base_model.model.model.layers.12
+Fwd hook pre base_model.model.model.layers.13
+Fwd hook pre base_model.model.model.layers.14
+Fwd hook pre base_model.model.model.layers.15
+Fwd hook pre base_model.model.model.layers.16
+Fwd hook pre base_model.model.model.layers.17
+Fwd hook pre base_model.model.model.layers.18
+Fwd hook pre base_model.model.model.layers.19
+Fwd hook pre base_model.model.model.layers.20
+loss=tensor(0.8050, device='cuda:0', grad_fn=<NllLossBackward0>)
+Bwd hook pre base_model.model.model.layers.21
+Bwd hook pre base_model.model.model.layers.20
+Bwd hook pre base_model.model.model.layers.19
+Bwd hook pre base_model.model.model.layers.18
+Bwd hook pre base_model.model.model.layers.17
+Bwd hook pre base_model.model.model.layers.16
+Bwd hook pre base_model.model.model.layers.15
+Bwd hook pre base_model.model.model.layers.14
+Bwd hook pre base_model.model.model.layers.13
+Bwd hook pre base_model.model.model.layers.12
+Bwd hook pre base_model.model.model.layers.11
+Bwd hook pre base_model.model.model.layers.10
+Bwd hook pre base_model.model.model.layers.9
+Bwd hook pre base_model.model.model.layers.8
+Bwd hook pre base_model.model.model.layers.7
+Bwd hook pre base_model.model.model.layers.6
+Bwd hook pre base_model.model.model.layers.5
+Bwd hook pre base_model.model.model.layers.4
+Bwd hook pre base_model.model.model.layers.3
+Bwd hook pre base_model.model.model.layers.2
+Bwd hook pre base_model.model.model.layers.1
+Round 1: 7260.2 ms , 7281.8 ms , peak Δ=8381.5 MB
+Peak CPU memory usage: 716.52 MB
+- Fwd time: 3478.4 ms
+- Bwd time: 3781.8 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms
+
+
+*************** i=2 ****************
+Fwd hook pre base_model.model.model.layers.0
+Fwd hook pre base_model.model.model.layers.1
+Fwd hook pre base_model.model.model.layers.2
+Fwd hook pre base_model.model.model.layers.3
+Fwd hook pre base_model.model.model.layers.4
+Fwd hook pre base_model.model.model.layers.5
+Fwd hook pre base_model.model.model.layers.6
+Fwd hook pre base_model.model.model.layers.7
+Fwd hook pre base_model.model.model.layers.8
+Fwd hook pre base_model.model.model.layers.9
+Fwd hook pre base_model.model.model.layers.10
+Fwd hook pre base_model.model.model.layers.11
+Fwd hook pre base_model.model.model.layers.12
+Fwd hook pre base_model.model.model.layers.13
+Fwd hook pre base_model.model.model.layers.14
+Fwd hook pre base_model.model.model.layers.15
+Fwd hook pre base_model.model.model.layers.16
+Fwd hook pre base_model.model.model.layers.17
+Fwd hook pre base_model.model.model.layers.18
+Fwd hook pre base_model.model.model.layers.19
+Fwd hook pre base_model.model.model.layers.20
+loss=tensor(0.7753, device='cuda:0', grad_fn=<NllLossBackward0>)
+Bwd hook pre base_model.model.model.layers.21
+Bwd hook pre base_model.model.model.layers.20
+Bwd hook pre base_model.model.model.layers.19
+Bwd hook pre base_model.model.model.layers.18
+Bwd hook pre base_model.model.model.layers.17
+Bwd hook pre base_model.model.model.layers.16
+Bwd hook pre base_model.model.model.layers.15
+Bwd hook pre base_model.model.model.layers.14
+Bwd hook pre base_model.model.model.layers.13
+Bwd hook pre base_model.model.model.layers.12
+Bwd hook pre base_model.model.model.layers.11
+Bwd hook pre base_model.model.model.layers.10
+Bwd hook pre base_model.model.model.layers.9
+Bwd hook pre base_model.model.model.layers.8
+Bwd hook pre base_model.model.model.layers.7
+Bwd hook pre base_model.model.model.layers.6
+Bwd hook pre base_model.model.model.layers.5
+Bwd hook pre base_model.model.model.layers.4
+Bwd hook pre base_model.model.model.layers.3
+Bwd hook pre base_model.model.model.layers.2
+Bwd hook pre base_model.model.model.layers.1
+Round 2: 7220.4 ms , 7241.8 ms , peak Δ=8381.5 MB
+Peak CPU memory usage: 716.97 MB
+- Fwd time: 3428.1 ms
+- Bwd time: 3792.4 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms
+
+
+*************** i=3 ****************
+Fwd hook pre base_model.model.model.layers.0
+Fwd hook pre base_model.model.model.layers.1
+Fwd hook pre base_model.model.model.layers.2
+Fwd hook pre base_model.model.model.layers.3
+Fwd hook pre base_model.model.model.layers.4
+Fwd hook pre base_model.model.model.layers.5
+Fwd hook pre base_model.model.model.layers.6
+Fwd hook pre base_model.model.model.layers.7
+Fwd hook pre base_model.model.model.layers.8
+Fwd hook pre base_model.model.model.layers.9
+Fwd hook pre base_model.model.model.layers.10
+Fwd hook pre base_model.model.model.layers.11
+Fwd hook pre base_model.model.model.layers.12
+Fwd hook pre base_model.model.model.layers.13
+Fwd hook pre base_model.model.model.layers.14
+Fwd hook pre base_model.model.model.layers.15
+Fwd hook pre base_model.model.model.layers.16
+Fwd hook pre base_model.model.model.layers.17
+Fwd hook pre base_model.model.model.layers.18
+Fwd hook pre base_model.model.model.layers.19
+Fwd hook pre base_model.model.model.layers.20
+loss=tensor(0.7365, device='cuda:0', grad_fn=<NllLossBackward0>)
+Bwd hook pre base_model.model.model.layers.21
+Bwd hook pre base_model.model.model.layers.20
+Bwd hook pre base_model.model.model.layers.19
+Bwd hook pre base_model.model.model.layers.18
+Bwd hook pre base_model.model.model.layers.17
+Bwd hook pre base_model.model.model.layers.16
+Bwd hook pre base_model.model.model.layers.15
+Bwd hook pre base_model.model.model.layers.14
+Bwd hook pre base_model.model.model.layers.13
+Bwd hook pre base_model.model.model.layers.12
+Bwd hook pre base_model.model.model.layers.11
+Bwd hook pre base_model.model.model.layers.10
+Bwd hook pre base_model.model.model.layers.9
+Bwd hook pre base_model.model.model.layers.8
+Bwd hook pre base_model.model.model.layers.7
+Bwd hook pre base_model.model.model.layers.6
+Bwd hook pre base_model.model.model.layers.5
+Bwd hook pre base_model.model.model.layers.4
+Bwd hook pre base_model.model.model.layers.3
+Bwd hook pre base_model.model.model.layers.2
+Bwd hook pre base_model.model.model.layers.1
+Round 3: 7271.6 ms , 7292.4 ms , peak Δ=8381.5 MB
+Peak CPU memory usage: 717.23 MB
+- Fwd time: 3473.9 ms
+- Bwd time: 3797.6 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms
+
+
+*************** i=4 ****************
+Fwd hook pre base_model.model.model.layers.0
+Fwd hook pre base_model.model.model.layers.1
+Fwd hook pre base_model.model.model.layers.2
+Fwd hook pre base_model.model.model.layers.3
+Fwd hook pre base_model.model.model.layers.4
+Fwd hook pre base_model.model.model.layers.5
+Fwd hook pre base_model.model.model.layers.6
+Fwd hook pre base_model.model.model.layers.7
+Fwd hook pre base_model.model.model.layers.8
+Fwd hook pre base_model.model.model.layers.9
+Fwd hook pre base_model.model.model.layers.10
+Fwd hook pre base_model.model.model.layers.11
+Fwd hook pre base_model.model.model.layers.12
+Fwd hook pre base_model.model.model.layers.13
+Fwd hook pre base_model.model.model.layers.14
+Fwd hook pre base_model.model.model.layers.15
+Fwd hook pre base_model.model.model.layers.16
+Fwd hook pre base_model.model.model.layers.17
+Fwd hook pre base_model.model.model.layers.18
+Fwd hook pre base_model.model.model.layers.19
+Fwd hook pre base_model.model.model.layers.20
+loss=tensor(0.6971, device='cuda:0', grad_fn=<NllLossBackward0>)
+Bwd hook pre base_model.model.model.layers.21
+Bwd hook pre base_model.model.model.layers.20
+Bwd hook pre base_model.model.model.layers.19
+Bwd hook pre base_model.model.model.layers.18
+Bwd hook pre base_model.model.model.layers.17
+Bwd hook pre base_model.model.model.layers.16
+Bwd hook pre base_model.model.model.layers.15
+Bwd hook pre base_model.model.model.layers.14
+Bwd hook pre base_model.model.model.layers.13
+Bwd hook pre base_model.model.model.layers.12
+Bwd hook pre base_model.model.model.layers.11
+Bwd hook pre base_model.model.model.layers.10
+Bwd hook pre base_model.model.model.layers.9
+Bwd hook pre base_model.model.model.layers.8
+Bwd hook pre base_model.model.model.layers.7
+Bwd hook pre base_model.model.model.layers.6
+Bwd hook pre base_model.model.model.layers.5
+Bwd hook pre base_model.model.model.layers.4
+Bwd hook pre base_model.model.model.layers.3
+Bwd hook pre base_model.model.model.layers.2
+Bwd hook pre base_model.model.model.layers.1
+Round 4: 7601.1 ms , 7621.9 ms , peak Δ=8381.5 MB
+Peak CPU memory usage: 717.71 MB
+- Fwd time: 3817.7 ms
+- Bwd time: 3783.3 ms
+Compression time: 0.0 ms
+	Wait comp start time: 0.0 ms
+Decompression time: 0.0 ms
+	Wait comp done time: 0.0 ms
+	Wait decomp done time: 0.0 ms
+	Wait merge done time: 0.0 ms
+Pack time: 0.0 ms
+	Prep time 1: 0.0 ms
+		 - pp1: 0.0 ms
+		 - pp2: 0.0 ms
+		 - pp3: 0.0 ms
+		 - pp4: 0.0 ms
+	Prep time 2: 0.0 ms
+	Prep time 3: 0.0 ms
+	Prep time 4: 0.0 ms
+Unpack time: 0.0 ms
+	Post time 1: 0.0 ms
+	Post time 2: 0.0 ms
+	Post time 3: 0.0 ms

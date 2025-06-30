@@ -1,0 +1,1 @@
+{"cpu_proc_MB":1165,"ram_used_MB":4717,"weight_load_sec":5.384920358657837,"_wandb":{"runtime":10},"gpu_alloc_MB":1309,"ram_total_MB":30697,"phase":"weight_load_end","timestamp":6176,"_step":12,"cpu_util":10.5,"_runtime":8.855780448,"gpu_reserved_MB":1316,"gpu_util":0,"_timestamp":1.751232043997124e+09}

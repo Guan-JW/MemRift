@@ -1,0 +1,29 @@
+
+
+args.model='/opt/models/hf/gemma-2-2b-it', args.outdir='./weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level18', args.weight=False, args.activation=False, args.max_length=2048
+Loading checkpoint shards: 100%|███████████████████████████████████████████████████████████████████████████████████████████| 2/2 [00:13<00:00,  6.63s/it]
+Peak CPU memory usage: 739.75 MB
+Peak GPU memory usage: 6112.00 MB
+Using the latest cached version of the dataset since timdettmers/openassistant-guanaco couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /data/models/huggingface/datasets/timdettmers___openassistant-guanaco/default/0.0.0/831dabac2283d99420cda0b673d7a2a43849f17a (last modified on Mon Jun 23 08:47:36 2025).
+
+
+*************** i=0 ****************
+It is strongly recommended to train Gemma2 models with the `eager` attention implementation instead of `sdpa`. Use `eager` with `AutoModelForCausalLM.from_pretrained('<path-to-checkpoint>', attn_implementation='eager')`.
+loss=tensor(0.8907, device='cuda:0', grad_fn=<NllLossBackward0>)
+
+
+*************** i=1 ****************
+loss=tensor(0.8221, device='cuda:0', grad_fn=<NllLossBackward0>)
+
+
+*************** i=2 ****************
+loss=tensor(0.7148, device='cuda:0', grad_fn=<NllLossBackward0>)
+
+
+*************** i=3 ****************
+loss=tensor(0.6266, device='cuda:0', grad_fn=<NllLossBackward0>)
+
+
+*************** i=4 ****************
+loss=tensor(0.5529, device='cuda:0', grad_fn=<NllLossBackward0>)

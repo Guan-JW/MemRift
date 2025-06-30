@@ -1,0 +1,11 @@
+
+
+args.model='/opt/models/hf/TinyLlama-1.1B-Chat-v1.0', args.outdir='./weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level18', args.weight=False, args.activation=True, args.max_length=2048
+[meta] still 0 tensors on meta device
+Traceback (most recent call last):
+  File "/opt/finetune/MemRift/train_multithread.py", line 693, in <module>
+    class HookRuntime:
+  File "/opt/finetune/MemRift/train_multithread.py", line 696, in HookRuntime
+    compressor: AsyncCompressor):
+                ^^^^^^^^^^^^^^^
+NameError: name 'AsyncCompressor' is not defined

@@ -1,0 +1,7 @@
+{"time":"2025-06-30T02:56:33.492085056+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250630_025632-smlwsyav/logs/debug-core.log"}
+{"time":"2025-06-30T02:56:35.055299584+08:00","level":"INFO","msg":"stream: created new stream","id":"smlwsyav"}
+{"time":"2025-06-30T02:56:35.055651968+08:00","level":"INFO","msg":"stream: started","id":"smlwsyav"}
+{"time":"2025-06-30T02:56:35.055704608+08:00","level":"INFO","msg":"sender: started","stream_id":"smlwsyav"}
+{"time":"2025-06-30T02:56:35.055857504+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"smlwsyav"}
+{"time":"2025-06-30T02:56:35.055702048+08:00","level":"INFO","msg":"handler: started","stream_id":"smlwsyav"}
+{"time":"2025-06-30T02:56:35.604664384+08:00","level":"INFO","msg":"Starting system monitor"}

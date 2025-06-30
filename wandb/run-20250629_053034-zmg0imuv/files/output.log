@@ -1,0 +1,10 @@
+
+
+args.model='/opt/models/hf/TinyLlama-1.1B-Chat-v1.0', args.outdir='./weight_comp/prepare_weight/TinyLlama-1.1B-zstd-compressed-weights/level18', args.weight=True, args.activation=False, args.max_length=2048
+Traceback (most recent call last):
+  File "/opt/finetune/MemRift/train_multithread.py", line 719, in <module>
+    class DecoderLayerWrapper(torch.nn.Module):
+  File "/opt/finetune/MemRift/train_multithread.py", line 720, in DecoderLayerWrapper
+    def __init__(self, layer: nn.Module, runtime: HookRuntime):
+                                                  ^^^^^^^^^^^
+NameError: name 'HookRuntime' is not defined

@@ -1,0 +1,46 @@
+{
+  "os": "Linux-5.15.148-tegra-aarch64-with-glibc2.39",
+  "python": "CPython 3.12.3",
+  "startedAt": "2025-06-28T19:18:10.068405Z",
+  "args": [
+    "--hook",
+    "--weight",
+    "--activation",
+    "--act_async"
+  ],
+  "program": "/opt/finetune/MemRift/train_multithread.py",
+  "codePath": "train_multithread.py",
+  "git": {
+    "remote": "https://github.com/Guan-JW/MemRift.git",
+    "commit": "dca6d4ac1cad456f7187ccfb6fb82c3a411e6285"
+  },
+  "root": "/opt/finetune/MemRift",
+  "host": "ubuntu",
+  "executable": "/opt/venv/bin/python3",
+  "codePathLocal": "train_multithread.py",
+  "cpu_count": 12,
+  "cpu_count_logical": 12,
+  "gpu": "Orin (nvgpu)",
+  "gpu_count": 1,
+  "disk": {
+    "/": {
+      "total": "1967813582848",
+      "used": "472107991040"
+    }
+  },
+  "memory": {
+    "total": "32188047360"
+  },
+  "cpu": {
+    "count": 12,
+    "countLogical": 12
+  },
+  "gpu_nvidia": [
+    {
+      "name": "Orin (nvgpu)",
+      "architecture": "Ampere",
+      "uuid": "72136144-6de6-51ba-9974-e3ac199c954a"
+    }
+  ],
+  "cudaVersion": "12.8"
+}

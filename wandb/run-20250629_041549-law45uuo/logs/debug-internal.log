@@ -1,0 +1,15 @@
+{"time":"2025-06-29T04:15:49.765705632+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250629_041549-law45uuo/logs/debug-core.log"}
+{"time":"2025-06-29T04:15:51.547514368+08:00","level":"INFO","msg":"stream: created new stream","id":"law45uuo"}
+{"time":"2025-06-29T04:15:51.54792544+08:00","level":"INFO","msg":"stream: started","id":"law45uuo"}
+{"time":"2025-06-29T04:15:51.548347776+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"law45uuo"}
+{"time":"2025-06-29T04:15:51.548685504+08:00","level":"INFO","msg":"handler: started","stream_id":"law45uuo"}
+{"time":"2025-06-29T04:15:51.548807424+08:00","level":"INFO","msg":"sender: started","stream_id":"law45uuo"}
+{"time":"2025-06-29T04:15:51.976374016+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-29T04:16:40.541989152+08:00","level":"INFO","msg":"stream: closing","id":"law45uuo"}
+{"time":"2025-06-29T04:16:40.542121984+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-29T04:16:40.54222768+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-29T04:16:41.319629024+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-29T04:16:42.64121824+08:00","level":"INFO","msg":"handler: closed","stream_id":"law45uuo"}
+{"time":"2025-06-29T04:16:42.641326464+08:00","level":"INFO","msg":"sender: closed","stream_id":"law45uuo"}
+{"time":"2025-06-29T04:16:42.654712512+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"law45uuo"}
+{"time":"2025-06-29T04:16:42.654964928+08:00","level":"INFO","msg":"stream: closed","id":"law45uuo"}

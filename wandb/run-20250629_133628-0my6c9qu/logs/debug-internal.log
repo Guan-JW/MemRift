@@ -1,0 +1,21 @@
+{"time":"2025-06-29T13:36:28.90142976+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/opt/finetune/MemRift/wandb/run-20250629_133628-0my6c9qu/logs/debug-core.log"}
+{"time":"2025-06-29T13:36:31.332864768+08:00","level":"INFO","msg":"stream: created new stream","id":"0my6c9qu"}
+{"time":"2025-06-29T13:36:31.333266176+08:00","level":"INFO","msg":"stream: started","id":"0my6c9qu"}
+{"time":"2025-06-29T13:36:31.333642368+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"0my6c9qu"}
+{"time":"2025-06-29T13:36:31.334050656+08:00","level":"INFO","msg":"sender: started","stream_id":"0my6c9qu"}
+{"time":"2025-06-29T13:36:31.334141152+08:00","level":"INFO","msg":"handler: started","stream_id":"0my6c9qu"}
+{"time":"2025-06-29T13:36:33.251496896+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-29T13:37:48.58755328+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2025-06-29T13:38:20.78996768+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2025-06-29T13:38:54.849607808+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded"}
+{"time":"2025-06-29T13:39:19.953090528+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/15692276873/Mistral-7B_memrift_act_weight_jetson_1024/0my6c9qu/file_stream\": unexpected EOF"}
+{"time":"2025-06-29T13:39:33.463958464+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded"}
+{"time":"2025-06-29T13:40:20.999213824+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded"}
+{"time":"2025-06-29T13:40:55.0491568+08:00","level":"INFO","msg":"stream: closing","id":"0my6c9qu"}
+{"time":"2025-06-29T13:40:55.049945888+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-29T13:40:55.050879264+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-29T13:40:58.17778144+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-29T13:41:01.631720224+08:00","level":"INFO","msg":"handler: closed","stream_id":"0my6c9qu"}
+{"time":"2025-06-29T13:41:01.632023104+08:00","level":"INFO","msg":"sender: closed","stream_id":"0my6c9qu"}
+{"time":"2025-06-29T13:41:01.64449904+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"0my6c9qu"}
+{"time":"2025-06-29T13:41:01.644593952+08:00","level":"INFO","msg":"stream: closed","id":"0my6c9qu"}

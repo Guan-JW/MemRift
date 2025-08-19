@@ -1,10 +1,0 @@
-=== Running level 22 → level22 ===
-args.model='/opt/models/Llama-3.1-8B', args.outdir='level22'
-✅  wrote 291 frozen tensors → “level22”, compression time: 24382979.70 ms
-nohup: ignoring input
-=== Running level 21 → Llama-3.1-8B-zstd-compressed-weights/level21 ===
-/opt/venv/lib/python3.12/site-packages/transformers/utils/hub.py:106: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
-  warnings.warn(
-args.model='/opt/models/Llama-3.1-8B', args.outdir='Llama-3.1-8B-zstd-compressed-weights/level21'
-Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:00<00:01,  2.33it/s]Loading checkpoint shards:  50%|█████     | 2/4 [00:00<00:00,  2.20it/s]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:01<00:00,  2.35it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:01<00:00,  2.53it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:01<00:00,  2.44it/s]
-✅  wrote 291 frozen tensors → “Llama-3.1-8B-zstd-compressed-weights/level21”, compression time: 24955317.04 ms

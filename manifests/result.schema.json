@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://memrift.invalid/schema/result-1.0.json",
+  "type": "object",
+  "required": ["batch_size", "max_length", "rounds", "warmup_rounds", "round_time_mean_sec"],
+  "properties": {
+    "batch_size": {"type": "integer", "minimum": 1},
+    "max_length": {"type": "integer", "minimum": 1},
+    "rounds": {"type": "integer", "minimum": 1},
+    "warmup_rounds": {"type": "integer", "minimum": 0},
+    "round_time_mean_sec": {"type": "number", "minimum": 0},
+    "peak_torch_allocated_bytes": {"type": ["integer", "null"], "minimum": 0},
+    "peak_torch_reserved_bytes": {"type": ["integer", "null"], "minimum": 0},
+    "peak_process_rss_bytes": {"type": ["integer", "null"], "minimum": 0},
+    "peak_system_used_bytes": {"type": ["integer", "null"], "minimum": 0},
+    "minimum_system_available_bytes": {"type": ["integer", "null"], "minimum": 0},
+    "round_peak_gpu_alloc_MB_max": {"type": "number", "minimum": 0},
+    "ram_used_MB_max": {"type": "number", "minimum": 0}
+  },
+  "additionalProperties": true
+}

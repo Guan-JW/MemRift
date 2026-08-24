@@ -1,0 +1,56 @@
+FROM nvcr.io/nvidia/pytorch:24.12-py3-igpu@sha256:8b8ce6c8b0d34fea26602d52a0c1a4364339773e900047cbd9f3511eb7b79e64
+
+ARG BUILD_DATE=unknown
+ARG SOURCE_REVISION=bb138185d2bd0b88d924d7ea20fe61d72571a7b6
+ARG BITSANDBYTES_REVISION=f0735f95174136a71a097ce54942c1e9a9d89a3a
+LABEL org.opencontainers.image.title="MemRift research artifact" \
+      org.opencontainers.image.version="0.1.0-review" \
+      org.opencontainers.image.created="${BUILD_DATE}" \
+      org.opencontainers.image.revision="${SOURCE_REVISION}" \
+      org.opencontainers.image.licenses="LicenseRef-Proprietary"
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    TORCH_CUDA_ARCH_LIST=8.7 \
+    CUDA_MODULE_LOADING=LAZY \
+    WANDB_MODE=disabled \
+    WANDB_DISABLED=true \
+    HF_HUB_OFFLINE=1 \
+    TRANSFORMERS_OFFLINE=1 \
+    HF_HOME=/cache/huggingface \
+    PYTHONUNBUFFERED=1
+
+RUN git clone https://github.com/bitsandbytes-foundation/bitsandbytes.git /tmp/bitsandbytes \
+ && git -C /tmp/bitsandbytes checkout --detach "${BITSANDBYTES_REVISION}" \
+ && cmake -S /tmp/bitsandbytes -B /tmp/bitsandbytes/build \
+      -DCOMPUTE_BACKEND=cuda -DCOMPUTE_CAPABILITY=87 -DCMAKE_BUILD_TYPE=Release \
+ && cmake --build /tmp/bitsandbytes/build --parallel "$(nproc)" \
+ && python3 -m pip install --no-cache-dir --no-deps /tmp/bitsandbytes \
+ && python3 -c 'import bitsandbytes as b; assert b.__version__ == "0.45.4"' \
+ && rm -rf /tmp/bitsandbytes
+
+RUN python3 -m venv --system-site-packages /opt/venvs/training \
+ && python3 -m venv --system-site-packages /opt/venvs/loading \
+ && /opt/venvs/training/bin/pip install --no-cache-dir --upgrade pip==24.3.1 setuptools==75.6.0 wheel==0.45.1 \
+ && /opt/venvs/loading/bin/pip install --no-cache-dir --upgrade pip==24.3.1 setuptools==75.6.0 wheel==0.45.1
+
+WORKDIR /workspace
+COPY docker/requirements-training.lock docker/requirements-loading.lock /tmp/
+RUN /opt/venvs/training/bin/pip install --no-cache-dir -r /tmp/requirements-training.lock \
+ && /opt/venvs/loading/bin/pip install --no-cache-dir -r /tmp/requirements-loading.lock \
+ && /opt/venvs/training/bin/python -c 'import bitsandbytes as b; assert b.__version__ == "0.45.4", "training venv lost source-built bitsandbytes 0.45.4"' \
+ && /opt/venvs/loading/bin/python -c 'import bitsandbytes as b; assert b.__version__ == "0.45.4", "loading venv lost source-built bitsandbytes 0.45.4"'
+
+COPY . /workspace
+# Build from source in-image. The ignore file prevents host-built shared objects
+# from entering the build context. Install independently into both venvs.
+RUN /opt/venvs/training/bin/pip install --no-cache-dir --no-build-isolation /workspace/src/float_split_stride \
+ && /opt/venvs/loading/bin/pip install --no-cache-dir --no-build-isolation /workspace/src/float_split_stride \
+ && rm -rf /root/.cache /tmp/* /workspace/src/float_split_stride/build
+
+RUN mkdir -p /models /checkpoints /results /cache/huggingface \
+ && chmod 0555 /models /checkpoints \
+ && chmod 0755 /results /cache/huggingface \
+ && chmod +x /workspace/docker/entrypoint.sh /workspace/scripts/smoke.sh /workspace/scripts/evaluate.sh
+
+ENTRYPOINT ["/workspace/docker/entrypoint.sh"]
+CMD ["validate"]

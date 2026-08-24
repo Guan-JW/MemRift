@@ -1,0 +1,18 @@
+MemRift artifact licensing notice
+
+No license file or other source-licensing grant was present in either source
+snapshot used to assemble this artifact. Therefore no copyright license is
+granted for the imported MemRift implementation, CUDA extension, or model-
+loading benchmark by this repository. All rights in those materials remain
+with their respective copyright holders.
+
+The documentation, manifests, container definitions, and reviewer scripts in
+this artifact are supplied for research artifact evaluation. Their presence
+must not be interpreted as permission to use, reproduce, modify, distribute,
+or sublicense source material for which the user has not separately obtained
+permission.
+
+Third-party dependencies and model weights remain subject to their own
+licenses. In particular, Meta Llama weights are not covered by this notice and
+must be acquired directly under Meta's applicable license. No model weights
+are distributed with this artifact.

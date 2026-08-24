@@ -1,0 +1,16 @@
+.git
+.git/**
+__pycache__
+**/__pycache__
+*.pyc
+*.so
+*.egg-info
+build
+dist
+wandb
+results/*
+models
+checkpoints
+.cache
+*.tar.zst
+.env

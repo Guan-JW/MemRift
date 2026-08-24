@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "assembled_at": "2026-08-25",
+  "sources": [
+    {
+      "role": "authoritative training/runtime implementation",
+      "name": "MemRift-Asplos",
+      "revision": "bb138185d2bd0b88d924d7ea20fe61d72571a7b6",
+      "remote": null,
+      "license_evidence": "No LICENSE or COPYING file found in the inspected snapshot"
+    },
+    {
+      "role": "model-loading benchmark suite",
+      "name": "MemRift",
+      "revision": "2fdc90fbcad7c20cc565480ddd7c8931af596531",
+      "remote": null,
+      "license_evidence": "No LICENSE or COPYING file found in the inspected snapshot"
+    }
+  ],
+  "host_observed": {
+    "l4t_release": "R36.4.0",
+    "nvidia_l4t_core_package": "36.4.0-20240912212859",
+    "jetpack_generation": "6.1",
+    "architecture": "aarch64"
+  },
+  "base_image": "nvcr.io/nvidia/pytorch:24.12-py3-igpu@sha256:8b8ce6c8b0d34fea26602d52a0c1a4364339773e900047cbd9f3511eb7b79e64",
+  "verification": {
+    "image_built": false,
+    "native_extension_tested_in_image": false,
+    "smoke_run_completed": false
+  }
+}

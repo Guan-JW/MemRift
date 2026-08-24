@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://memrift.invalid/schema/run-record-1.0.json",
+  "type": "object",
+  "required": ["schema_version", "run_name", "status", "exit_code", "started_at", "ended_at", "model_logical_id", "checkpoint_logical_id", "command_file", "raw_log", "result", "environment"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "run_name": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"},
+    "status": {"enum": ["success", "oom", "memory_guard", "timeout", "dependency_failure", "validation_failure", "software_failure", "user_termination"]},
+    "exit_code": {"type": "integer"},
+    "command_file": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"},
+    "raw_log": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"},
+    "result": {"type": ["object", "null"]},
+    "model_logical_id": {"type": "string", "minLength": 1},
+    "checkpoint_logical_id": {"type": "string", "minLength": 1},
+    "started_at": {"type": "string", "format": "date-time"},
+    "ended_at": {"type": "string", "format": "date-time"},
+    "environment": {"type": "object"},
+    "validation_error": {"type": ["string", "null"]}
+  },
+  "additionalProperties": true
+}

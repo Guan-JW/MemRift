@@ -1,0 +1,13 @@
+# Model-loading code patches Transformers internals: do not change these two
+# versions without revalidation. PyTorch comes from the NVIDIA image;
+# bitsandbytes 0.45.4 is built from its pinned source commit in the Dockerfile.
+accelerate==1.4.0
+jsonschema==4.23.0
+numpy==2.2.3
+peft==0.14.0
+psutil==7.0.0
+safetensors==0.5.3
+sentencepiece==0.2.0
+tokenizers==0.21.0
+transformers==4.49.0
+zstandard==0.23.0

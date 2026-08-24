@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+.cache/
+.venv/
+build/
+dist/
+wandb/
+results/*
+!results/README.md
+!results/*.schema.json
+*.tar.zst
+*.sha256
+.env

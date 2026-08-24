@@ -1,0 +1,5 @@
+{
+  "$comment": "Copy configs/models.example.json to manifests/models.json and fill exact acquisition metadata before use.",
+  "schema_version": "1.0",
+  "models": []
+}

@@ -1,0 +1,58 @@
+name: memrift-artifact
+x-runtime: &runtime
+  image: ${MEMRIFT_IMAGE:-memrift-artifact:0.1.0-review}
+  platform: linux/arm64
+  runtime: nvidia
+  network_mode: none
+  ipc: host
+  security_opt:
+    - no-new-privileges:true
+  environment:
+    WANDB_MODE: disabled
+    HF_HUB_OFFLINE: "1"
+    TRANSFORMERS_OFFLINE: "1"
+    HF_HOME: /cache/huggingface
+    DATASET_REVISION: ${DATASET_REVISION:-}
+
+services:
+  validate:
+    <<: *runtime
+    command: ["validate"]
+    tmpfs:
+      - /results:rw,size=67108864
+  smoke:
+    <<: *runtime
+    command: ["smoke"]
+    volumes:
+      - type: bind
+        source: ${MODEL_DIR:-./.missing/model}
+        target: /models/model
+        read_only: true
+      - type: bind
+        source: ${CHECKPOINT_DIR:-./.missing/checkpoint}
+        target: /checkpoints/model
+        read_only: true
+      - type: bind
+        source: ${RESULTS_DIR:-./results}
+        target: /results
+      - type: bind
+        source: ${CACHE_DIR:-./.cache/huggingface}
+        target: /cache/huggingface
+  evaluate:
+    <<: *runtime
+    command: ["evaluate"]
+    volumes:
+      - type: bind
+        source: ${MODEL_DIR:-./.missing/model}
+        target: /models/model
+        read_only: true
+      - type: bind
+        source: ${CHECKPOINT_DIR:-./.missing/checkpoint}
+        target: /checkpoints/model
+        read_only: true
+      - type: bind
+        source: ${RESULTS_DIR:-./results}
+        target: /results
+      - type: bind
+        source: ${CACHE_DIR:-./.cache/huggingface}
+        target: /cache/huggingface

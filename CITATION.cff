@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "If you use this artifact, cite the MemRift paper and this software artifact. Replace the placeholder paper metadata when the archival citation is available."
+type: software
+title: "MemRift Research Artifact"
+authors:
+  - name: "MemRift authors"
+version: "0.1.0-review"
+date-released: 2026-08-25
+license: "LicenseRef-Proprietary"
+identifiers:
+  - type: other
+    value: "source:bb138185d2bd0b88d924d7ea20fe61d72571a7b6;benchmark:2fdc90fbcad7c20cc565480ddd7c8931af596531"
+    description: "Local source snapshot revisions; no repository remotes are recorded"

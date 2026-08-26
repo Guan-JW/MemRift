@@ -1,13 +1,6 @@
 FROM nvcr.io/nvidia/pytorch:24.12-py3-igpu@sha256:8b8ce6c8b0d34fea26602d52a0c1a4364339773e900047cbd9f3511eb7b79e64
 
-ARG BUILD_DATE=unknown
-ARG SOURCE_REVISION=bb138185d2bd0b88d924d7ea20fe61d72571a7b6
 ARG BITSANDBYTES_REVISION=f0735f95174136a71a097ce54942c1e9a9d89a3a
-LABEL org.opencontainers.image.title="MemRift research artifact" \
-      org.opencontainers.image.version="0.1.0-review" \
-      org.opencontainers.image.created="${BUILD_DATE}" \
-      org.opencontainers.image.revision="${SOURCE_REVISION}" \
-      org.opencontainers.image.licenses="LicenseRef-Proprietary"
 
 ENV DEBIAN_FRONTEND=noninteractive \
     TORCH_CUDA_ARCH_LIST=8.7 \
@@ -17,7 +10,9 @@ ENV DEBIAN_FRONTEND=noninteractive \
     HF_HUB_OFFLINE=1 \
     TRANSFORMERS_OFFLINE=1 \
     HF_HOME=/cache/huggingface \
-    PYTHONUNBUFFERED=1
+    PYTHONUNBUFFERED=1 \
+    PIP_CONFIG_FILE=/dev/null \
+    PIP_INDEX_URL=https://pypi.org/simple
 
 RUN git clone https://github.com/bitsandbytes-foundation/bitsandbytes.git /tmp/bitsandbytes \
  && git -C /tmp/bitsandbytes checkout --detach "${BITSANDBYTES_REVISION}" \
@@ -28,17 +23,26 @@ RUN git clone https://github.com/bitsandbytes-foundation/bitsandbytes.git /tmp/b
  && python3 -c 'import bitsandbytes as b; assert b.__version__ == "0.45.4"' \
  && rm -rf /tmp/bitsandbytes
 
-RUN python3 -m venv --system-site-packages /opt/venvs/training \
+RUN --mount=type=cache,target=/root/.cache/pip python3 -m venv --system-site-packages /opt/venvs/training \
  && python3 -m venv --system-site-packages /opt/venvs/loading \
- && /opt/venvs/training/bin/pip install --no-cache-dir --upgrade pip==24.3.1 setuptools==75.6.0 wheel==0.45.1 \
- && /opt/venvs/loading/bin/pip install --no-cache-dir --upgrade pip==24.3.1 setuptools==75.6.0 wheel==0.45.1
+ && /opt/venvs/training/bin/pip install --upgrade pip==24.3.1 setuptools==75.6.0 wheel==0.45.1 \
+ && /opt/venvs/loading/bin/pip install --upgrade pip==24.3.1 setuptools==75.6.0 wheel==0.45.1
 
 WORKDIR /workspace
 COPY docker/requirements-training.lock docker/requirements-loading.lock /tmp/
-RUN /opt/venvs/training/bin/pip install --no-cache-dir -r /tmp/requirements-training.lock \
- && /opt/venvs/loading/bin/pip install --no-cache-dir -r /tmp/requirements-loading.lock \
- && /opt/venvs/training/bin/python -c 'import bitsandbytes as b; assert b.__version__ == "0.45.4", "training venv lost source-built bitsandbytes 0.45.4"' \
+RUN --mount=type=cache,target=/root/.cache/pip /opt/venvs/training/bin/pip install --retries 5 --timeout 600 \
+      -r /tmp/requirements-training.lock \
+ && /opt/venvs/training/bin/python -c 'import bitsandbytes as b; assert b.__version__ == "0.45.4", "training venv lost source-built bitsandbytes 0.45.4"'
+RUN --mount=type=cache,target=/root/.cache/pip \
+    --mount=type=bind,from=wheelhouse,target=/wheelhouse,readonly \
+    printf '%s  %s\n' '6b4fded1c5fee04d384b1014495b4235a2b53c87503d7d592423c06128cbbe03' '/wheelhouse/transformers-4.49.0-py3-none-any.whl' | sha256sum -c - \
+ && /opt/venvs/loading/bin/pip install --no-deps /wheelhouse/transformers-4.49.0-py3-none-any.whl \
+ && /opt/venvs/loading/bin/pip install --retries 5 --timeout 600 -r /tmp/requirements-loading.lock \
  && /opt/venvs/loading/bin/python -c 'import bitsandbytes as b; assert b.__version__ == "0.45.4", "loading venv lost source-built bitsandbytes 0.45.4"'
+
+# NVIDIA's Jetson PyTorch omits distributed C10d. Transformers guards DTensor
+# usage, but still imports it eagerly and validates against a disabled registry.
+RUN /opt/venvs/training/bin/python -c 'from pathlib import Path; import transformers; p=Path(transformers.__file__).with_name("modeling_utils.py"); text=p.read_text(); eager="import torch.distributed.tensor\n"; check="if self._tp_plan is not None and is_torch_greater_or_equal(\"2.3\"):"; guarded="if ALL_PARALLEL_STYLES is not None and self._tp_plan is not None and is_torch_greater_or_equal(\"2.3\"):"; assert text.count(eager) == 1, f"expected DTensor import not found in {p}"; assert text.count(check) == 1, f"expected TP-plan check not found in {p}"; p.write_text(text.replace(eager, "", 1).replace(check, guarded, 1))'
 
 COPY . /workspace
 # Build from source in-image. The ignore file prevents host-built shared objects
@@ -51,6 +55,15 @@ RUN mkdir -p /models /checkpoints /results /cache/huggingface \
  && chmod 0555 /models /checkpoints \
  && chmod 0755 /results /cache/huggingface \
  && chmod +x /workspace/docker/entrypoint.sh /workspace/scripts/smoke.sh /workspace/scripts/evaluate.sh
+
+ARG BUILD_DATE=unknown
+ARG SOURCE_REVISION=unknown-uncommitted
+LABEL org.opencontainers.image.title="MemRift research artifact" \
+      org.opencontainers.image.version="0.1.0-review" \
+      org.opencontainers.image.created="${BUILD_DATE}" \
+      org.opencontainers.image.revision="${SOURCE_REVISION}" \
+      org.opencontainers.image.licenses="Apache-2.0" \
+      org.memrift.upstream.revision="bb138185d2bd0b88d924d7ea20fe61d72571a7b6"
 
 ENTRYPOINT ["/workspace/docker/entrypoint.sh"]
 CMD ["validate"]

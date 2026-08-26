@@ -1,5 +1,6 @@
 .git
 .git/**
+CITATION.cff
 __pycache__
 **/__pycache__
 *.pyc

@@ -11,6 +11,7 @@ exec /opt/venvs/training/bin/python /workspace/scripts/run_result_driver.py \
   --model /models/model --checkpoint /checkpoints/model --results-dir "/results/$run_name" \
   --save-model-dir "/results/$run_name/models" \
   --dataset-cache /cache/huggingface --device cuda:0 --wandb-mode disabled \
+  --tegra-csv tegrastats.csv \
   --synthetic-data \
   --finetune_type lora --hook --weight --weight_async --activation --act_async \
   --gradient_checkpointing --gc_keep_recompute_weights --gc_no_recompute_prefetch \

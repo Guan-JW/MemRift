@@ -1,0 +1,152 @@
+{
+  "schema_version": "1.0",
+  "paper": {
+    "title": "MemRift: A Runtime for Efficient Lossless Compression in On-Device LLM Learning with Unified Memory",
+    "venue": "CGO 2027 submission",
+    "sha256": "31c4d8cecf0ea336cbd0e404de6c9049b8493cf1511fd5c1537c830ceb1f3898"
+  },
+  "common_setup": {
+    "hardware": "32 GB NVIDIA Jetson AGX Orin",
+    "primary_dataset": "tatsu-lab/alpaca",
+    "additional_datasets": ["akoksal/LongForm", "OpenAssistant/oasst1"],
+    "models": [
+      "tinyllama-1.1b-chat-v1.0",
+      "llama-3.2-3b-instruct",
+      "mistral-7b-v0.1",
+      "llama-3.1-8b"
+    ],
+    "precision": "BF16 autocast mixed precision",
+    "attention": "FlashAttention",
+    "tegrastats_interval_ms": 500,
+    "memrift_backend": "EBC-Zstd",
+    "weight_lookahead": 1,
+    "activation_lookahead": 0,
+    "transition_concurrency": {
+      "activation_compact": 16,
+      "activation_materialize": 4,
+      "weight_materialize": 4
+    }
+  },
+  "default_acceptance": {
+    "peak_system_memory_relative_tolerance": 0.05,
+    "step_time_relative_tolerance": 0.10,
+    "model_loading_time_relative_tolerance": 0.15,
+    "percentage_metric_absolute_tolerance_points": 3.0,
+    "maximum_context_requirement": "meet or exceed the paper value on the recorded 32 GB platform",
+    "oom_requirement": "an expected OOM may occur at or before the reported failing configuration",
+    "numerical_fidelity_requirement": "zero reconstructed-tensor mismatches"
+  },
+  "known_source_discrepancies": [
+    "The paper does not identify immutable model or dataset revisions; the AE manifest pins later reviewer snapshots.",
+    "The imported model-loading raw summary reports Mistral online QLoRA at 14.36 s and MemRift at 15.99 s, while Table 2 prints those two values in the opposite columns.",
+    "Table 3 checkpoint sizes differ from the located Zstd-level-3 model-loading records and require the original training checkpoint records.",
+    "The imported runtime source did not contain an Alpaca loader even though the paper identifies Alpaca as the primary dataset; the AE wrapper adds explicit Alpaca formatting.",
+    "Figure 1 reports peak GPU memory above 32 GB and therefore does not use the same total-system-memory metric as the main 32 GB evaluation."
+  ],
+  "experiments": [
+    {
+      "paper_item": "Table 1",
+      "claim": "BF16 field entropy for weights and activations",
+      "artifact_status": "runnable_after_inputs",
+      "models": ["tinyllama-1.1b-chat-v1.0", "llama-3.2-3b-instruct", "mistral-7b-v0.1", "llama-3.1-8b"],
+      "expected_exponent_entropy_range_bits_per_8_bit_field": [2.61, 2.93],
+      "required_output": "table1_entropy.csv"
+    },
+    {
+      "paper_item": "Table 2",
+      "claim": "maximum context, step time, and five-run warm-cache model loading",
+      "artifact_status": "tinyllama_runnable_other_models_required",
+      "tinyllama_command": "make tables23 MODEL_DIR=/path/to/TinyLlama CHECKPOINT_DIR=/path/to/zstd18-checkpoint LOADING_CHECKPOINT_DIR=/path/to/loading-checkpoints CACHE_DIR=/path/to/pinned-alpaca-cache MEMRIFT_IMAGE_DIGEST=sha256:IMAGE_ID",
+      "expected": {
+        "tinyllama-1.1b-chat-v1.0": {"context": 2048, "batch_size": 5, "memrift_step_seconds": 19.32, "memrift_load_seconds": 2.66},
+        "llama-3.2-3b-instruct": {"context": 4096, "batch_size": 1, "memrift_step_seconds": 31.41, "memrift_load_seconds": 8.47},
+        "mistral-7b-v0.1": {"context": 2048, "batch_size": 1, "qlora_step_seconds": 19.71, "memrift_step_seconds": 20.34, "memrift_load_seconds": 14.36},
+        "llama-3.1-8b": {"context": 1664, "batch_size": 1, "qlora_step_seconds": 17.99, "memrift_step_seconds": 17.58, "memrift_load_seconds": 24.65}
+      },
+      "required_output": "table2.csv"
+    },
+    {
+      "paper_item": "Table 3",
+      "claim": "peak system memory and checkpoint storage at LoRA maximum context",
+      "artifact_status": "tinyllama_runnable_other_models_required",
+      "tinyllama_command": "make tables23 MODEL_DIR=/path/to/TinyLlama CHECKPOINT_DIR=/path/to/zstd18-checkpoint LOADING_CHECKPOINT_DIR=/path/to/loading-checkpoints CACHE_DIR=/path/to/pinned-alpaca-cache MEMRIFT_IMAGE_DIGEST=sha256:IMAGE_ID",
+      "expected": {
+        "tinyllama-1.1b-chat-v1.0": {"context": 2048, "batch_size": 4, "lora_peak_gb": 28.28, "memrift_reduction_percent": 14.96, "memrift_storage_gb": 1.4},
+        "llama-3.2-3b-instruct": {"context": 2944, "batch_size": 1, "lora_peak_gb": 29.09, "memrift_reduction_percent": 13.20, "memrift_storage_gb": 4.0},
+        "mistral-7b-v0.1": {"context": 1664, "batch_size": 1, "lora_peak_gb": 29.58, "memrift_reduction_percent": 15.45, "memrift_storage_gb": 9.0},
+        "llama-3.1-8b": {"context": 1024, "batch_size": 1, "lora_peak_gb": 28.61, "memrift_reduction_percent": 16.01, "memrift_storage_gb": 9.9}
+      },
+      "required_output": "table3.csv"
+    },
+    {
+      "paper_item": "Table 4",
+      "claim": "gradient-checkpointing comparison on Llama-3.2-3B-Instruct",
+      "artifact_status": "runnable_after_inputs",
+      "command": "/opt/venvs/training/bin/python /workspace/experiments/gradient_checkpointing/run.py --model /models/model --checkpoint /checkpoints/model --dataset tatsu-lab/alpaca --matched-context 2944 --batch-size 1 --rounds 7 --warmup-rounds 1 --variants lora_gc qlora_gc memrift_gc",
+      "expected": {
+        "2944": {"lora_gc": [17.75, 15.19], "qlora_gc": [14.63, 17.53], "memrift_gc": [15.90, 15.96]},
+        "8192": {"lora_gc": [27.08, 77.73], "qlora_gc": [26.71, 81.15], "memrift_gc": [25.95, 79.02]},
+        "maximum_context": {"lora_gc": 8704, "qlora_gc": 9216, "memrift_gc": 9728}
+      },
+      "required_output": "table4_gc.csv"
+    },
+    {
+      "paper_item": "Table 5",
+      "claim": "100-step tensor fidelity and LM-Eval accuracy",
+      "artifact_status": "codec_runnable_lm_eval_inputs_required",
+      "expected": {
+        "tensor_mismatches": 0,
+        "gsm8k_cot": {"lora": [42.08, 1.36], "memrift": [42.08, 1.36], "qlora": [38.74, 1.34]},
+        "hellaswag": {"lora": [61.30, 0.49], "memrift": [61.30, 0.49], "qlora": [60.91, 0.49]}
+      },
+      "required_output": "table5_fidelity.json"
+    },
+    {
+      "paper_item": "Table 6",
+      "claim": "alternative compression backend comparison",
+      "artifact_status": "runnable_after_inputs",
+      "command": "/opt/venvs/training/bin/python /workspace/experiments/backends/run.py --model /models/model --model-id MODEL_ID --checkpoint /checkpoints/model --dataset tatsu-lab/alpaca --dataset-revision dce01c9b08f87459cf36a430d809084718273017 --results-dir /results/table6 --context 2048 --batch-size 1 --rounds 7 --warmup-rounds 2 --compression-level 1",
+      "scope": "Activation backend comparison with static weights held at EBC-Zstd; located historical runs used an unpinned OpenAssistant Guanaco dataset.",
+      "expected": {
+        "lz4": [1.22, 22.67, 1.45],
+        "zstd": [1.60, 22.98, 1.66],
+        "ebc_lz4": [1.19, 21.94, 0.99],
+        "ebc_zstd": [1.48, 18.57, 1.02]
+      },
+      "required_output": "table6_backends.csv"
+    },
+    {
+      "paper_item": "Figures 1 and 6",
+      "claim": "baseline and MemRift memory scaling with context",
+      "artifact_status": "partial",
+      "required_output": "memory_context_sweep.csv"
+    },
+    {
+      "paper_item": "Figures 3 and 7",
+      "claim": "CPU-memory and GPU-inference co-run stress",
+      "artifact_status": "orchestration_required",
+      "required_output": "corun_stress.csv"
+    },
+    {
+      "paper_item": "Figure 8",
+      "claim": "weight-only and weight-plus-activation pipeline ablation",
+      "artifact_status": "runnable_after_inputs",
+      "expected_total_reduction_percent": {"tinyllama-1.1b-chat-v1.0": 15, "llama-3.2-3b-instruct": 13, "mistral-7b-v0.1": 14, "llama-3.1-8b": 16},
+      "required_output": "figure8_ablation.csv"
+    },
+    {
+      "paper_item": "Figures 9 and 10",
+      "claim": "asynchronous overlap, timeline, utilization, and transient bounds",
+      "artifact_status": "profiling_pipeline_required",
+      "expected": {"llama_3_2_async_seconds": 11.4, "llama_3_2_serialized_seconds": 56.5, "transition_overlap_percent": 98.0, "kernel_active_percent": 83.8},
+      "required_output": "runtime_overlap.json"
+    },
+    {
+      "paper_item": "Figure 11",
+      "claim": "weight and activation readiness-lookahead sensitivity",
+      "artifact_status": "runnable_after_inputs",
+      "grid": [0, 1, 2, 4, 8],
+      "required_output": "readiness_sweep.csv"
+    }
+  ]
+}

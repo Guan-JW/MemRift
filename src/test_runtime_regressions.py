@@ -72,6 +72,13 @@ class RuntimeSourceTests(unittest.TestCase):
             )
         )
 
+    def test_readiness_lookahead_is_configurable(self):
+        source = SOURCE.read_text()
+        self.assertIn('parser.add_argument("--weight_lookahead"', source)
+        self.assertIn('parser.add_argument("--activation_lookahead"', source)
+        self.assertIn("i - args.activation_lookahead", source)
+        self.assertGreaterEqual(source.count("args.weight_lookahead"), 3)
+
 
 if __name__ == "__main__":
     unittest.main()

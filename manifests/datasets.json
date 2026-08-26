@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "provenance_note": "The paper did not record dataset commits. These immutable revisions were selected for artifact evaluation on 2026-08-25 and must not be represented as recovered historical revisions.",
+  "datasets": [
+    {
+      "logical_name": "alpaca",
+      "huggingface_id": "tatsu-lab/alpaca",
+      "revision": "dce01c9b08f87459cf36a430d809084718273017",
+      "license": "CC-BY-NC-4.0",
+      "split": "train",
+      "examples": 52002,
+      "upstream_storage_bytes": 318636537,
+      "paper_role": "primary"
+    },
+    {
+      "logical_name": "longform",
+      "huggingface_id": "akoksal/LongForm",
+      "revision": "c4d2836f581bf1b7ad4ba1243af81b6b1b8626f1",
+      "license": "MIT",
+      "split": "train",
+      "upstream_storage_bytes": 1018249527,
+      "paper_role": "additional corpus"
+    },
+    {
+      "logical_name": "oasst1",
+      "huggingface_id": "OpenAssistant/oasst1",
+      "revision": "fdf72ae0827c1cda404aff25b6603abec9e3399b",
+      "license": "Apache-2.0",
+      "split": "train",
+      "examples": 84437,
+      "upstream_storage_bytes": 398331795,
+      "paper_role": "additional corpus called OSST1 in the paper"
+    }
+  ]
+}

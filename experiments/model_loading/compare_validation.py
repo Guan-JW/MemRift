@@ -70,7 +70,8 @@ def main(argv=None):
     with open(args.output, "w") as output:
         json.dump(result, output, indent=2)
     print(json.dumps(result))
+    return 0 if result["logits_allclose_atol_1e-5"] else 1
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

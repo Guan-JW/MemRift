@@ -1,8 +1,11 @@
 import argparse
 import math
 import os
+import random
 import re
 import sys
+
+from compression_backends import BACKENDS, ByteCodec, compression_ratio, uses_ebc, validate_level
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--model", required=True, help="Local model path or Hugging Face model ID")
@@ -11,10 +14,12 @@ parser.add_argument("--results-dir", default="/results/memrift")
 parser.add_argument("--dataset-cache", default="/cache/huggingface")
 parser.add_argument("--save-model-dir", default="/results/models/memrift")
 parser.add_argument("--device", default="cuda:0")
+parser.add_argument("--seed", type=int, default=42)
 parser.add_argument("--tegrastats-bin", default="/usr/bin/tegrastats")
 parser.add_argument("--disable-tegrastats", action="store_true")
 parser.add_argument("--wandb-mode", choices=["disabled", "offline", "online"], default="disabled")
 parser.add_argument("--dataset", default="timdettmers/openassistant-guanaco", help="Dataset to use for training")
+parser.add_argument("--dataset-revision", help="Exact dataset source revision")
 parser.add_argument(
     "--synthetic-data",
     action="store_true",
@@ -37,6 +42,8 @@ parser.add_argument(
     default=1,
     help="Maximum concurrent async weight materialization jobs.",
 )
+parser.add_argument("--weight_lookahead", type=int, default=1)
+parser.add_argument("--activation_lookahead", type=int, default=0)
 parser.add_argument(
     "--act_compact_concurrency",
     type=int,
@@ -63,13 +70,14 @@ parser.add_argument(
 )
 parser.add_argument("--weight_df11", default=False, action="store_true", help="Switch on asynchronous weight decompression")
 parser.add_argument("--activation", default=False, action="store_true", help="Switch on activation compression")
+parser.add_argument("--activation-backend", choices=BACKENDS, default="ebc-zstd")
 parser.add_argument("--layerwise", default=False, action="store_true", help="Switch on layerwise activation compression")
 parser.add_argument("--act_async", default=False, action="store_true", help="Switch on asynchronous activation (de)compression")
 parser.add_argument("--attn", default=False, action="store_true", help="Switch on asynchronous activation (de)compression")
 parser.add_argument("--mlp", default=True, action="store_true", help="Switch on asynchronous activation (de)compression")
 parser.add_argument("--save_model", default=False, action="store_true", help="Switch on to save finetuned model weights")
 parser.add_argument(
-        "--level", type=int, default=1, help="Zstd compression level (-131072 through 22)"
+        "--level", type=int, default=1, help="Compression level (Zstd: -131072..22; LZ4: 0..16)"
     )
 parser.add_argument(
         "--round", type=int, default=2, help="# training cycles"
@@ -93,6 +101,8 @@ args = parser.parse_args()
 for name in ("round", "batch_size", "max_length", "weight_async_concurrency", "act_compact_concurrency", "act_decode_concurrency"):
     if getattr(args, name) < 1:
         parser.error(f"--{name} must be at least 1")
+if args.weight_lookahead < 0 or args.activation_lookahead < 0:
+    parser.error("lookahead values must be non-negative")
 if args.warmup_rounds < 0 or args.warmup_rounds >= args.round:
     parser.error("--warmup_rounds must be non-negative and less than --round")
 if re.fullmatch(r"cuda(?::\d+)?", args.device) is None:
@@ -105,8 +115,10 @@ if args.activation and not args.hook:
     parser.error("--activation requires --hook")
 if args.act_async and not args.activation:
     parser.error("--act_async requires --activation")
-if not -131072 <= args.level <= 22:
-    parser.error("--level must be a valid Zstd compression level (-131072 through 22)")
+try:
+    validate_level(args.activation_backend, args.level)
+except ValueError as error:
+    parser.error(str(error))
 if args.weight and not args.checkpoint:
     parser.error("--checkpoint is required when --weight is enabled")
 if args.checkpoint:
@@ -145,9 +157,7 @@ except ModuleNotFoundError:
                     return f"{size:.1f} {unit}" if unit != "Bytes" else f"{int(size)} Bytes"
                 size /= step
 
-import imagecodecs
 import numpy as np
-import pandas as pd
 import torch
 import bitsandbytes as bnb
 from torch import nn
@@ -159,10 +169,15 @@ from transformers import MistralModel, MistralForCausalLM, MistralConfig, LlamaM
 from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training, PeftModel
 from accelerate import init_empty_weights
 from data_prep import data_prepare
+from checkpoint_format import uses_legacy_checkpoint
 import float_split_stride as fs_sp
 import zstandard as zstd
-import lz4.frame as lz4f, lz4.block as lz4b
 import torch.cuda.nvtx as nvtx
+
+np.random.seed(args.seed)
+random.seed(args.seed)
+torch.manual_seed(args.seed)
+torch.cuda.manual_seed_all(args.seed)
 
 if not torch.cuda.is_available():
     parser.error("--device requires CUDA, but CUDA is not available")
@@ -424,25 +439,14 @@ if GC_BOUNDARY_ONLY_ACT:
 
 _tls = threading.local()
 
-def get_cctx(algo="zstd", level=-1):
-    try:
-        return _tls.cctx
-    except AttributeError:
-        if algo == "zstd":
-            _tls.cctx = zstd.ZstdCompressor(level=level, write_checksum=False)
-        elif algo == "lz4":
-            _tls.cctx = lz4f.LZ4FrameCompressor(compression_level=level)
-        return _tls.cctx
-
-def get_dctx(algo="zstd"):
-    try:
-        return _tls.dctx
-    except AttributeError:
-        if algo == "zstd":
-            _tls.dctx = zstd.ZstdDecompressor()
-        elif algo == "lz4":
-            _tls.dctx = lz4f.LZ4FrameDecompressor()
-        return _tls.dctx
+def get_activation_codec():
+    key = (args.activation_backend, args.level)
+    codecs = getattr(_tls, "activation_codecs", None)
+    if codecs is None:
+        codecs = _tls.activation_codecs = {}
+    if key not in codecs:
+        codecs[key] = ByteCodec(*key)
+    return codecs[key]
 
 class CompressedParam(torch.nn.Parameter):
     def __new__(cls, orig_shape, sm_gpu, exp_mv, parent, attr, layer_id, typ):
@@ -520,9 +524,9 @@ class CompressedParam(torch.nn.Parameter):
             # 1) 解压 exponent → pinned uint8
             # self._exp_host = fs_sp.acquire_pin(numel, torch.uint8)
             self._exp_host = torch.empty(numel, dtype=torch.uint8, pin_memory=True)
-            if not hasattr(_tls, "dctx"):        # 该线程第一次用，创建解压器
-                _tls.dctx = zstd.ZstdDecompressor()
-            with _tls.dctx.stream_reader(memoryview(self.exp_mv)) as reader:
+            if not hasattr(_tls, "weight_dctx"):
+                _tls.weight_dctx = zstd.ZstdDecompressor()
+            with _tls.weight_dctx.stream_reader(memoryview(self.exp_mv)) as reader:
                 view = memoryview(self._exp_host.numpy())   # numpy() 不复制，只拿 data_ptr
                 nread = reader.readinto(view)
                 assert nread == numel, "decompress size mismatch"
@@ -640,6 +644,7 @@ class PlaceHolderToken:
 decomp_time = comp_time = 0
 wait_comp_done = wait_comp_start = 0
 orig_len = new_len = 0
+codec_stats_lock = threading.Lock()
 act_pack_count = act_pack_bytes = 0
 act_pack_boundary_count = act_pack_boundary_bytes = 0
 weight_materialize_sync_count = 0
@@ -647,6 +652,17 @@ weight_materialize_async_count = 0
 weight_release_count = 0
 c3_lock = threading.Lock()
 c3_stats = defaultdict(int)
+
+def record_activation_compression(original_bytes, stored_bytes):
+    global orig_len, new_len
+    with codec_stats_lock:
+        orig_len += int(original_bytes)
+        new_len += int(stored_bytes)
+
+def reset_activation_compression():
+    global orig_len, new_len
+    with codec_stats_lock:
+        orig_len = new_len = 0
 
 def _c3_add_current(name, delta):
     with c3_lock:
@@ -700,8 +716,7 @@ class AsyncCompressor:
         self._async_errors = []
         self._async_errors_lock = threading.Lock()
         if not args.act_async:
-            self.cctx = zstd.ZstdCompressor(level=args.level, threads=-1, write_checksum=False)
-            self.dctx = zstd.ZstdDecompressor()
+            self.codec = ByteCodec(args.activation_backend, args.level)
         if args.act_async:
             self.act_compact_semaphore = threading.Semaphore(args.act_compact_concurrency)
             self.act_decode_semaphore = threading.Semaphore(args.act_decode_concurrency)
@@ -754,30 +769,41 @@ class AsyncCompressor:
     # ---------------------------------------------------------------------
     def kickoff_sync(self, tok: PlaceHolderToken, t: torch.Tensor):
         self.d2h_stream.wait_stream(torch.cuda.current_stream())
-        # stream = torch.cuda.current_stream()
         with torch.cuda.stream(self.d2h_stream):
-            cpu_exp, sm_bits = fs_sp.split(t, self.d2h_stream.cuda_stream)
-            evt = self.d2h_stream.record_event()   # 拷贝结束事件
+            if uses_ebc(args.activation_backend):
+                cpu_data, tok.sm_bits = fs_sp.split(t, self.d2h_stream.cuda_stream)
+            else:
+                source = t.detach().contiguous().view(torch.uint8).reshape(-1)
+                cpu_data = torch.empty(source.numel(), dtype=torch.uint8, pin_memory=True)
+                cpu_data.copy_(source, non_blocking=True)
+                t.record_stream(self.d2h_stream)
+                tok.sm_bits = None
+            evt = self.d2h_stream.record_event()
         evt.synchronize()
-        # tok.cpu_exp = cpu_exp
-        tok.sm_bits = sm_bits
-        # del t
 
-        arr = cpu_exp.numpy()
-        comped_bytes = self.cctx.compress(arr)
-        tok.comped_cpu_exp = comped_bytes
-        tok.numel = arr.size
+        raw_bytes = cpu_data.nbytes
+        tok.comped_cpu_exp = self.codec.compress(cpu_data.numpy())
+        tok.numel = raw_bytes
+        stored_bytes = len(tok.comped_cpu_exp) + (tok.sm_bits.nbytes if tok.sm_bits is not None else 0)
+        record_activation_compression(t.nbytes, stored_bytes)
 
     def kickoff_async(self, tok: PlaceHolderToken, t: torch.Tensor):
 
 
         self.act_compact_semaphore.acquire()
+        original_bytes = t.nbytes
         nvtx.range_push("memrift_act_split")
         try:
             self.d2h_stream.wait_stream(torch.cuda.current_stream())
             with torch.cuda.stream(self.d2h_stream):
-                cpu_exp, sm_bits = fs_sp.split(t, self.d2h_stream.cuda_stream)
-                evt = self.d2h_stream.record_event()   # 拷贝结束事件
+                if uses_ebc(args.activation_backend):
+                    cpu_data, sm_bits = fs_sp.split(t, self.d2h_stream.cuda_stream)
+                else:
+                    source = t.detach().contiguous().view(torch.uint8).reshape(-1)
+                    cpu_data = torch.empty(source.numel(), dtype=torch.uint8, pin_memory=True)
+                    cpu_data.copy_(source, non_blocking=True)
+                    sm_bits = None
+                evt = self.d2h_stream.record_event()
                 t.record_stream(self.d2h_stream)
         except Exception:
             self.act_compact_semaphore.release()
@@ -786,29 +812,22 @@ class AsyncCompressor:
             nvtx.range_pop()
         # evt.synchronize()
         tok.sm_bits = sm_bits
-        # tok.t = t
-        compact_bytes = int(t.nbytes + sm_bits.nbytes + cpu_exp.nbytes)
+        compact_bytes = int(t.nbytes + cpu_data.nbytes + (sm_bits.nbytes if sm_bits is not None else 0))
         _c3_add_current("act_compact_transition", compact_bytes)
         _c3_inc_current("act_compact_jobs")
 
-        def _encode(cpu_exp, evt, algo="zstd"):
+        def _encode(cpu_data, evt):
             # self.comp_semaphore.acquire() # Wait for a free slot
             nvtx.range_push("memrift_act_encode")
             arr = None
             try:
                 evt.synchronize()
 
-                arr = cpu_exp.numpy()
-                cctx = get_cctx(algo, args.level)
-                comped_bytes = cctx.compress(arr)
-                numel = arr.size
-
-                if args.print_ratio:
-                    global orig_len, new_len
-                    orig_len += arr.nbytes
-                    new_len += len(comped_bytes)
-
-                return comped_bytes, numel
+                arr = cpu_data.numpy()
+                comped_bytes = get_activation_codec().compress(arr)
+                stored_bytes = len(comped_bytes) + (sm_bits.nbytes if sm_bits is not None else 0)
+                record_activation_compression(original_bytes, stored_bytes)
+                return comped_bytes, arr.nbytes
             except Exception as e:
                 import traceback, sys
                 traceback.print_exc(file=sys.stderr)
@@ -818,20 +837,20 @@ class AsyncCompressor:
                 _c3_dec_current("act_compact_transition", compact_bytes)
                 _c3_inc_current("act_compact_jobs", -1)
                 self.act_compact_semaphore.release() # Release the slot for others
-                del cpu_exp
-                # fs_sp.release_pin(cpu_exp)
+                del cpu_data
                 if arr is not None:
                     del arr
                 del evt
 
         # _encode(tok, cpu_exp, evt)
         try:
-            fut = self._watch_future(self.compress_pool.submit(_encode, cpu_exp, evt))
+            fut = self._watch_future(self.compress_pool.submit(_encode, cpu_data, evt))
         except BaseException:
             _c3_dec_current("act_compact_transition", compact_bytes)
             _c3_inc_current("act_compact_jobs", -1)
             self.act_compact_semaphore.release()
-            fs_sp.release_cuda(sm_bits)
+            if sm_bits is not None:
+                fs_sp.release_cuda(sm_bits)
             raise
 
         return fut
@@ -840,17 +859,17 @@ class AsyncCompressor:
             tok: PlaceHolderToken):
 
         comped_bytes = tok.comped_cpu_exp
-        numel = tok.numel
-        cpu_exp = torch.empty(numel, dtype=torch.uint8, pin_memory=True)
-        with self.dctx.stream_reader(memoryview(comped_bytes)) as reader:
-            view = memoryview(cpu_exp.numpy())   # numpy() 不复制，只拿 data_ptr
-            nread = reader.readinto(view)
-            assert nread == numel, "decompress size mismatch"
-
-        sm_bits = tok.sm_bits
+        raw_bytes = tok.numel
+        cpu_data = torch.empty(raw_bytes, dtype=torch.uint8, pin_memory=True)
+        memoryview(cpu_data.numpy())[:] = self.codec.decompress(comped_bytes, raw_bytes)
         stream = self.h2d_stream
         with torch.cuda.stream(stream):
-            rst = fs_sp.merge(cpu_exp, sm_bits, tok.shape, tok.stride, tok.offset, tok.dtype, stream.cuda_stream)
+            if uses_ebc(args.activation_backend):
+                rst = fs_sp.merge(cpu_data, tok.sm_bits, tok.shape, tok.stride, tok.offset, tok.dtype, stream.cuda_stream)
+            else:
+                values = cpu_data.view(tok.dtype).reshape(tok.shape)
+                rst = torch.empty_strided(tok.shape, tok.stride, dtype=tok.dtype, device=args.device)
+                rst.copy_(values, non_blocking=True)
         evt = stream.record_event()
         evt.synchronize()
 
@@ -860,36 +879,36 @@ class AsyncCompressor:
             tok: PlaceHolderToken,
             fut: fut.Future):
 
-        def _decode(tok, fut, algo="zstd"):
-            comped_bytes, numel, decode_bytes, cpu_exp = None, None, 0, None
+        def _decode(tok, fut):
+            comped_bytes, raw_bytes, decode_bytes, cpu_data = None, None, 0, None
             range_pushed = semaphore_acquired = False
             try:
                 nvtx.range_push("memrift_act_decode")
                 range_pushed = True
                 self.act_decode_semaphore.acquire()
                 semaphore_acquired = True
-                comped_bytes, numel = fut.result()
+                comped_bytes, raw_bytes = fut.result()
 
-                cpu_exp = torch.empty(numel, dtype=torch.uint8, pin_memory=True)
+                cpu_data = torch.empty(raw_bytes, dtype=torch.uint8, pin_memory=True)
                 out_bytes = int(np.prod(tok.shape)) * torch.tensor([], dtype=tok.dtype).element_size()
-                decode_bytes = int(len(comped_bytes) + cpu_exp.nbytes + tok.sm_bits.nbytes + out_bytes)
+                sm_bytes = tok.sm_bits.nbytes if tok.sm_bits is not None else 0
+                decode_bytes = int(len(comped_bytes) + cpu_data.nbytes + sm_bytes + out_bytes)
                 _c3_add_current("act_decode_transition", decode_bytes)
                 _c3_inc_current("act_decode_jobs")
-                # cpu_exp = fs_sp.acquire_pin(numel, torch.uint8)
-                dctx = get_dctx(algo)
-                with dctx.stream_reader(memoryview(comped_bytes)) as reader:
-                    view = memoryview(cpu_exp.numpy())   # numpy() 不复制，只拿 data_ptr
-                    nread = reader.readinto(view)
-                    assert nread == numel, "decompress size mismatch"
+                memoryview(cpu_data.numpy())[:] = get_activation_codec().decompress(comped_bytes, raw_bytes)
 
                 with torch.cuda.stream(self.h2d_stream):
-                    rst = fs_sp.merge(cpu_exp, tok.sm_bits, tok.shape, tok.stride, tok.offset, tok.dtype, self.h2d_stream.cuda_stream)
-                    tok.sm_bits.record_stream(self.h2d_stream)
+                    if uses_ebc(args.activation_backend):
+                        rst = fs_sp.merge(cpu_data, tok.sm_bits, tok.shape, tok.stride, tok.offset, tok.dtype, self.h2d_stream.cuda_stream)
+                        tok.sm_bits.record_stream(self.h2d_stream)
+                    else:
+                        values = cpu_data.view(tok.dtype).reshape(tok.shape)
+                        rst = torch.empty_strided(tok.shape, tok.stride, dtype=tok.dtype, device=args.device)
+                        rst.copy_(values, non_blocking=True)
                 evt = self.h2d_stream.record_event()
                 # print(f"waiting for merging")
                 evt.synchronize()
                 tok.CtoD_copy_evt = evt
-                # tok.cpu_exp = cpu_exp
                 tok.decomped_data = rst
 
                 # del tok.future
@@ -910,7 +929,8 @@ class AsyncCompressor:
                     if decode_bytes:
                         _c3_dec_current("act_decode_transition", decode_bytes)
                         _c3_inc_current("act_decode_jobs", -1)
-                    fs_sp.release_cuda(tok.sm_bits)
+                    if tok.sm_bits is not None:
+                        fs_sp.release_cuda(tok.sm_bits)
                 except BaseException as cleanup_error:
                     if tok.decomp_error is None:
                         tok.decomp_error = cleanup_error
@@ -949,7 +969,7 @@ class AsyncCompressor:
                 strides[i] = running
             return tuple(strides)
 
-        def _materialize(cp, sync, algo="zstd"):
+        def _materialize(cp, sync):
             mat_bytes = 0
             ev = None
             range_pushed = semaphore_acquired = False
@@ -962,7 +982,9 @@ class AsyncCompressor:
                 numel = int(np.prod(cp.orig_shape))
 
                 # 1) 解压 exponent → pinned uint8
-                dctx = get_dctx(algo)
+                if not hasattr(_tls, "weight_dctx"):
+                    _tls.weight_dctx = zstd.ZstdDecompressor()
+                dctx = _tls.weight_dctx
                 cp._exp_host = torch.empty(numel, dtype=torch.uint8, pin_memory=True)
                 bf16_bytes = numel * torch.tensor([], dtype=MODEL_TYPE).element_size()
                 mat_bytes = int(len(cp.exp_mv) + cp._exp_host.nbytes + cp.sm_gpu.nbytes + bf16_bytes)
@@ -1265,7 +1287,7 @@ class HookRuntime:
             self.layer_names = [f"base_model.model.model.layers.{i}"
                     for i in range(self.model.config.num_hidden_layers)]
 
-            if "Llama-3.1-8B" in args.model:
+            if uses_legacy_checkpoint(args.checkpoint):
                 self.layer2cps, max_job_size = self.inject_from_files_old(args.checkpoint)
             else:
                 self.layer2cps, max_job_size = self.inject_from_files(args.checkpoint)
@@ -1328,17 +1350,17 @@ class HookRuntime:
             layers[i] = DecoderLayerWrapper(layer, compressor, do_empty)
             if args.activation and args.act_async:
                 if i >= 0:
-                    def _bwd_pre_hook(_, __, layer=layers[i], compressor=compressor):
-                        for tok_ptr in layer.tokens[::-1]:
-                            tok = tok_ptr()
-                            if tok is None:
-                                continue
-                            if tok.decomp_started:
-                                continue
-                            fut = layer.futures[tok.fut_id]
-                            tok.decomp_started = True
-                            compressor.decompress_async(tok, fut)
-                            layer.futures[tok.fut_id] = None
+                    restore_layers = layers[max(0, i - args.activation_lookahead):i + 1]
+                    def _bwd_pre_hook(_, __, restore_layers=restore_layers, compressor=compressor):
+                        for restore_layer in reversed(restore_layers):
+                            for tok_ptr in restore_layer.tokens[::-1]:
+                                tok = tok_ptr()
+                                if tok is None or tok.decomp_started:
+                                    continue
+                                fut = restore_layer.futures[tok.fut_id]
+                                tok.decomp_started = True
+                                compressor.decompress_async(tok, fut)
+                                restore_layer.futures[tok.fut_id] = None
                     layers[i].register_full_backward_pre_hook(_bwd_pre_hook)
                 def _bwd_hook(_, __, ___, layer=layers[i]):
                     for tok_ptr in layer.tokens:
@@ -1380,7 +1402,7 @@ class HookRuntime:
                     sm_bytes = f.read(sm_size)
                     if len(sm_bytes) != sm_size:
                         raise ValueError(f"checkpoint file has truncated sign/mantissa data: {file_path}")
-                    sm     = np.frombuffer(sm_bytes, dtype=np.uint8)
+                    sm     = np.frombuffer(sm_bytes, dtype=np.uint8).copy()
                     exp    = f.read()
                     if not exp:
                         raise ValueError(f"checkpoint file has no compressed exponent data: {file_path}")
@@ -1479,7 +1501,7 @@ class HookRuntime:
 
             # --- 1) sign → gpu ------------------------------------------------
             sign_np   = np.frombuffer(buf, dtype=np.uint8,
-                                    count=numel, offset=sign_off)
+                                    count=numel, offset=sign_off).copy()
 
             sm_gpu = torch.as_tensor(sign_np, dtype=torch.uint8, device=device)
             del sign_np
@@ -1527,8 +1549,9 @@ class HookRuntime:
 
     def install_fwd_prefetch_hooks(self):
         name2layer = {n: m for n, m in self.model.named_modules()}
-        for cur, nxt in zip(self.layer_names[:-1], self.layer_names[1:]):
-            nxt_pars = self.layer2cps.get(nxt, [])
+        for layer_index, cur in enumerate(self.layer_names[:-1]):
+            ahead_names = self.layer_names[layer_index + 1:layer_index + 1 + args.weight_lookahead]
+            ahead_pars = [cp for name in ahead_names for cp in self.layer2cps.get(name, [])]
             cur_pars = self.layer2cps.get(cur, [])
 
             def _hook_post(_, __, ___, cur_pars=cur_pars):
@@ -1542,11 +1565,11 @@ class HookRuntime:
                     p.release()  # 释放当前层的 CompressedParam
                     # p.release_comp()
                 # torch.cuda.empty_cache()
-            def _hook_pre(_, __, nxt_pars=nxt_pars, cur_pars=cur_pars, cur=cur):
+            def _hook_pre(_, __, ahead_pars=ahead_pars, cur_pars=cur_pars, cur=cur):
                 # print(f"Fwd hook pre {cur}")
                 is_gc_recompute = args.gradient_checkpointing and torch.is_grad_enabled()
                 if args.weight_async and not (args.gc_no_recompute_prefetch and is_gc_recompute):
-                    for cp in nxt_pars:
+                    for cp in ahead_pars:
                         self.compressor.materialize_async(cp, sync=False)
                 for cp in cur_pars:
                     if not args.weight_async:
@@ -1590,8 +1613,9 @@ class HookRuntime:
         name2layer = {n: m for n, m in self.model.named_modules()}
         layer_names = self.layer_names[::-1]
 
-        for cur, nxt in zip(layer_names[:-1], layer_names[1:]):
-            nxt_pars = self.layer2cps.get(nxt, [])
+        for layer_index, cur in enumerate(layer_names[:-1]):
+            ahead_names = layer_names[layer_index + 1:layer_index + 1 + args.weight_lookahead]
+            ahead_pars = [cp for name in ahead_names for cp in self.layer2cps.get(name, [])]
             cur_pars = self.layer2cps.get(cur, [])
 
             def _hook_post(_, __, ___, cur_pars=cur_pars):
@@ -1601,10 +1625,10 @@ class HookRuntime:
                 if self.bwd_counter % self._EMPTY_STEP == 0:
                     torch.cuda.empty_cache()
                     # torch._C._host_emptyCache()
-            def _hook_pre(_, __, nxt_pars=nxt_pars, cur_pars=cur_pars, cur=cur):
+            def _hook_pre(_, __, ahead_pars=ahead_pars, cur_pars=cur_pars, cur=cur):
                 # print(f"Bwd hook pre {cur}")
                 if args.weight_async:
-                    for cp in nxt_pars:
+                    for cp in ahead_pars:
                         self.compressor.materialize_async(cp, sync=False)
                 for cp in cur_pars:
                     if not args.weight_async:
@@ -1708,7 +1732,6 @@ if args.weight:
         return tot
 
     def pretty_print_footprint(fp):
-        import humanize
         for k, v in fp.items():
             print(f"{k:6s}: {humanize.naturalsize(v, binary=True)}")
         total = sum(fp.values())
@@ -1764,7 +1787,12 @@ if args.synthetic_data:
         for i in range(args.batch_size)
     ]
 else:
-    longest_texts = data_prepare(args.dataset, args.batch_size, cache_dir=args.dataset_cache)
+    longest_texts = data_prepare(
+        args.dataset,
+        args.batch_size,
+        cache_dir=args.dataset_cache,
+        revision=args.dataset_revision,
+    )
 # sample_text = [dataset['train'][i]['text'] for i in range(args.batch_size)]
 encoding = tokenizer(
     longest_texts,
@@ -1832,10 +1860,8 @@ def measure(n=args.round):
         print(f"\n\n*************** {i=} ****************")
         global rid
         rid = i
-        if args.print_ratio:
-            global orig_len, new_len
-            orig_len = new_len = 0
-
+        if i == args.warmup_rounds:
+            reset_activation_compression()
         torch.cuda.empty_cache()
         torch._C._host_emptyCache()
         gc.collect()
@@ -1954,6 +1980,9 @@ def measure(n=args.round):
         "model": os.path.basename(os.path.normpath(args.model)),
         "checkpoint": None if args.checkpoint is None else os.path.basename(os.path.normpath(args.checkpoint)),
         "dataset": args.dataset,
+        "dataset_revision": args.dataset_revision,
+        "seed": args.seed,
+        "attention_implementation": getattr(model.config, "_attn_implementation", None),
         "synthetic_data": args.synthetic_data,
         "finetune_type": args.finetune_type,
         "max_length": args.max_length,
@@ -1966,6 +1995,13 @@ def measure(n=args.round):
         "weight_async": args.weight_async,
         "activation": args.activation,
         "act_async": args.act_async,
+        "activation_backend": args.activation_backend,
+        "activation_compression_level": args.level,
+        "activation_original_bytes": int(orig_len),
+        "activation_stored_bytes": int(new_len),
+        "activation_compression_ratio": compression_ratio(orig_len, new_len),
+        "weight_lookahead": args.weight_lookahead,
+        "activation_lookahead": args.activation_lookahead,
         "round_time_mean_sec": float(avg_t),
         "round_time_std_sec": float(std_t),
         "round_peak_gpu_alloc_MB_max": float(peak_gpu_MB),
@@ -1974,6 +2010,7 @@ def measure(n=args.round):
         "round_peak_gpu_reserved_bytes_max": int(peak_gpu_reserved_bytes),
         "ram_used_MB_max": None if peak_ram_MB is None else int(peak_ram_MB),
         "ram_used_bytes_max": None if peak_ram_MB is None else int(peak_ram_MB) * 2**20,
+        "tegrastats_samples": int(tegra_samples),
         "process_rss_MB_max": int(process_rss_MB_max),
         "process_rss_bytes_max": int(process_rss_bytes_max),
         "system_available_MB_min": None if system_available_MB_min is None else int(system_available_MB_min),

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 import gc
+import hashlib
 import json
 import shutil
 import struct
@@ -13,6 +14,28 @@ METHODS = ("bf16", "nf4", "memrift")
 
 def directory_size(path):
     return sum(p.stat().st_size for p in Path(path).rglob("*") if p.is_file())
+
+
+def sha256(path):
+    digest = hashlib.sha256()
+    with Path(path).open("rb") as source:
+        for block in iter(lambda: source.read(8 * 1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def directory_sha256(path):
+    root = Path(path)
+    digest = hashlib.sha256()
+    for item in sorted(candidate for candidate in root.rglob("*") if candidate.is_file() and candidate.name != "preparation.json"):
+        relative = item.relative_to(root).as_posix().encode("utf-8")
+        digest.update(len(relative).to_bytes(8, "little"))
+        digest.update(relative)
+        digest.update(item.stat().st_size.to_bytes(8, "little"))
+        with item.open("rb") as source:
+            for block in iter(lambda: source.read(8 * 1024 * 1024), b""):
+                digest.update(block)
+    return digest.hexdigest()
 
 
 def selected_methods(method):
@@ -140,6 +163,9 @@ def build_parser():
     parser.add_argument("--method", choices=(*METHODS, "all"), default="all")
     parser.add_argument("--zstd-level", type=int, default=21)
     parser.add_argument("--device", default="cuda:0")
+    parser.add_argument("--model-id")
+    parser.add_argument("--source-revision")
+    parser.add_argument("--source-weight-sha256")
     parser.add_argument("--overwrite", action="store_true")
     return parser
 
@@ -147,6 +173,13 @@ def build_parser():
 def main(argv=None):
     parser = build_parser()
     args = parser.parse_args(argv)
+    provenance = (args.model_id, args.source_revision, args.source_weight_sha256)
+    if any(provenance) and not all(provenance):
+        parser.error("--model-id, --source-revision, and --source-weight-sha256 must be provided together")
+    if all(provenance):
+        weight = Path(args.model) / "model.safetensors"
+        if not weight.is_file() or sha256(weight) != args.source_weight_sha256:
+            parser.error("source model weight SHA-256 does not match --source-weight-sha256")
     methods = selected_methods(args.method)
     try:
         paths = prepare_output_directories(args.output_root, methods, args.overwrite)
@@ -160,6 +193,15 @@ def main(argv=None):
     }
     for method in methods:
         preparers[method](paths[method])
+        if all(provenance):
+            receipt = {
+                "schema_version": "1.0", "method": method, "model_logical_id": args.model_id,
+                "source_revision": args.source_revision, "source_weight_sha256": args.source_weight_sha256,
+                "prepared_bytes": directory_size(paths[method]),
+                "prepared_directory_sha256": directory_sha256(paths[method]),
+                "zstd_level": args.zstd_level if method == "memrift" else None,
+            }
+            (paths[method] / "preparation.json").write_text(json.dumps(receipt, indent=2) + "\n")
         print(json.dumps({"method": method, "bytes": directory_size(paths[method])}))
 
 

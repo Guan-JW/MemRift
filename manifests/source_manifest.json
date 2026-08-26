@@ -7,14 +7,16 @@
       "name": "MemRift-Asplos",
       "revision": "bb138185d2bd0b88d924d7ea20fe61d72571a7b6",
       "remote": null,
-      "license_evidence": "No LICENSE or COPYING file found in the inspected snapshot"
+      "license": "Apache-2.0",
+      "license_evidence": "Covered by the artifact repository's top-level Apache-2.0 license"
     },
     {
       "role": "model-loading benchmark suite",
       "name": "MemRift",
       "revision": "2fdc90fbcad7c20cc565480ddd7c8931af596531",
       "remote": null,
-      "license_evidence": "No LICENSE or COPYING file found in the inspected snapshot"
+      "license": "Apache-2.0",
+      "license_evidence": "Covered by the artifact repository's top-level Apache-2.0 license"
     }
   ],
   "host_observed": {
@@ -25,8 +27,35 @@
   },
   "base_image": "nvcr.io/nvidia/pytorch:24.12-py3-igpu@sha256:8b8ce6c8b0d34fea26602d52a0c1a4364339773e900047cbd9f3511eb7b79e64",
   "verification": {
-    "image_built": false,
-    "native_extension_tested_in_image": false,
-    "smoke_run_completed": false
+    "scope_note": "Canonical image built from an anonymized Docker context identified by a content snapshot hash and verified offline on the target Jetson.",
+    "verified_at": "2026-08-26T12:04:47Z",
+    "image_built": true,
+    "source_snapshot": "sha256:c639724f475148ab7c6b95a31096b690916d4706fb4a33bcecfd8e7e4a8b9fe9",
+    "local_image_id": "sha256:717922b372426125d25ba857be930ee3f9e675dcabe9b69fc5467c22e38fd842",
+    "registry_reference": "ghcr.io/guan-jw/memrift-artifact@sha256:f55a219673ea26e86e9faf4ca0b5c0ddc4e626de978879e454eb4448a9bef656",
+    "registry_digest": "sha256:f55a219673ea26e86e9faf4ca0b5c0ddc4e626de978879e454eb4448a9bef656",
+    "registry_anonymous_pull_verified": true,
+    "environment_validated": true,
+    "native_extension_tested_in_image": true,
+    "in_image_tests_passed": 122,
+    "smoke_run_completed": true,
+    "smoke_run_name": "smoke-20260825T172148Z",
+    "smoke_run_status": "success",
+    "smoke_used_synthetic_data": true,
+    "smoke_evidence_image_id": "sha256:4f360ec7b278814e1c97faa3b6d6ca8e69dafbb8e58df2fe81d817e9e8c8af4c",
+    "table6_backend_smoke": "table6-smoke/table6_backends.csv",
+    "table6_backend_smoke_status": "success",
+    "loading_transformers_wheel_sha256": "6b4fded1c5fee04d384b1014495b4235a2b53c87503d7d592423c06128cbbe03",
+    "tables23_tinyllama": {
+      "result_directory": "tables23-tinyllama-1.1b-chat-v1.0",
+      "evidence_image_id": "sha256:b77a4d30206008ddb437f49dc516a39337e81438c875f89a365ca13c05d69c95",
+      "status": "complete_with_failures",
+      "protocol_reportable": false,
+      "reason": "The 4 GiB host-safety watchdog stopped five training workers; only the batch-4 MemRift point completed. All 20 loading workers completed.",
+      "table2_sha256": "1476e4f9a4e49568d10c58c330a1d5e6bdd81b500067a440479d503b65fb6213",
+      "table3_sha256": "6f9c5a7a22f5ca555a233ae44cc9d0d164ab6743ffce0ba11824b25951949a13",
+      "manifest_sha256": "e21444752cb9c60152da1f597d871a0184a6ead802a3447ffb5b404a5b6606bf",
+      "loading_summary_sha256": "87d15154bb30a11c96a8e91e29df69fb4f6201e63702189af59b6e51b73e638d"
+    }
   }
 }

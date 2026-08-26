@@ -31,6 +31,18 @@ METHODS = ("lora", "qlora-online", "qlora-prequant", "memrift")
 CACHE_STATE = "warm"
 
 
+def validate_method_row(row):
+    method = row["method"]
+    online = row["online_quantized_tensor_calls"]
+    prequantized = row["prequantized_tensor_calls"]
+    if method == "qlora-online" and online < 1:
+        raise ValueError("online QLoRA did not execute online quantization")
+    if method == "qlora-prequant" and (online != 0 or prequantized < 1):
+        raise ValueError("prequantized QLoRA did not use only serialized NF4 tensors")
+    if method == "memrift" and row.get("post_timing_forward_validated") is not True:
+        raise ValueError("MemRift loading did not pass post-timing forward validation")
+
+
 def build_schedule(runs, methods, seed):
     if runs < 1:
         raise ValueError("--runs must be at least 1")
@@ -54,6 +66,8 @@ def summarize_rows(rows, methods):
         method_rows = [row for row in rows if row["method"] == method]
         if not method_rows:
             raise ValueError(f"no current-run results for method {method}")
+        for row in method_rows:
+            validate_method_row(row)
         summary[method] = {
             "runs": len(method_rows),
             "cache_state": CACHE_STATE,

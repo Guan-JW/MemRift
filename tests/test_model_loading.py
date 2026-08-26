@@ -32,6 +32,26 @@ def test_partial_method_summary_contains_only_selected_methods():
     assert summary["lora"]["cache_dropped"] is False
 
 
+def test_prequantized_summary_enforces_serialized_nf4_path():
+    module = load_module("experiments/model_loading/run_benchmarks.py", "loading_semantics")
+    valid = loading_row("qlora-prequant")
+    valid["prequantized_tensor_calls"] = 1
+    module.summarize_rows([valid], ("qlora-prequant",))
+
+    invalid = loading_row("qlora-prequant")
+    with pytest.raises(ValueError, match="serialized NF4"):
+        module.summarize_rows([invalid], ("qlora-prequant",))
+
+
+def test_memrift_summary_requires_post_timing_forward_validation():
+    module = load_module("experiments/model_loading/run_benchmarks.py", "loading_memrift_validation")
+    valid = loading_row("memrift")
+    valid["post_timing_forward_validated"] = True
+    module.summarize_rows([valid], ("memrift",))
+    with pytest.raises(ValueError, match="forward validation"):
+        module.summarize_rows([loading_row("memrift")], ("memrift",))
+
+
 def test_main_reads_only_current_outputs_and_uses_current_python(monkeypatch, tmp_path):
     module = load_module("experiments/model_loading/run_benchmarks.py", "loading_current")
     output_dir = tmp_path / "benchmark"
@@ -90,6 +110,29 @@ def test_relative_logits_are_resolved_against_each_record(monkeypatch, tmp_path)
     record = {"logits": "artifacts/logits.pt", "training_step_seconds": 1, "training_peak_torch_bytes": 1, "loss": 0}
     module.compare(record, record, online_file, prequant_file)
     assert loaded == [online_file.parent / "artifacts/logits.pt", prequant_file.parent / "artifacts/logits.pt"]
+
+
+def test_validation_comparison_reports_failed_tolerance(monkeypatch, tmp_path):
+    module = load_module("experiments/model_loading/compare_validation.py", "failed_tolerance")
+
+    class FakeTensor:
+        def __sub__(self, other): return self
+        def abs(self): return self
+        def max(self): return self
+        def mean(self): return self
+        def item(self): return 1.0
+
+    class FakeTorch:
+        @staticmethod
+        def load(*args, **kwargs): return FakeTensor()
+
+        @staticmethod
+        def allclose(*args, **kwargs): return False
+
+    monkeypatch.setitem(sys.modules, "torch", FakeTorch)
+    record = {"logits": "logits.pt", "training_step_seconds": 1, "training_peak_torch_bytes": 1, "loss": 0}
+    result = module.compare(record, record, tmp_path / "online.json", tmp_path / "prequant.json")
+    assert result["logits_allclose_atol_1e-5"] is False
 
 
 def test_stale_preparation_output_is_rejected_and_overwrite_is_scoped(tmp_path):

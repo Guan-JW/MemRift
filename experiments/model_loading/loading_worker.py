@@ -169,6 +169,10 @@ def load_memrift(model_path, checkpoint_path, device="cuda:0"):
 
     if model.config.tie_word_embeddings:
         model.tie_weights()
+    for module in model.modules():
+        for name, buffer in module._buffers.items():
+            if buffer is not None:
+                module._buffers[name] = buffer.to(device)
     model = get_peft_model(model, lora_config(), autocast_adapter_dtype=True)
 
     # Hook installation is included in ready state; values remain lazy by design.
@@ -275,6 +279,12 @@ def main(argv=None):
         Bnb4BitHfQuantizer.create_quantized_param = original_create
         sampler.stop_event.set()
         sampler_thread.join()
+
+    if args.method == "memrift":
+        with torch.no_grad():
+            model(input_ids=torch.tensor([[1, 2]], dtype=torch.long, device=args.device))
+        torch.cuda.synchronize(device=args.device)
+        details["post_timing_forward_validated"] = True
 
     trainable = sum(parameter.numel() for parameter in model.parameters() if parameter.requires_grad)
     result = {

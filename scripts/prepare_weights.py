@@ -35,7 +35,11 @@ def validate_source(model: dict, source: Path) -> None:
     missing = [name for name in model["expected_files"] if not (source / name).is_file()]
     if missing:
         raise FileNotFoundError(f"model directory is missing expected files: {missing}")
-    actual_size = sum(path.stat().st_size for path in source.rglob("*") if path.is_file())
+    actual_size = sum(
+        path.stat().st_size
+        for path in source.rglob("*")
+        if path.is_file() and ".git" not in path.relative_to(source).parts
+    )
     if actual_size != model["expected_bytes"]:
         raise ValueError(f"model size is {actual_size}, manifest expects {model['expected_bytes']}")
     for relative, expected in model.get("sha256", {}).items():
@@ -94,9 +98,19 @@ def prepare(source: Path, target: Path, logical_name: str, source_revision: str,
     (target / "metadata.json").write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
 
 
+def clear_output(target: Path) -> None:
+    if target.resolve() in (Path("/"), Path.home().resolve()):
+        raise ValueError("refusing unsafe overwrite target")
+    for child in target.iterdir():
+        if child.is_dir() and not child.is_symlink():
+            shutil.rmtree(child)
+        else:
+            child.unlink()
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--manifest", type=Path, default=Path("manifests/models.example.json"))
+    parser.add_argument("--manifest", type=Path, default=Path("manifests/models.json"))
     parser.add_argument("--name", required=True)
     parser.add_argument("--model", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
@@ -109,9 +123,7 @@ def main() -> int:
     if args.output.exists() and any(args.output.iterdir()):
         if not args.overwrite:
             raise FileExistsError(f"refusing stale non-empty output directory: {args.output}")
-        if args.output.resolve() in (Path("/"), Path.home().resolve()):
-            raise ValueError("refusing unsafe overwrite target")
-        shutil.rmtree(args.output)
+        clear_output(args.output)
     args.output.mkdir(parents=True, exist_ok=True)
     incomplete = args.output / ".incomplete"
     incomplete.write_text("checkpoint preparation in progress\n", encoding="ascii")

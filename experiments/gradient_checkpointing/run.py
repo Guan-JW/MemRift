@@ -28,6 +28,7 @@ VARIANTS: dict[str, list[str]] = {
     "lora": [],
     "lora_gc": ["--gradient_checkpointing"],
     "memrift": ["--hook", "--weight", "--weight_async", "--activation", "--act_async"],
+    "memrift_weight": ["--hook", "--weight", "--weight_async"],
     "memrift_gc": [
         "--hook",
         "--weight",
@@ -38,6 +39,7 @@ VARIANTS: dict[str, list[str]] = {
         "--gc_keep_recompute_weights",
         "--gc_no_recompute_prefetch",
     ],
+    "qlora": ["--finetune_type", "qlora", "--autocast_context"],
     "qlora_gc": ["--finetune_type", "qlora", "--autocast_context", "--gradient_checkpointing"],
 }
 
@@ -138,7 +140,7 @@ def classify_exit(
     )
     if any(marker in text for marker in dependency_markers):
         return "dependency_failure"
-    validation_markers = ("error: argument", "compressed checkpoint index is missing", "checkpoint file listed")
+    validation_markers = (": error:", "error: argument", "compressed checkpoint index is missing", "checkpoint file listed")
     if returncode == 0 or any(marker in text for marker in validation_markers):
         return "validation_failure"
     return "software_failure"
@@ -280,6 +282,8 @@ def build_command(args: argparse.Namespace, variant: str, context: int, rounds: 
         args.model,
         "--dataset",
         args.dataset,
+        "--dataset-revision",
+        args.dataset_revision,
         "--dataset-cache",
         args.dataset_cache,
         "--results-dir",
@@ -288,6 +292,8 @@ def build_command(args: argparse.Namespace, variant: str, context: int, rounds: 
         args.device,
         "--wandb-mode",
         args.wandb_mode,
+        "--seed",
+        str(args.seed),
         "--max_length",
         str(context),
         "--batch_size",
@@ -302,6 +308,14 @@ def build_command(args: argparse.Namespace, variant: str, context: int, rounds: 
         str(args.activation_decode_concurrency),
         "--weight_async_concurrency",
         str(args.weight_materialization_concurrency),
+        "--weight_lookahead",
+        str(args.weight_lookahead),
+        "--activation_lookahead",
+        str(args.activation_lookahead),
+        "--activation-backend",
+        args.activation_backend,
+        "--level",
+        str(args.compression_level),
         *VARIANTS[variant],
     ]
     if variant.startswith("memrift"):
@@ -310,11 +324,22 @@ def build_command(args: argparse.Namespace, variant: str, context: int, rounds: 
         command.append("--disable-tegrastats")
     else:
         command.extend(["--tegrastats-bin", args.tegrastats_bin])
+        command.extend(["--tegra-csv", "tegrastats.csv"])
+    if args.synthetic_data:
+        command.append("--synthetic-data")
     return command
 
 
 def resource_estimate(variant: str, context: int, args: argparse.Namespace) -> dict[str, object]:
-    baseline_mb = {"lora": 20000, "lora_gc": 14500, "memrift": 18000, "memrift_gc": 13500, "qlora_gc": 12500}[variant]
+    baseline_mb = {
+        "lora": 20000,
+        "lora_gc": 14500,
+        "memrift": 18000,
+        "memrift_weight": 19000,
+        "memrift_gc": 13500,
+        "qlora": 17000,
+        "qlora_gc": 12500,
+    }[variant]
     return {
         "variant": variant,
         "context_tokens": context,
@@ -423,10 +448,13 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", default="/models/TinyLlama-1.1B-Chat-v1.0")
     parser.add_argument("--checkpoint", default="/checkpoints/TinyLlama-1.1B-Chat-v1.0/memrift")
-    parser.add_argument("--dataset", default="timdettmers/openassistant-guanaco")
+    parser.add_argument("--dataset", default="tatsu-lab/alpaca")
+    parser.add_argument("--dataset-revision", default="dce01c9b08f87459cf36a430d809084718273017")
     parser.add_argument("--dataset-cache", default="/cache/huggingface")
+    parser.add_argument("--synthetic-data", action="store_true", help="Use local text for driver smoke tests only")
     parser.add_argument("--results-dir", default="/results/gradient_checkpointing")
     parser.add_argument("--device", default="cuda:0")
+    parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--python", default=sys.executable)
     parser.add_argument("--tegrastats-bin", default="/usr/bin/tegrastats")
     parser.add_argument("--disable-tegrastats", action="store_true")
@@ -441,6 +469,10 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--activation-compaction-concurrency", type=int, default=1)
     parser.add_argument("--activation-decode-concurrency", type=int, default=1)
     parser.add_argument("--weight-materialization-concurrency", type=int, default=1)
+    parser.add_argument("--weight-lookahead", type=int, default=1)
+    parser.add_argument("--activation-lookahead", type=int, default=0)
+    parser.add_argument("--activation-backend", choices=("lz4", "zstd", "ebc-lz4", "ebc-zstd"), default="ebc-zstd")
+    parser.add_argument("--compression-level", type=int, default=1)
     parser.add_argument("--variants", nargs="+", choices=sorted(VARIANTS), default=["lora", "lora_gc", "memrift", "memrift_gc"])
     parser.add_argument("--run-max-context", action="store_true", help="Opt in to the maximum-context search")
     parser.add_argument("--max-context-low", type=int, default=2048)
@@ -460,6 +492,10 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         parser.error("--warmup-rounds must be non-negative and less than --rounds")
     if args.run_max_context and args.max_context_low > args.max_context_high:
         parser.error("--max-context-low cannot exceed --max-context-high")
+    if args.activation_backend.endswith("lz4") and not 0 <= args.compression_level <= 16:
+        parser.error("LZ4 compression level must be between 0 and 16")
+    if args.activation_backend.endswith("zstd") and not -131072 <= args.compression_level <= 22:
+        parser.error("Zstd compression level must be between -131072 and 22")
     return args
 
 
@@ -487,7 +523,7 @@ def main(argv: Sequence[str] | None = None, runner: WorkerRunner | None = None) 
             break
         rows.append(run_one(args, runner, variant, args.matched_context, args.rounds, "matched"))
     if args.run_max_context and not USER_TERMINATED.is_set():
-        for variant in ("lora_gc", "memrift_gc"):
+        for variant in ("lora_gc", "qlora_gc", "memrift_gc"):
             rows.extend(max_context_search(args, runner, variant))
             if USER_TERMINATED.is_set():
                 break

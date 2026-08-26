@@ -20,7 +20,7 @@ case "${1:-validate}" in
     shift
     validation_args=(--require-model /models/model --require-checkpoint /checkpoints/model)
     if [[ "$action" == "evaluate" ]]; then
-      validation_args+=(--require-dataset-cache /cache/huggingface --dataset-revision "${DATASET_REVISION:-}")
+      validation_args+=(--require-dataset-cache /cache/huggingface --dataset-id "${DATASET_ID:-}" --dataset-revision "${DATASET_REVISION:-}")
     fi
     /opt/venvs/training/bin/python /workspace/scripts/validate_environment.py "${validation_args[@]}"
     exec "/workspace/scripts/${action}.sh" "$@"

@@ -16,7 +16,9 @@ def gradient():
 
 
 def arguments(gradient, tmp_path):
-    return gradient.parse_args(["--results-dir", str(tmp_path), "--disable-tegrastats"])
+    return gradient.parse_args([
+        "--results-dir", str(tmp_path), "--disable-tegrastats", "--dataset-revision", "a" * 40
+    ])
 
 
 def test_memrift_gc_command_has_all_fixed_flags(gradient, tmp_path):
@@ -26,6 +28,7 @@ def test_memrift_gc_command_has_all_fixed_flags(gradient, tmp_path):
     for flag in ("--gradient_checkpointing", "--gc_keep_recompute_weights", "--gc_no_recompute_prefetch"):
         assert command.count(flag) == 1
     assert "--checkpoint" in command
+    assert command[command.index("--dataset-revision") + 1] == "a" * 40
 
 
 @pytest.mark.parametrize(
@@ -36,6 +39,7 @@ def test_memrift_gc_command_has_all_fixed_flags(gradient, tmp_path):
         (1, "traceback", {"timed_out": True}, "timeout"),
         (1, "ModuleNotFoundError: x", {}, "dependency_failure"),
         (0, "no result", {}, "validation_failure"),
+        (2, "run.py: error: LZ4 compression level must be between 0 and 16", {}, "validation_failure"),
         (2, "traceback", {}, "software_failure"),
         (1, "anything", {"user_terminated": True}, "user_termination"),
     ],
@@ -91,3 +95,9 @@ def test_gradient_process_group_termination(gradient, monkeypatch):
     monkeypatch.setattr(gradient.os, "killpg", lambda pid, sig: sent.append((pid, sig)))
     gradient.terminate_process_group(WaitingProcess(), grace_sec=0)
     assert sent == [(5151, signal.SIGTERM), (5151, signal.SIGKILL)]
+
+
+def test_every_variant_has_a_resource_estimate(gradient, tmp_path):
+    args = arguments(gradient, tmp_path)
+    for variant in gradient.VARIANTS:
+        assert gradient.resource_estimate(variant, 64, args)["variant"] == variant

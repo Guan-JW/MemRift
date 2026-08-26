@@ -21,6 +21,35 @@ EXPECTED_PACKAGES = {
 }
 
 
+def validate_dataset_cache(root: Path, dataset_id: str | None, revision: str | None) -> list[str]:
+    errors = []
+    if not re.fullmatch(r"[0-9a-f]{40}", revision or ""):
+        errors.append("dataset revision must be an exact 40-hex commit")
+    if not dataset_id:
+        errors.append("dataset ID is required")
+    if not root.is_dir() or not any(root.rglob("*.arrow")):
+        errors.append(f"dataset cache has no pre-populated Arrow data: {root}")
+
+    receipt_path = root / "memrift-dataset-receipt.json"
+    if not receipt_path.is_file():
+        errors.append(f"dataset cache lacks preparation receipt: {receipt_path}")
+        return errors
+    try:
+        receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+        matches = [
+            item
+            for item in receipt.get("datasets", [])
+            if item.get("huggingface_id") == dataset_id and item.get("revision") == revision
+        ]
+        if len(matches) != 1:
+            errors.append(f"dataset receipt does not bind {dataset_id}@{revision}")
+        elif not matches[0].get("fingerprint") or matches[0].get("num_rows", 0) < 1:
+            errors.append("dataset receipt has an invalid fingerprint or row count")
+    except (OSError, UnicodeError, json.JSONDecodeError, AttributeError) as exc:
+        errors.append(f"dataset receipt is invalid: {exc}")
+    return errors
+
+
 def validate_checkpoint(root: Path) -> list[str]:
     errors = []
     if (root / ".incomplete").exists():
@@ -154,6 +183,7 @@ def main() -> int:
     parser.add_argument("--require-model", type=Path)
     parser.add_argument("--require-checkpoint", type=Path)
     parser.add_argument("--require-dataset-cache", type=Path)
+    parser.add_argument("--dataset-id")
     parser.add_argument("--dataset-revision")
     parser.add_argument("--results", type=Path, default=Path("/results"))
     parser.add_argument("--allow-non-jetson", action="store_true")
@@ -205,10 +235,9 @@ def main() -> int:
     if args.require_checkpoint:
         errors.extend(validate_checkpoint(args.require_checkpoint))
     if args.require_dataset_cache:
-        if not re.fullmatch(r"[0-9a-f]{40}", args.dataset_revision or ""):
-            errors.append("dataset revision must be an exact 40-hex commit")
-        if not args.require_dataset_cache.is_dir() or not any(args.require_dataset_cache.rglob("*.arrow")):
-            errors.append(f"dataset cache has no pre-populated Arrow data: {args.require_dataset_cache}")
+        errors.extend(
+            validate_dataset_cache(args.require_dataset_cache, args.dataset_id, args.dataset_revision)
+        )
 
     try:
         args.results.mkdir(parents=True, exist_ok=True)

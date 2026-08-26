@@ -39,3 +39,25 @@ def test_source_manifest_validates_files_size_and_sha256(tmp_path):
         module.validate_source(model_entry(data, sha256={"weights.bin": "0" * 64}), tmp_path)
     with pytest.raises(FileNotFoundError, match="missing expected files"):
         module.validate_source(model_entry(data, expected_files=["missing.bin"]), tmp_path)
+
+
+def test_source_manifest_ignores_git_metadata(tmp_path):
+    module = load_module("scripts/prepare_weights.py", "manifest_git_metadata")
+    data = b"checkpoint source"
+    (tmp_path / "weights.bin").write_bytes(data)
+    git_dir = tmp_path / ".git" / "objects"
+    git_dir.mkdir(parents=True)
+    (git_dir / "clone-specific-data").write_bytes(b"not model content")
+
+    module.validate_source(model_entry(data), tmp_path)
+
+
+def test_clear_output_preserves_mount_root(tmp_path):
+    module = load_module("scripts/prepare_weights.py", "manifest_clear_output")
+    (tmp_path / "stale.bin").write_bytes(b"stale")
+    nested = tmp_path / "nested"
+    nested.mkdir()
+    (nested / "stale.bin").write_bytes(b"stale")
+    module.clear_output(tmp_path)
+    assert tmp_path.is_dir()
+    assert list(tmp_path.iterdir()) == []

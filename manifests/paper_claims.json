@@ -91,6 +91,34 @@
       "required_output": "table4_gc.csv"
     },
     {
+      "paper_item": "AE reviewer memory profile (not a paper table)",
+      "claim": "MemRift has lower median peak whole-system RAM than matched LoRA and online QLoRA for the exact reviewer profile",
+      "artifact_status": "verified",
+      "profile": {
+        "model": "tinyllama-1.1b-chat-v1.0",
+        "dataset": "tatsu-lab/alpaca",
+        "dataset_revision": "dce01c9b08f87459cf36a430d809084718273017",
+        "context": 2048,
+        "batch_size": 3,
+        "rounds": 7,
+        "warmup_rounds": 1,
+        "repetitions": 3,
+        "gradient_checkpointing": false
+      },
+      "observed": {
+        "lora_peak_system_ram_median_mib": 23140,
+        "qlora_peak_system_ram_median_mib": 24698,
+        "memrift_peak_system_ram_median_mib": 22124,
+        "memrift_reduction_vs_lora_percent": 4.39066551426102,
+        "memrift_reduction_vs_qlora_percent": 10.421896509838852,
+        "lora_round_time_median_seconds": 12.773568153381348,
+        "qlora_round_time_median_seconds": 13.847139755884806,
+        "memrift_round_time_median_seconds": 15.448500792185465
+      },
+      "scope": "Verified AE configuration only; not the paper's exact batch-4 Table 3 point and not a speedup claim.",
+      "required_output": "memory-comparison-tinyllama-1.1b-chat-v1.0/summary.json"
+    },
+    {
       "paper_item": "Table 5",
       "claim": "100-step tensor fidelity and LM-Eval accuracy",
       "artifact_status": "codec_runnable_lm_eval_inputs_required",

@@ -193,6 +193,12 @@ MemRift's median whole-system peak is lower than both baselines. Its scope is
 that exact reviewer configuration; it does not establish universal superiority
 or reproduce the exact batch-4 paper point.
 
+The verified run completed all nine workers. Median peak whole-system RAM was
+23,140 MiB for LoRA, 24,698 MiB for online QLoRA, and 22,124 MiB for MemRift,
+giving MemRift reductions of 4.39% and 10.42%. Median measured-round time was
+12.77 s, 13.85 s, and 15.45 s respectively; the artifact therefore claims a
+memory reduction for this profile, not a training-speed improvement.
+
 `make evaluate` remains available for a single MemRift+GC point. `make gc`
 compares LoRA+GC, QLoRA+GC, and corrected MemRift+GC as a separate experiment.
 

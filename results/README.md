@@ -13,6 +13,13 @@ is non-reportable: the 4 GiB watchdog stopped five training workers while all
 counts are recorded in `manifests/source_manifest.json`. The complete result
 directory, not only its CSV summaries, must be archived with the final release.
 
+The local `memory-comparison-tinyllama-1.1b-chat-v1.0` run is reportable for its
+exact batch-3 reviewer profile. All nine workers completed, raw telemetry passed
+the independent checker, and MemRift reduced median peak whole-system RAM by
+4.39% versus LoRA and 10.42% versus online QLoRA. The tracked provenance and
+summary hashes are recorded in `manifests/source_manifest.json`; the raw result
+directory must be included in the final evidence archive.
+
 Numeric values under `experiments/model_loading/RESULTS.md` are imported
 historical material without bundled raw records. They are not results produced
 or verified by this reviewer artifact and must not be presented as such.

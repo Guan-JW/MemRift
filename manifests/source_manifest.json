@@ -47,7 +47,7 @@
     "table6_backend_smoke": "table6-smoke/table6_backends.csv",
     "table6_backend_smoke_status": "success",
     "loading_transformers_wheel_sha256": "6b4fded1c5fee04d384b1014495b4235a2b53c87503d7d592423c06128cbbe03",
-    "tables23_tinyllama": {
+      "tables23_tinyllama": {
       "result_directory": "tables23-tinyllama-1.1b-chat-v1.0",
       "evidence_image_id": "sha256:b77a4d30206008ddb437f49dc516a39337e81438c875f89a365ca13c05d69c95",
       "status": "complete_with_failures",
@@ -56,7 +56,19 @@
       "table2_sha256": "1476e4f9a4e49568d10c58c330a1d5e6bdd81b500067a440479d503b65fb6213",
       "table3_sha256": "6f9c5a7a22f5ca555a233ae44cc9d0d164ab6743ffce0ba11824b25951949a13",
       "manifest_sha256": "e21444752cb9c60152da1f597d871a0184a6ead802a3447ffb5b404a5b6606bf",
-      "loading_summary_sha256": "87d15154bb30a11c96a8e91e29df69fb4f6201e63702189af59b6e51b73e638d"
-    }
+        "loading_summary_sha256": "87d15154bb30a11c96a8e91e29df69fb4f6201e63702189af59b6e51b73e638d"
+      },
+      "reviewer_memory_comparison": {
+        "orchestrator_source_revision": "f7a681fd044d2c4dfe7a0f5ed859f1ba366ef3ea",
+        "runtime_source_revision": "fe1f3fe1d2950f27db7b03732057f0309c40f4d4",
+        "result_directory": "memory-comparison-tinyllama-1.1b-chat-v1.0",
+        "status": "complete",
+        "claim_supported": true,
+        "profile": {"context": 2048, "batch_size": 3, "rounds": 7, "warmup_rounds": 1, "repetitions": 3},
+        "peak_system_ram_median_mib": {"lora": 23140, "qlora": 24698, "memrift": 22124},
+        "memrift_reduction_percent": {"lora": 4.39066551426102, "qlora": 10.421896509838852},
+        "summary_sha256": "8edd990ba33b92ff9f0c039ac7880c2ca5e07a8c84a4711f6bc7ab5d60b38e96",
+        "runs_csv_sha256": "d25db7648e4dd65c88ccc5fa27a702b0833d7afe4c90997ccd8d98418df14bae"
+      }
   }
 }

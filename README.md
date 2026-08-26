@@ -130,7 +130,7 @@ one primary result, and an automated check.
 | Environment | Image and CUDA validation | Verified | `ok: true` |
 | Smoke | End-to-end MemRift training path | Verified functional | successful synthetic run |
 | Quick correctness | 10-step lossless codec check | Reviewer default | exactly 0 mismatches |
-| Memory comparison | Balanced LoRA/QLoRA/MemRift runs | Runnable | completed whole-system peaks and explicit claim decision |
+| Memory comparison | Balanced LoRA/QLoRA/MemRift runs | Verified measurement | MemRift median below both baselines |
 | Loading | Five-run TinyLlama loading comparison | Verified measurement | all medians within 15% |
 | Entropy | TinyLlama Table 1 field entropy | Runnable | exponent entropy 2.61-2.93 bits |
 | Backends | Table 6 backend implementation | Verified functional | four successful backends |
@@ -152,6 +152,13 @@ The checker prints structured JSON and exits nonzero when acceptance fails.
 The memory comparison uses peak whole-system RAM from `tegrastats`, not CUDA
 allocator memory. A completed negative result is retained and causes the memory
 claim check to fail rather than being filtered out.
+
+The verified batch-3 reviewer profile measured median peak whole-system RAM of
+23,140 MiB for LoRA, 24,698 MiB for online QLoRA, and 22,124 MiB for MemRift.
+This is a 4.39% reduction from LoRA and a 10.42% reduction from online QLoRA.
+Median measured-round times were 12.77 s, 13.85 s, and 15.45 s respectively, so
+the memory result is not presented as a speedup. This profile is separate from
+the incomplete exact batch-4 Table 3 attempt.
 
 Run the core reviewer sequence with one resumable command:
 

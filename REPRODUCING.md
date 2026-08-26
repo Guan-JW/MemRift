@@ -123,6 +123,18 @@ negative result remains valid evidence but does not support the lower-memory
 claim. This is a safe AE reviewer configuration, not the paper's exact batch-4
 Table 3 point.
 
+The verified artifact run completed all nine workers and produced these
+whole-system medians:
+
+| Method | Peak RAM | Measured-round time |
+|---|---:|---:|
+| LoRA | 23,140 MiB | 12.77 s |
+| Online QLoRA | 24,698 MiB | 13.85 s |
+| MemRift | 22,124 MiB | 15.45 s |
+
+MemRift reduced median peak RAM by 4.39% relative to LoRA and 10.42% relative
+to online QLoRA. It was slower in this profile, so no speedup is claimed.
+
 ## D. Five-Run Model Loading
 
 ```bash

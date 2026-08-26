@@ -63,7 +63,8 @@ target and its current automation status.
 Pull the public ARM64 reviewer image by immutable digest:
 
 ```bash
-docker pull ghcr.io/guan-jw/memrift-artifact@sha256:45a7d409586dea875c504da09fd3e2215b2491476c151297b1c5d710d02b9979
+export MEMRIFT_IMAGE=ghcr.io/guan-jw/memrift-artifact@sha256:45a7d409586dea875c504da09fd3e2215b2491476c151297b1c5d710d02b9979
+docker pull "$MEMRIFT_IMAGE"
 ```
 
 The registry image is public, but an archival URL/DOI is still required for the
@@ -167,21 +168,33 @@ make smoke \
 The local two-round smoke completed in under one minute after image setup. It
 is a functional check and does not reproduce a paper table.
 
-### Primary Evaluation
+### Comparative Memory Evaluation
 
 ```bash
-make evaluate \
-  MODEL_DIR=/path/to/model \
-  CHECKPOINT_DIR=/path/to/checkpoint \
+make memory-comparison \
+  TAG="$MEMRIFT_IMAGE" \
+  MEMRIFT_IMAGE_DIGEST="${MEMRIFT_IMAGE##*@}" \
+  MODEL_DIR=/path/to/TinyLlama-1.1B-Chat-v1.0 \
+  CHECKPOINT_DIR=/path/to/tinyllama-memrift \
   CACHE_DIR=/path/to/prepopulated/huggingface-cache \
   RESULTS_DIR="$PWD/results"
-make summarize RESULTS_DIR="$PWD/results"
+make check EXPERIMENT=memory \
+  OUTPUT="$PWD/results/memory-comparison-tinyllama-1.1b-chat-v1.0/summary.json"
 ```
 
-The Make target passes the pinned Alpaca revision, context, batch size, rounds,
-warmup, image identity, and calibrated 16/4/4 transition concurrency into the
-offline container. Override these only for a paper configuration recorded in
-`manifests/paper_claims.json`.
+The reviewer profile runs three balanced repetitions at context 2048 and batch
+3. It compares non-GC LoRA, online QLoRA, and MemRift with identical pinned
+inputs, seven rounds, one warmup, calibrated 16/4/4 concurrency, and the 4 GiB
+safety guard. It reports whole-system RAM, CUDA allocator memory, process RSS,
+CPU/GPU utilization, timing, and links to raw `tegrastats.csv` files.
+
+The automatic claim check passes only when every matched run completes and
+MemRift's median whole-system peak is lower than both baselines. Its scope is
+that exact reviewer configuration; it does not establish universal superiority
+or reproduce the exact batch-4 paper point.
+
+`make evaluate` remains available for a single MemRift+GC point. `make gc`
+compares LoRA+GC, QLoRA+GC, and corrected MemRift+GC as a separate experiment.
 
 ### Paper Results
 
@@ -191,7 +204,7 @@ offline container. Override these only for a paper configuration recorded in
 | Tables 2-3 | `make tables23` produces a provenance-checked TinyLlama AE re-execution; the other models and activation attribution remain unavailable. |
 | Figures 1 and 6 | Core methods run; four-model sweep and activation attribution remain. |
 | Table 4 | Use `make gc GC_CONTEXT=2944`, repeat at 8192, then use `make gc-max-context` for the 128-token search. |
-| Table 5 | Direct 100-step codec checks are under `experiments/fidelity`; Mistral checkpoints and LM-Eval inputs remain required. |
+| Table 5 | `make correctness-quick` runs 10 steps; `make correctness-full` retains the optional 100-step stress protocol. Mistral checkpoints and LM-Eval inputs remain required. |
 | Table 6 | Use `make backends`; it serializes LoRA plus LZ4, Zstd, EBC-LZ4, and EBC-Zstd runs and writes `table6_backends.csv`. |
 | Figures 3 and 7 | Controlled co-runner supervisor still required. |
 | Figure 8 | `experiments/ablation/run.py` serializes LoRA, weight-only, and weight-plus-activation runs and computes reductions. |

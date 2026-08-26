@@ -28,7 +28,8 @@
       },
       "checkpoint_preparation_command": "/opt/venvs/training/bin/python /workspace/scripts/prepare_weights.py --manifest /workspace/manifests/models.json --name tinyllama-1.1b-chat-v1.0 --model /models/tinyllama-1.1b-chat-v1.0 --output /checkpoints/tinyllama-1.1b-chat-v1.0/memrift --zstd-level 18",
       "checkpoint_format": "memrift-float-split-stride-v1",
-      "zstd_level": 18
+      "zstd_level": 18,
+      "checkpoint_payload_sha256": "f4dff6bb6c0017a8668e0263a24c311bc2891a2ed467ca58520aff30a5c9cdaa"
     }
   ]
 }

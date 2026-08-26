@@ -28,7 +28,12 @@ EXPERIMENT ?=
 OUTPUT ?=
 GC_CONTEXT ?= 2944
 LOOKAHEAD_BATCH ?= 1
-FIDELITY_STEPS ?= 100
+FIDELITY_STEPS ?= 10
+FIDELITY_OUTPUT ?= table5-fidelity-$(MODEL_NAME).json
+MEMORY_REPETITIONS ?= 3
+MEMORY_BATCH_SIZE ?= 3
+MEMORY_CONTEXT ?= 2048
+MEMORY_MIN_REDUCTION_PERCENT ?= 0
 ABLATION_CONTEXT ?= 2048
 TABLE6_CONTEXT ?= 2048
 TABLE6_LEVEL ?= 1
@@ -49,7 +54,7 @@ MOUNTS = --mount type=bind,src=$(abspath $(MODEL_DIR)),dst=/models/model,readonl
 	--mount type=bind,src=$(abspath $(RESULTS_DIR)),dst=/results \
 	--mount type=bind,src=$(abspath $(CACHE_DIR)),dst=/cache/huggingface
 
-.PHONY: help image validate cache-dataset prepare prepare-loading model-loading entropy fidelity smoke evaluate gc gc-max-context lookahead ablation backends tables23 check summarize export release syntax test
+.PHONY: help image validate cache-dataset prepare prepare-loading model-loading entropy fidelity correctness-quick correctness-full smoke evaluate memory-comparison gc gc-max-context lookahead ablation backends tables23 check summarize export release syntax test
 
 help:
 	@printf '%s\n' 'make image' 'make validate' \
@@ -58,8 +63,10 @@ help:
 	  'make prepare-loading MODEL_DIR=/path LOADING_CHECKPOINT_OUTPUT_DIR=/path' \
 	  'make model-loading MODEL_DIR=/path LOADING_CHECKPOINT_DIR=/path' \
 	  'make entropy MODEL_DIR=/path CACHE_DIR=/path' \
-	  'make fidelity MODEL_DIR=/path CACHE_DIR=/path' \
+	  'make correctness-quick MODEL_DIR=/path CACHE_DIR=/path' \
+	  'make correctness-full MODEL_DIR=/path CACHE_DIR=/path' \
 	  'make smoke MODEL_DIR=/path CHECKPOINT_DIR=/path' \
+	  'make memory-comparison MODEL_DIR=/path CHECKPOINT_DIR=/path CACHE_DIR=/path' \
 	  'make evaluate MODEL_DIR=/path CHECKPOINT_DIR=/path' \
 	  'make gc MODEL_DIR=/path CHECKPOINT_DIR=/path GC_CONTEXT=2944' \
 	  'make lookahead MODEL_DIR=/path CHECKPOINT_DIR=/path LOOKAHEAD_BATCH=1' \
@@ -150,7 +157,13 @@ fidelity:
 	  --model /models/model --model-id "$(MODEL_LOGICAL_ID)" \
 	  --dataset "$(DATASET_ID)" --dataset-revision "$(DATASET_REVISION)" \
 	  --max-length "$(CONTEXT_TOKENS)" --batch-size "$(BATCH_SIZE)" --steps "$(FIDELITY_STEPS)" \
-	  --output "/results/table5-fidelity-$(MODEL_NAME).json"
+	  --output "/results/$(FIDELITY_OUTPUT)"
+
+correctness-quick:
+	$(MAKE) fidelity FIDELITY_STEPS=10 FIDELITY_OUTPUT="correctness-quick-$(MODEL_NAME).json"
+
+correctness-full:
+	$(MAKE) fidelity FIDELITY_STEPS=100 FIDELITY_OUTPUT="correctness-full-$(MODEL_NAME).json"
 
 smoke:
 	@test -d "$(MODEL_DIR)" || { printf '%s\n' 'MODEL_DIR must name an existing directory' >&2; exit 2; }
@@ -177,6 +190,25 @@ evaluate:
 	  -e ROUNDS="$(ROUNDS)" -e WARMUP_ROUNDS="$(WARMUP_ROUNDS)" \
 	  -e TIMEOUT_SECONDS="$(TIMEOUT_SECONDS)" -e MIN_AVAILABLE_GIB="$(MIN_AVAILABLE_GIB)" \
 	  $(TAG) evaluate
+
+memory-comparison:
+	@test -z "$$(git status --porcelain)" || { printf '%s\n' 'memory-comparison requires a clean source tree' >&2; exit 2; }
+	@test -d "$(MODEL_DIR)" || { printf '%s\n' 'MODEL_DIR must name an existing directory' >&2; exit 2; }
+	@test -d "$(CHECKPOINT_DIR)" || { printf '%s\n' 'CHECKPOINT_DIR must name an existing directory' >&2; exit 2; }
+	@test -f "$(CACHE_DIR)/memrift-dataset-receipt.json" || { printf '%s\n' 'CACHE_DIR must contain a dataset preparation receipt' >&2; exit 2; }
+	@mkdir -p "$(RESULTS_DIR)"
+	python3 scripts/run_memory_comparison.py \
+	  --image "$(TAG)" --image-digest "$(MEMRIFT_IMAGE_DIGEST)" \
+	  --source-revision "$$(git rev-parse HEAD)" \
+	  --model "$(abspath $(MODEL_DIR))" --checkpoint "$(abspath $(CHECKPOINT_DIR))" \
+	  --cache "$(abspath $(CACHE_DIR))" --results-root "$(abspath $(RESULTS_DIR))" \
+	  --name "$(MODEL_NAME)" --dataset "$(DATASET_ID)" --dataset-revision "$(DATASET_REVISION)" \
+	  --context "$(MEMORY_CONTEXT)" --batch-size "$(MEMORY_BATCH_SIZE)" \
+	  --rounds "$(ROUNDS)" --warmup-rounds "$(WARMUP_ROUNDS)" \
+	  --repetitions "$(MEMORY_REPETITIONS)" \
+	  --minimum-reduction-percent "$(MEMORY_MIN_REDUCTION_PERCENT)" \
+	  --timeout-seconds "$(TIMEOUT_SECONDS)" --min-available-mb "$(MIN_AVAILABLE_MB)" \
+	  --docker "$(DOCKER)"
 
 gc:
 	@test -d "$(MODEL_DIR)" || { printf '%s\n' 'MODEL_DIR must name an existing directory' >&2; exit 2; }

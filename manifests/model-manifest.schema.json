@@ -10,7 +10,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["logical_name", "huggingface_id", "revision", "license", "local_mount_path", "expected_files", "expected_bytes", "sha256", "checkpoint_preparation_command", "checkpoint_format", "zstd_level"],
+        "required": ["logical_name", "huggingface_id", "revision", "license", "local_mount_path", "expected_files", "expected_bytes", "sha256", "checkpoint_preparation_command", "checkpoint_format", "zstd_level", "checkpoint_payload_sha256"],
         "properties": {
           "logical_name": {"type": "string", "minLength": 1},
           "huggingface_id": {"type": "string", "pattern": "^[^/]+/[^/]+$"},
@@ -22,7 +22,8 @@
           "sha256": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}},
           "checkpoint_preparation_command": {"type": "string", "minLength": 1},
           "checkpoint_format": {"const": "memrift-float-split-stride-v1"},
-          "zstd_level": {"type": "integer", "minimum": 1, "maximum": 22}
+          "zstd_level": {"type": "integer", "minimum": 1, "maximum": 22},
+          "checkpoint_payload_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}
         }
       }
     }

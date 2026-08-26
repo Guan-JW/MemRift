@@ -41,32 +41,74 @@ This verifies functionality, not a paper timing claim.
 
 ## B. Lossless Codec Fidelity
 
-Run the paper protocol of 100 training steps:
+Run the reviewer-default 10-step check:
 
 ```bash
-make fidelity \
+make correctness-quick \
   TAG="$MEMRIFT_IMAGE" \
   MODEL_DIR="$MODEL_DIR" \
   CACHE_DIR="$CACHE_DIR" \
-  RESULTS_DIR="$RESULTS_DIR" \
-  FIDELITY_STEPS=100 CONTEXT_TOKENS=2048 BATCH_SIZE=1
+  RESULTS_DIR="$RESULTS_DIR"
 ```
 
-Expected output: `results/table5-fidelity-tinyllama-1.1b-chat-v1.0.json`.
-Acceptance requires all 100 requested steps to complete and exactly zero weight
-or activation tensor mismatches.
+Expected output: `results/correctness-quick-tinyllama-1.1b-chat-v1.0.json`.
+Acceptance requires all 10 requested steps to complete and exactly zero weight
+or activation tensor mismatches. This checks thousands of direct weight and
+activation round trips and is not a timing benchmark.
 
 ```bash
 make check \
   EXPERIMENT=fidelity \
-  OUTPUT="$RESULTS_DIR/table5-fidelity-tinyllama-1.1b-chat-v1.0.json"
+  OUTPUT="$RESULTS_DIR/correctness-quick-tinyllama-1.1b-chat-v1.0.json"
 ```
 
-The locally verified one-step functional check covered 201 weight tensors and
-497 activation tensors with zero mismatches. The checker requires completion of
-the number of steps recorded by the new invocation.
+The optional stress profile runs 100 steps and can take over one hour on the
+recorded Jetson:
 
-## C. Five-Run Model Loading
+```bash
+make correctness-full \
+  TAG="$MEMRIFT_IMAGE" MODEL_DIR="$MODEL_DIR" CACHE_DIR="$CACHE_DIR" \
+  RESULTS_DIR="$RESULTS_DIR"
+```
+
+## C. Comparative Training Memory
+
+Run three balanced repetitions of non-GC LoRA, online QLoRA, and MemRift with
+the pinned TinyLlama and Alpaca inputs:
+
+```bash
+make memory-comparison \
+  TAG="$MEMRIFT_IMAGE" \
+  MEMRIFT_IMAGE_DIGEST="${MEMRIFT_IMAGE##*@}" \
+  MODEL_DIR="$MODEL_DIR" \
+  CHECKPOINT_DIR="$CHECKPOINT_DIR" \
+  CACHE_DIR="$CACHE_DIR" \
+  RESULTS_DIR="$RESULTS_DIR"
+```
+
+The review profile uses context 2048, batch 3, seven rounds, one warmup, and
+the unchanged 4 GiB safety guard. Method order rotates across repetitions. Each
+method runs in a fresh worker process. The primary metric is peak whole-system
+used RAM sampled by `tegrastats`; CUDA allocation and process RSS are secondary
+diagnostics and are not substituted for that metric.
+
+Expected output:
+`results/memory-comparison-tinyllama-1.1b-chat-v1.0/summary.json`, plus
+`runs.csv` and each worker's command, raw log, result, and `tegrastats.csv`.
+
+```bash
+make check \
+  EXPERIMENT=memory \
+  OUTPUT="$RESULTS_DIR/memory-comparison-tinyllama-1.1b-chat-v1.0/summary.json"
+```
+
+Acceptance requires all nine matched workers to complete with telemetry and
+MemRift's median whole-system peak to be lower than both baselines. A completed
+negative result remains valid evidence but does not support the lower-memory
+claim. This is a safe AE reviewer configuration, not the paper's exact batch-4
+Table 3 point.
+
+## D. Five-Run Model Loading
 
 ```bash
 make model-loading \
@@ -99,7 +141,7 @@ make check \
 The checker also verifies five samples per method, warm-cache labeling, and that
 the online and serialized NF4 instrumentation took different intended paths.
 
-## D. TinyLlama Entropy
+## E. TinyLlama Entropy
 
 ```bash
 make entropy \
@@ -122,7 +164,7 @@ make check \
 Only the TinyLlama portion is runnable with the supplied manifest. A complete
 Table 1 requires three additional exact model snapshots.
 
-## E. Compression Backends
+## F. Compression Backends
 
 ```bash
 make backends \
@@ -175,3 +217,8 @@ make check \
 
 Never lower the memory watchdog merely to turn a stopped point into a claimed
 paper result. Preserve the raw record and report the stop separately from OOM.
+
+The exact TinyLlama Table 3 input is context 2048, batch 4, without gradient
+checkpointing. The current safe run supports only the statement that MemRift
+completed while LoRA and QLoRA reached the safety guard; it does not provide
+completed baseline peaks or a percentage reduction.

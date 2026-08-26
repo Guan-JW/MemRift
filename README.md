@@ -126,7 +126,8 @@ one primary result, and an automated check.
 |---|---|---|---|
 | Environment | Image and CUDA validation | Verified | `ok: true` |
 | Smoke | End-to-end MemRift training path | Verified functional | successful synthetic run |
-| Fidelity | Lossless weight/activation codec | Verified functional | exactly 0 mismatches |
+| Quick correctness | 10-step lossless codec check | Reviewer default | exactly 0 mismatches |
+| Memory comparison | Balanced LoRA/QLoRA/MemRift runs | Runnable | completed whole-system peaks and explicit claim decision |
 | Loading | Five-run TinyLlama loading comparison | Verified measurement | all medians within 15% |
 | Entropy | TinyLlama Table 1 field entropy | Runnable | exponent entropy 2.61-2.93 bits |
 | Backends | Table 6 backend implementation | Verified functional | four successful backends |
@@ -138,12 +139,16 @@ Check an output with:
 ```bash
 make check EXPERIMENT=smoke OUTPUT=/path/to/run.json
 make check EXPERIMENT=fidelity OUTPUT=/path/to/fidelity.json
+make check EXPERIMENT=memory OUTPUT=/path/to/memory-comparison/summary.json
 make check EXPERIMENT=loading OUTPUT=/path/to/summary.json
 make check EXPERIMENT=entropy OUTPUT=/path/to/table1.csv
 make check EXPERIMENT=backends OUTPUT=/path/to/table6_backends.csv
 ```
 
 The checker prints structured JSON and exits nonzero when acceptance fails.
+The memory comparison uses peak whole-system RAM from `tegrastats`, not CUDA
+allocator memory. A completed negative result is retained and causes the memory
+claim check to fail rather than being filtered out.
 
 ## Unsupported Or Partial Claims
 

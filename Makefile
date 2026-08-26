@@ -131,7 +131,7 @@ entropy:
 	@mkdir -p "$(RESULTS_DIR)"
 	$(RUN) \
 	  --mount type=bind,src=$(abspath $(MODEL_DIR)),dst=/models/model,readonly \
-	  --mount type=bind,src=$(abspath $(CACHE_DIR)),dst=/cache/huggingface,readonly \
+	  --mount type=bind,src=$(abspath $(CACHE_DIR)),dst=/cache/huggingface \
 	  --mount type=bind,src=$(abspath $(RESULTS_DIR)),dst=/results \
 	  $(TAG) training /workspace/experiments/entropy/collect.py \
 	  --model /models/model --model-id "$(MODEL_LOGICAL_ID)" \
@@ -144,7 +144,7 @@ fidelity:
 	@mkdir -p "$(RESULTS_DIR)"
 	$(RUN) \
 	  --mount type=bind,src=$(abspath $(MODEL_DIR)),dst=/models/model,readonly \
-	  --mount type=bind,src=$(abspath $(CACHE_DIR)),dst=/cache/huggingface,readonly \
+	  --mount type=bind,src=$(abspath $(CACHE_DIR)),dst=/cache/huggingface \
 	  --mount type=bind,src=$(abspath $(RESULTS_DIR)),dst=/results \
 	  $(TAG) training /workspace/experiments/fidelity/roundtrip.py \
 	  --model /models/model --model-id "$(MODEL_LOGICAL_ID)" \

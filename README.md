@@ -29,7 +29,7 @@ Use the public immutable image reference; do not substitute the mutable version
 tag when recording evaluation results.
 
 ```bash
-export MEMRIFT_IMAGE='ghcr.io/guan-jw/memrift-artifact@sha256:f55a219673ea26e86e9faf4ca0b5c0ddc4e626de978879e454eb4448a9bef656'
+export MEMRIFT_IMAGE='ghcr.io/guan-jw/memrift-artifact@sha256:45a7d409586dea875c504da09fd3e2215b2491476c151297b1c5d710d02b9979'
 docker pull "$MEMRIFT_IMAGE"
 ```
 

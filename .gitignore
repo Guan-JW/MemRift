@@ -13,3 +13,6 @@ results/*
 *.tar.zst
 *.sha256
 .env
+inputs/
+checkpoints/
+.memrift-source-revision

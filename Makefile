@@ -54,7 +54,7 @@ MOUNTS = --mount type=bind,src=$(abspath $(MODEL_DIR)),dst=/models/model,readonl
 	--mount type=bind,src=$(abspath $(RESULTS_DIR)),dst=/results \
 	--mount type=bind,src=$(abspath $(CACHE_DIR)),dst=/cache/huggingface
 
-.PHONY: help image validate cache-dataset prepare prepare-loading model-loading entropy fidelity correctness-quick correctness-full smoke evaluate memory-comparison gc gc-max-context lookahead ablation backends tables23 check summarize export release syntax test
+.PHONY: help image validate cache-dataset prepare prepare-loading model-loading entropy fidelity correctness-quick correctness-full smoke evaluate memory-comparison reviewer gc gc-max-context lookahead ablation backends tables23 check summarize export release syntax test
 
 help:
 	@printf '%s\n' 'make image' 'make validate' \
@@ -67,6 +67,7 @@ help:
 	  'make correctness-full MODEL_DIR=/path CACHE_DIR=/path' \
 	  'make smoke MODEL_DIR=/path CHECKPOINT_DIR=/path' \
 	  'make memory-comparison MODEL_DIR=/path CHECKPOINT_DIR=/path CACHE_DIR=/path' \
+	  'make reviewer MODEL_DIR=/path CHECKPOINT_DIR=/path CACHE_DIR=/path' \
 	  'make evaluate MODEL_DIR=/path CHECKPOINT_DIR=/path' \
 	  'make gc MODEL_DIR=/path CHECKPOINT_DIR=/path GC_CONTEXT=2944' \
 	  'make lookahead MODEL_DIR=/path CHECKPOINT_DIR=/path LOOKAHEAD_BATCH=1' \
@@ -192,14 +193,16 @@ evaluate:
 	  $(TAG) evaluate
 
 memory-comparison:
-	@test -z "$$(git status --porcelain)" || { printf '%s\n' 'memory-comparison requires a clean source tree' >&2; exit 2; }
+	@root=$$(pwd -P); git_root=$$(git rev-parse --show-toplevel 2>/dev/null || true); if test "$$git_root" = "$$root"; then \
+	  test -z "$$(git status --porcelain)" || { printf '%s\n' 'memory-comparison requires a clean source tree' >&2; exit 2; }; \
+	else test -f .memrift-source-revision || { printf '%s\n' 'memory-comparison requires Git metadata or .memrift-source-revision' >&2; exit 2; }; fi
 	@test -d "$(MODEL_DIR)" || { printf '%s\n' 'MODEL_DIR must name an existing directory' >&2; exit 2; }
 	@test -d "$(CHECKPOINT_DIR)" || { printf '%s\n' 'CHECKPOINT_DIR must name an existing directory' >&2; exit 2; }
 	@test -f "$(CACHE_DIR)/memrift-dataset-receipt.json" || { printf '%s\n' 'CACHE_DIR must contain a dataset preparation receipt' >&2; exit 2; }
 	@mkdir -p "$(RESULTS_DIR)"
 	python3 scripts/run_memory_comparison.py \
 	  --image "$(TAG)" --image-digest "$(MEMRIFT_IMAGE_DIGEST)" \
-	  --source-revision "$$(git rev-parse HEAD)" \
+	  --source-revision "$$(root=$$(pwd -P); git_root=$$(git rev-parse --show-toplevel 2>/dev/null || true); if test "$$git_root" = "$$root"; then git rev-parse HEAD; else cat .memrift-source-revision; fi)" \
 	  --model "$(abspath $(MODEL_DIR))" --checkpoint "$(abspath $(CHECKPOINT_DIR))" \
 	  --cache "$(abspath $(CACHE_DIR))" --results-root "$(abspath $(RESULTS_DIR))" \
 	  --name "$(MODEL_NAME)" --dataset "$(DATASET_ID)" --dataset-revision "$(DATASET_REVISION)" \
@@ -209,6 +212,12 @@ memory-comparison:
 	  --minimum-reduction-percent "$(MEMORY_MIN_REDUCTION_PERCENT)" \
 	  --timeout-seconds "$(TIMEOUT_SECONDS)" --min-available-mb "$(MIN_AVAILABLE_MB)" \
 	  --docker "$(DOCKER)"
+
+reviewer:
+	python3 scripts/run_reviewer_evaluation.py \
+	  --image "$(TAG)" --model "$(abspath $(MODEL_DIR))" \
+	  --checkpoint "$(abspath $(CHECKPOINT_DIR))" --cache "$(abspath $(CACHE_DIR))" \
+	  --results-root "$(abspath $(RESULTS_DIR))" $(REVIEWER_FLAGS)
 
 gc:
 	@test -d "$(MODEL_DIR)" || { printf '%s\n' 'MODEL_DIR must name an existing directory' >&2; exit 2; }

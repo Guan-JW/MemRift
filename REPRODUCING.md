@@ -15,6 +15,21 @@ All runtime experiments use the pinned image from `MEMRIFT_IMAGE`, execute with
 network access disabled, and retain raw commands, logs, telemetry, and structured
 results.
 
+For the least interactive core evaluation, run:
+
+```bash
+make reviewer TAG="$MEMRIFT_IMAGE" MODEL_DIR="$MODEL_DIR" \
+  CHECKPOINT_DIR="$CHECKPOINT_DIR" CACHE_DIR="$CACHE_DIR" RESULTS_DIR="$RESULTS_DIR"
+```
+
+This resumable command runs environment validation, quick correctness, smoke,
+and balanced comparative memory in isolated stage directories. Console progress
+is mirrored to stage logs, while `events.jsonl` and `evaluation.json` provide
+machine-readable progress and final outcomes. Use `REVIEWER_FLAGS='--rerun smoke'`
+to repeat one stage or `REVIEWER_FLAGS='--stages validate,correctness'` to select
+a subset. Input acquisition and checkpoint preparation remain separate because
+they are not network-isolated evaluation steps.
+
 ## A. End-To-End Smoke
 
 ```bash

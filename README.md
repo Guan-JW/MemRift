@@ -57,6 +57,9 @@ zstd -dc memrift-artifact-0.1.0-review-release.tar.zst | tar -xf - -C memrift-re
 cd memrift-release/memrift-artifact-0.1.0-review
 sha256sum -c SHA256SUMS
 zstd -dc image.tar.zst | docker load
+mkdir source
+zstd -dc source.tar.zst | tar -xf - -C source
+cd source
 ```
 
 ## 2. Download Inputs
@@ -149,6 +152,19 @@ The checker prints structured JSON and exits nonzero when acceptance fails.
 The memory comparison uses peak whole-system RAM from `tegrastats`, not CUDA
 allocator memory. A completed negative result is retained and causes the memory
 claim check to fail rather than being filtered out.
+
+Run the core reviewer sequence with one resumable command:
+
+```bash
+make reviewer TAG="$MEMRIFT_IMAGE" MODEL_DIR="$MODEL_DIR" \
+  CHECKPOINT_DIR="$CHECKPOINT_DIR" CACHE_DIR="$CACHE_DIR" RESULTS_DIR="$RESULTS_DIR"
+```
+
+It runs validation, quick correctness, smoke, and balanced memory stages. Each
+stage streams progress, keeps its own logs and outputs, and writes structured
+records below `results/reviewer-<source>-<image>-<configuration>/`. Re-running the command skips
+stages with valid evidence. A completed memory comparison that does not support
+the lower-memory claim is recorded as `valid_negative`, not an execution error.
 
 ## Unsupported Or Partial Claims
 

@@ -20,6 +20,10 @@ for path in "$results_dir" "$dataset_receipt" "$training_checkpoint_dir/index.js
   "$loading_checkpoint_dir/memrift/preparation.json" "$tables23_manifest"; do
   test -e "$path" || { printf 'required release input is missing: %s\n' "$path" >&2; exit 2; }
 done
+test -z "$(git -C "$root" status --porcelain)" || {
+  printf 'release packaging requires a clean source tree\n' >&2
+  exit 2
+}
 if test -e "$archive" && test "${FORCE:-0}" != 1; then
   printf 'refusing to overwrite %s; set FORCE=1 to replace it\n' "$archive" >&2
   exit 2
@@ -33,13 +37,20 @@ trap 'rm -rf "$stage"' EXIT
 bundle="$stage/memrift-artifact-$version"
 mkdir -p "$bundle/provenance/training-checkpoint" "$bundle/provenance/loading-nf4" \
   "$bundle/provenance/loading-memrift" "$bundle/provenance/dataset"
+source_revision=$(git -C "$root" rev-parse HEAD)
+printf '%s\n' "$source_revision" > "$stage/source-revision.txt"
 
 docker save "$tag" | zstd -T2 -10 -q -o "$bundle/image.tar.zst"
 
+source_tar="$stage/source.tar"
 git -C "$root" ls-files -z --cached --others --exclude-standard | \
   tar -C "$root" --null --files-from=- --sort=name --mtime=@0 \
-    --owner=0 --group=0 --numeric-owner -cf - | \
-  zstd -T2 -10 -q -o "$bundle/source.tar.zst"
+    --owner=0 --group=0 --numeric-owner -cf "$source_tar"
+tar -C "$stage" --append -f "$source_tar" \
+  --mtime=@0 --owner=0 --group=0 --numeric-owner \
+  --transform='s|^source-revision.txt$|.memrift-source-revision|' source-revision.txt
+zstd -T2 -10 -q "$source_tar" -o "$bundle/source.tar.zst"
+rm -f "$source_tar"
 
 tar -C "$(dirname "$results_dir")" --sort=name --mtime=@0 \
   --owner=0 --group=0 --numeric-owner -cf - "$(basename "$results_dir")" | \
@@ -54,7 +65,7 @@ tar -C "$bundle" --sort=name --mtime=@0 --owner=0 --group=0 --numeric-owner \
   -cf - provenance | zstd -T2 -10 -q -o "$bundle/provenance.tar.zst"
 rm -rf "$bundle/provenance"
 
-python3 - "$tables23_manifest" "$bundle/RELEASE.json" "$version" "$tag" "$image_id" "$created_at" <<'PY'
+python3 - "$tables23_manifest" "$bundle/RELEASE.json" "$version" "$tag" "$image_id" "$created_at" "$source_revision" <<'PY'
 import json
 import sys
 from pathlib import Path
@@ -64,6 +75,7 @@ release = {
     "schema_version": "1.0",
     "version": sys.argv[3],
     "created_at": sys.argv[6],
+    "source_revision": sys.argv[7],
     "image": {"tag": sys.argv[4], "id": sys.argv[5], "archive": "image.tar.zst"},
     "source_archive": "source.tar.zst",
     "evidence_archive": "evidence.tar.zst",

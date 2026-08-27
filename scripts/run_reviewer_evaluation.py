@@ -14,6 +14,17 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_STAGES = ("validate", "correctness", "smoke", "memory")
+OPTIONAL_STAGES = ("loading", "entropy", "backends")
+ALL_STAGES = DEFAULT_STAGES + OPTIONAL_STAGES
+STAGE_TARGETS = {
+    "validate": "validate", "correctness": "correctness-quick", "smoke": "smoke",
+    "memory": "memory-comparison", "loading": "model-loading", "entropy": "entropy",
+    "backends": "backends",
+}
+STAGE_CHECKERS = {
+    "correctness": "fidelity", "smoke": "smoke", "memory": "memory",
+    "loading": "loading", "entropy": "entropy", "backends": "backends",
+}
 CLAIM_CHECKS = {"memrift_vs_lora", "memrift_vs_qlora", "claim_supported"}
 REQUIRED_MEMORY_CHECKS = {
     "status", "methods", "repetitions", "review_profile", "gradient_checkpointing",
@@ -87,6 +98,20 @@ def hash_tree_for_pattern(root, pattern):
     return digest.hexdigest()
 
 
+def directory_sha256(root, excluded_names=()):
+    digest = hashlib.sha256()
+    paths = sorted(path for path in root.rglob("*") if path.is_file() and path.name not in excluded_names)
+    for path in paths:
+        relative = path.relative_to(root).as_posix().encode("utf-8")
+        digest.update(len(relative).to_bytes(8, "little"))
+        digest.update(relative)
+        digest.update(path.stat().st_size.to_bytes(8, "little"))
+        with path.open("rb") as stream:
+            for block in iter(lambda: stream.read(8 * 1024 * 1024), b""):
+                digest.update(block)
+    return digest.hexdigest()
+
+
 def next_attempt(stage_dir):
     attempts = [int(path.name.split("-")[-1]) for path in stage_dir.glob("attempt-[0-9][0-9][0-9]")]
     return max(attempts, default=0) + 1
@@ -106,11 +131,33 @@ def completed_result(stage_dir):
     return None
 
 
+def validate_loading_checkpoint(root):
+    expected = {
+        "model_logical_id": "tinyllama-1.1b-chat-v1.0",
+        "source_revision": "de253fa9783f8bd558c9ed398c8ffbe3c55cedb3",
+        "source_weight_sha256": "6e6001da2106d4757498752a021df6c2bdc332c650aae4bae6b0c004dcf14933",
+    }
+    for method, level in (("nf4", None), ("memrift", 3)):
+        path = root / method / "preparation.json"
+        try:
+            receipt = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+            raise ValueError(f"invalid {method} loading checkpoint receipt: {exc}") from exc
+        valid = (
+            receipt.get("schema_version") == "1.0" and receipt.get("method") == method
+            and receipt.get("zstd_level") == level
+            and all(receipt.get(key) == value for key, value in expected.items())
+            and isinstance(receipt.get("prepared_directory_sha256"), str)
+            and re.fullmatch(r"[0-9a-f]{64}", receipt["prepared_directory_sha256"])
+            and receipt.get("prepared_directory_sha256") == directory_sha256(root / method, {"preparation.json"})
+        )
+        if not valid:
+            raise ValueError(f"{method} loading checkpoint receipt does not match the pinned model")
+
+
 def stage_command(args, stage, outputs):
     common = [
-        "make", "-s", "--no-print-directory", stage if stage == "validate" else {
-            "correctness": "correctness-quick", "smoke": "smoke", "memory": "memory-comparison",
-        }[stage],
+        "make", "-s", "--no-print-directory", STAGE_TARGETS[stage],
         f"TAG={args.image}", f"MODEL_DIR={args.model}", f"CHECKPOINT_DIR={args.checkpoint}",
         f"CACHE_DIR={args.cache}", f"RESULTS_DIR={outputs}",
         f"MEMRIFT_IMAGE_DIGEST={args.image_digest}",
@@ -122,7 +169,11 @@ def stage_command(args, stage, outputs):
         "MIN_AVAILABLE_GIB=4", "TIMEOUT_SECONDS=2400",
         "MODEL_LOGICAL_ID=tinyllama-1.1b-chat-v1.0",
         "CHECKPOINT_LOGICAL_ID=tinyllama-1.1b-chat-v1.0-memrift", "DOCKER=docker",
+        "LOADING_RUNS=5", "TABLE6_CONTEXT=2048", "TABLE6_WARMUP_ROUNDS=2",
+        "TABLE6_LEVEL=1",
     ]
+    if stage == "loading":
+        common.append(f"LOADING_CHECKPOINT_DIR={args.loading_checkpoint}")
     return common
 
 
@@ -152,6 +203,12 @@ def primary_output(stage, outputs):
         return outputs / "correctness-quick-tinyllama-1.1b-chat-v1.0.json"
     if stage == "memory":
         return outputs / "memory-comparison-tinyllama-1.1b-chat-v1.0" / "summary.json"
+    if stage == "loading":
+        return outputs / "model-loading" / "tinyllama-1.1b-chat-v1.0" / "summary.json"
+    if stage == "entropy":
+        return outputs / "table1-tinyllama-1.1b-chat-v1.0.csv"
+    if stage == "backends":
+        return outputs / "table6-tinyllama-1.1b-chat-v1.0" / "table6_backends.csv"
     if stage == "smoke":
         candidates = sorted(outputs.glob("smoke-*/run.json"))
         return candidates[0] if len(candidates) == 1 else None
@@ -180,7 +237,7 @@ def check_stage(stage, output, attempt_dir, validate_text=None):
             report = {"ok": False, "error": "validation output was not one JSON document"}
         write_json(attempt_dir / "check.json", report)
         return report.get("ok") is True, "passed" if report.get("ok") is True else "invalid_evidence", "not_applicable"
-    experiment = {"correctness": "fidelity", "smoke": "smoke", "memory": "memory"}[stage]
+    experiment = STAGE_CHECKERS[stage]
     completed = subprocess.run(
         [sys.executable, str(ROOT / "scripts/check_reproduction.py"), "--experiment", experiment, "--input", str(output)],
         cwd=ROOT, text=True, capture_output=True, check=False,
@@ -199,8 +256,10 @@ def parse_args(argv=None):
     parser.add_argument("--model", type=Path, required=True)
     parser.add_argument("--checkpoint", type=Path, required=True)
     parser.add_argument("--cache", type=Path, required=True)
+    parser.add_argument("--loading-checkpoint", type=Path)
     parser.add_argument("--results-root", type=Path, required=True)
     parser.add_argument("--stages", default=",".join(DEFAULT_STAGES))
+    parser.add_argument("--full", action="store_true")
     parser.add_argument("--rerun", action="append", default=[])
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args(argv)
@@ -208,16 +267,23 @@ def parse_args(argv=None):
     if not match:
         parser.error("--image must be pinned by sha256 digest")
     args.image_digest = match.group(1)
-    args.stage_names = tuple(name.strip() for name in args.stages.split(",") if name.strip())
-    unknown = set(args.stage_names) - set(DEFAULT_STAGES)
+    args.stage_names = ALL_STAGES if args.full else tuple(name.strip() for name in args.stages.split(",") if name.strip())
+    unknown = set(args.stage_names) - set(ALL_STAGES)
     if unknown or not args.stage_names:
-        parser.error(f"--stages must use: {', '.join(DEFAULT_STAGES)}")
+        parser.error(f"--stages must use: {', '.join(ALL_STAGES)}")
     unknown_reruns = set(args.rerun) - set(args.stage_names)
     if unknown_reruns:
         parser.error(f"--rerun names stages not selected: {sorted(unknown_reruns)}")
     for path in (args.model, args.checkpoint, args.cache):
         if not path.is_dir():
             parser.error(f"input directory does not exist: {path}")
+    if "loading" in args.stage_names:
+        if args.loading_checkpoint is None or not args.loading_checkpoint.is_dir():
+            parser.error("--loading-checkpoint must name an existing directory when loading is selected")
+        try:
+            validate_loading_checkpoint(args.loading_checkpoint)
+        except ValueError as exc:
+            parser.error(str(exc))
     return args
 
 
@@ -249,11 +315,16 @@ def main(argv=None):
         "dataset_arrow_sha256": hash_tree_for_pattern(args.cache, "*.arrow"),
         "dataset_receipt_sha256": file_sha256(args.cache / "memrift-dataset-receipt.json"),
     }
-    configuration = json.dumps({
+    if "loading" in args.stage_names:
+        input_fingerprints["loading_checkpoint_sha256"] = hash_tree(args.loading_checkpoint)
+    configuration_values = {
         "model": str(args.model.resolve()), "checkpoint": str(args.checkpoint.resolve()),
         "cache": str(args.cache.resolve()), "stages": args.stage_names,
         "input_fingerprints": input_fingerprints,
-    }, sort_keys=True).encode("utf-8")
+    }
+    if "loading" in args.stage_names:
+        configuration_values["loading_checkpoint"] = str(args.loading_checkpoint.resolve())
+    configuration = json.dumps(configuration_values, sort_keys=True).encode("utf-8")
     configuration_id = hashlib.sha256(configuration).hexdigest()[:12]
     evaluation_id = f"reviewer-{revision[:12]}-{args.image_digest[7:19]}-{configuration_id}"
     evaluation_dir = args.results_root.resolve() / evaluation_id
@@ -285,6 +356,8 @@ def main(argv=None):
         "cache": str(args.cache.resolve()), "stages": list(args.stage_names),
         "input_fingerprints": input_fingerprints,
     }
+    if "loading" in args.stage_names:
+        provenance["loading_checkpoint"] = str(args.loading_checkpoint.resolve())
     write_json(evaluation_dir / "provenance.json", provenance)
 
     stage_results = []

@@ -217,6 +217,7 @@ reviewer:
 	python3 scripts/run_reviewer_evaluation.py \
 	  --image "$(TAG)" --model "$(abspath $(MODEL_DIR))" \
 	  --checkpoint "$(abspath $(CHECKPOINT_DIR))" --cache "$(abspath $(CACHE_DIR))" \
+	  $(if $(strip $(LOADING_CHECKPOINT_DIR)),--loading-checkpoint "$(abspath $(LOADING_CHECKPOINT_DIR))",) \
 	  --results-root "$(abspath $(RESULTS_DIR))" $(REVIEWER_FLAGS)
 
 gc:

@@ -173,6 +173,17 @@ records below `results/reviewer-<source>-<image>-<configuration>/`. Re-running t
 stages with valid evidence. A completed memory comparison that does not support
 the lower-memory claim is recorded as `valid_negative`, not an execution error.
 
+Add the verified loading, entropy, and backend stages with:
+
+```bash
+make reviewer TAG="$MEMRIFT_IMAGE" MODEL_DIR="$MODEL_DIR" \
+  CHECKPOINT_DIR="$CHECKPOINT_DIR" LOADING_CHECKPOINT_DIR="$LOADING_CHECKPOINT_DIR" \
+  CACHE_DIR="$CACHE_DIR" RESULTS_DIR="$RESULTS_DIR" REVIEWER_FLAGS=--full
+```
+
+The core four stages remain the default so reviewers are not forced into the
+longer optional measurements.
+
 ## Unsupported Or Partial Claims
 
 The following must not be presented as reproduced by the current artifact:

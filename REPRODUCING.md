@@ -30,6 +30,10 @@ to repeat one stage or `REVIEWER_FLAGS='--stages validate,correctness'` to selec
 a subset. Input acquisition and checkpoint preparation remain separate because
 they are not network-isolated evaluation steps.
 
+Use `REVIEWER_FLAGS=--full` and provide `LOADING_CHECKPOINT_DIR` to append the
+five-run loading comparison, TinyLlama entropy collector, and four-backend
+comparison. The default remains the shorter four-stage core workflow.
+
 ## A. End-To-End Smoke
 
 ```bash

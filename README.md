@@ -210,7 +210,6 @@ the incomplete exact batch-4 Table 3 attempt.
 ## More Information
 
 - [`REPRODUCING.md`](REPRODUCING.md): experiment-by-experiment commands and checks
-- [`CGO27_ARTIFACT_APPENDIX.md`](CGO27_ARTIFACT_APPENDIX.md): concise reference for the paper's two-page appendix
 - `manifests/models.json`: verified model identity and hashes
 - `manifests/datasets.json`: pinned dataset identities and licenses
 - `manifests/source_manifest.json`: local verification record

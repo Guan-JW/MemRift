@@ -1,5 +1,6 @@
 IMAGE ?= memrift-artifact
 VERSION ?= 0.1.0-review
+DOI ?= 10.5281/zenodo.22119678
 TAG ?= $(IMAGE):$(VERSION)
 MODEL_DIR ?=
 CHECKPOINT_DIR ?=
@@ -334,7 +335,7 @@ export:
 	sha256sum memrift-artifact-$(VERSION).tar.zst > memrift-artifact-$(VERSION).tar.zst.sha256
 
 release:
-	TAG="$(TAG)" VERSION="$(VERSION)" RELEASE_DIR="$(RELEASE_DIR)" \
+	TAG="$(TAG)" VERSION="$(VERSION)" DOI="$(DOI)" RELEASE_DIR="$(RELEASE_DIR)" \
 	  RESULTS_DIR="$(RESULTS_DIR)" DATASET_RECEIPT="$(CACHE_DIR)/memrift-dataset-receipt.json" \
 	  CHECKPOINT_DIR="$(CHECKPOINT_DIR)" LOADING_CHECKPOINT_DIR="$(LOADING_CHECKPOINT_DIR)" \
 	  scripts/package_release.sh

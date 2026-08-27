@@ -4,6 +4,7 @@ set -euo pipefail
 root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 tag=${TAG:-memrift-artifact:0.1.0-review}
 version=${VERSION:-0.1.0-review}
+doi=${DOI:?DOI must identify the archival release}
 output_dir=${RELEASE_DIR:-"$root/dist"}
 results_dir=${RESULTS_DIR:-"$root/results"}
 dataset_receipt=${DATASET_RECEIPT:-"$root/.cache/huggingface/memrift-dataset-receipt.json"}
@@ -65,7 +66,7 @@ tar -C "$bundle" --sort=name --mtime=@0 --owner=0 --group=0 --numeric-owner \
   -cf - provenance | zstd -T2 -10 -q -o "$bundle/provenance.tar.zst"
 rm -rf "$bundle/provenance"
 
-python3 - "$tables23_manifest" "$bundle/RELEASE.json" "$version" "$tag" "$image_id" "$created_at" "$source_revision" <<'PY'
+python3 - "$tables23_manifest" "$bundle/RELEASE.json" "$version" "$tag" "$image_id" "$created_at" "$source_revision" "$doi" <<'PY'
 import json
 import sys
 from pathlib import Path
@@ -74,6 +75,8 @@ evidence = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
 release = {
     "schema_version": "1.0",
     "version": sys.argv[3],
+    "doi": sys.argv[8],
+    "archive_url": f"https://doi.org/{sys.argv[8]}",
     "created_at": sys.argv[6],
     "source_revision": sys.argv[7],
     "image": {"tag": sys.argv[4], "id": sys.argv[5], "archive": "image.tar.zst"},

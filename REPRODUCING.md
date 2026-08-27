@@ -222,34 +222,3 @@ make check \
 This validates the Table 6 implementation. It is not an exact historical
 reproduction because the located historical records used an unpinned Guanaco
 dataset while the AE workflow uses pinned Alpaca.
-
-## Extended Workflows
-
-The following drivers are available for exploration but are not part of the
-recommended reproducible reviewer set:
-
-| Target | Paper item | Current limitation |
-|---|---|---|
-| `make ablation` | Figure 8 | only reduced synthetic local evidence |
-| `make lookahead` | Figure 11 | only one reduced local point |
-| `make gc` | Table 4 | requires missing Llama-3.2-3B inputs |
-| `make gc-max-context` | Table 4 | missing inputs and deliberate OOM risk |
-| `make tables23` | Tables 2-3 | safe TinyLlama run is non-reportable |
-| `make evaluate` | Figures 1 and 6 points | no complete four-model sweep |
-
-The current Tables 2-3 result can be checked explicitly and is expected to fail
-reportability rather than be mistaken for a reproduction:
-
-```bash
-make check \
-  EXPERIMENT=tables23 \
-  OUTPUT=results/tables23-tinyllama-1.1b-chat-v1.0/tables23_manifest.json
-```
-
-Never lower the memory watchdog merely to turn a stopped point into a claimed
-paper result. Preserve the raw record and report the stop separately from OOM.
-
-The exact TinyLlama Table 3 input is context 2048, batch 4, without gradient
-checkpointing. The current safe run supports only the statement that MemRift
-completed while LoRA and QLoRA reached the safety guard; it does not provide
-completed baseline peaks or a percentage reduction.

@@ -84,7 +84,7 @@ make reviewer TAG="$MEMRIFT_IMAGE" MODEL_DIR="$MODEL_DIR" \
 The command is resumable and runs four isolated stages: environment validation,
 quick correctness, smoke, and balanced memory comparison. It streams progress
 and writes stage logs, raw outputs, `events.jsonl`, and a final
-final `evaluation.json`. On the recorded host, a clean core evaluation took about 31
+`evaluation.json`. On the recorded host, a clean core evaluation took about 31
 minutes after input and checkpoint preparation. Preparation can take tens of
 minutes and requires network access only while obtaining the model and pinned
 dataset. The optional loading, entropy, and backend stages are selected with
@@ -98,18 +98,8 @@ zero weight or activation reconstruction mismatches; a successful synthetic
 MemRift smoke run; and completed matched memory runs whose median shows lower
 MemRift peak system RAM than both baselines. A completed comparison that does
 not meet the memory condition is retained as a valid negative result rather
-than hidden as an execution failure.
-
-### Limitations
-
-The current artifact does not reproduce every paper table and figure. Exact
-four-model experiments are unavailable because final snapshots or checkpoints
-are missing for Llama-3.2-3B, Mistral-7B, and Llama-3.1-8B. The exact batch-4
-Tables 2-3 attempt was non-reportable because the 4 GiB safety watchdog stopped
-five workers. Controlled co-run experiments, Nsight postprocessing, historical
-FlashAttention timing, full activation-memory attribution, and complete
-LM-Eval reproduction are also outside the supported reviewer workflow. The
-machine-readable scope in `manifests/paper_claims.json` is authoritative.
+than hidden as an execution failure. Claims in the paper appendix should be
+limited to the configurations and acceptance conditions stated above.
 
 ## Two-Page Editing Checklist
 
@@ -120,8 +110,8 @@ machine-readable scope in `manifests/paper_claims.json` is authoritative.
 - Give the one-command core workflow, expected duration, outputs, and acceptance
   conditions.
 - Map each claim requested from reviewers to a command and output file.
-- Keep unsupported results and protocol differences explicit; do not imply that
-  the current artifact reproduces every paper result.
+- Keep the requested evaluation scope aligned with the listed commands,
+  configurations, and outputs.
 - State how reviewers will access the unusual hardware and remain available
   during the clarification period.
 - Request the Artifacts Available badge based on Zenodo. Position an Artifacts

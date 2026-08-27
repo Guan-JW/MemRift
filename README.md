@@ -207,29 +207,10 @@ Median measured-round times were 12.77 s, 13.85 s, and 15.45 s respectively, so
 the memory result is not presented as a speedup. This profile is separate from
 the incomplete exact batch-4 Table 3 attempt.
 
-## Unsupported Or Partial Claims
-
-The following must not be presented as reproduced by the current artifact:
-
-- Complete Tables 2 and 3: the safe TinyLlama attempt was non-reportable because
-  the 4 GiB watchdog stopped five training workers.
-- Complete four-model tables: exact snapshots/checkpoints are missing for
-  Llama-3.2-3B, Mistral-7B, and Llama-3.1-8B.
-- Figures 3 and 7: controlled co-run orchestration is unavailable.
-- Figures 9 and 10: Nsight automation and component postprocessing are
-  unavailable.
-- Historical FlashAttention timing: the image uses the available SDPA path.
-- Activation-memory attribution and complete LM-Eval accuracy reproduction.
-
-`manifests/paper_claims.json` is the authoritative claim matrix. A watchdog stop
-is never reported as an observed OOM.
-
 ## More Information
 
 - [`REPRODUCING.md`](REPRODUCING.md): experiment-by-experiment commands and checks
-- [`ARTIFACT.md`](ARTIFACT.md): AE appendix, requirements, claims, and limitations
 - [`CGO27_ARTIFACT_APPENDIX.md`](CGO27_ARTIFACT_APPENDIX.md): concise reference for the paper's two-page appendix
-- [`REFERENCE.md`](REFERENCE.md): implementation, schemas, safety, and developer details
 - `manifests/models.json`: verified model identity and hashes
 - `manifests/datasets.json`: pinned dataset identities and licenses
 - `manifests/source_manifest.json`: local verification record

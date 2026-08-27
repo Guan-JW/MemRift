@@ -2,8 +2,6 @@
 .git/**
 CITATION.cff
 README.md
-ARTIFACT.md
-REFERENCE.md
 REPRODUCING.md
 manifests/source_manifest.json
 __pycache__

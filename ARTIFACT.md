@@ -55,8 +55,8 @@ target and its current automation status.
   the immutable digest below.
 - **License:** Apache-2.0 for the artifact; datasets and models retain their own
   licenses.
-- **Archive:** Zenodo version DOI `10.5281/zenodo.22119678` is reserved; the
-  deposit must be published before claiming archival availability.
+- **Archive:** the published Zenodo record is available at
+  [doi:10.5281/zenodo.22119678](https://doi.org/10.5281/zenodo.22119678).
 
 ## Access
 
@@ -67,9 +67,9 @@ export MEMRIFT_IMAGE=ghcr.io/guan-jw/memrift-artifact@sha256:45a7d409586dea875c5
 docker pull "$MEMRIFT_IMAGE"
 ```
 
-The registry image is public and `10.5281/zenodo.22119678` is recorded in
-`CITATION.cff`. The Zenodo deposit must contain the final source revision and be
-published before claiming the ACM Artifact Available badge.
+The registry image and the DOI-backed Zenodo archive are public. The archive
+records the final source revision, evidence, provenance receipts, and release
+checksums without redistributing the NVIDIA-derived container image.
 
 ## Hardware Dependencies
 

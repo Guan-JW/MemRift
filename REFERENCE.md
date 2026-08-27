@@ -9,8 +9,8 @@ host, its CUDA extension passed the in-image tests, and a deterministic
 synthetic-data TinyLlama smoke run completed successfully. Generated run output
 is excluded from version control; `manifests/source_manifest.json` records the
 local verification evidence. The reviewer image is published by immutable GHCR
-digest; DOI `10.5281/zenodo.22119678` is reserved for the archival release, but
-the Zenodo deposit remains unpublished.
+digest, and the archival release is published at
+[doi:10.5281/zenodo.22119678](https://doi.org/10.5281/zenodo.22119678).
 
 ## Claims and non-claims
 

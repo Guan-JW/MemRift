@@ -4,6 +4,9 @@ This repository evaluates MemRift, a lossless weight-and-activation compression
 runtime for LLM fine-tuning on NVIDIA unified-memory systems. Reviewers should
 use the published container image rather than rebuild it.
 
+The archived artifact is available from Zenodo at
+[doi:10.5281/zenodo.22119678](https://doi.org/10.5281/zenodo.22119678).
+
 ## Platform
 
 The released image is **not a general x86 or generic CUDA image**. It requires:

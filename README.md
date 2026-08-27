@@ -51,7 +51,7 @@ docker run --rm \
 Expected: JSON containing `"ok": true`, architecture `aarch64`, L4T
 `R36.4.0`, CUDA available, device `Orin`, and compute capability `[8, 7]`.
 
-The checksummed release bundle is an alternative to the registry:
+Verify and extract the checksummed Zenodo release bundle with:
 
 ```bash
 sha256sum -c memrift-artifact-0.1.0-review-release.tar.zst.sha256
@@ -59,11 +59,13 @@ mkdir memrift-release
 zstd -dc memrift-artifact-0.1.0-review-release.tar.zst | tar -xf - -C memrift-release
 cd memrift-release/memrift-artifact-0.1.0-review
 sha256sum -c SHA256SUMS
-zstd -dc image.tar.zst | docker load
 mkdir source
 zstd -dc source.tar.zst | tar -xf - -C source
 cd source
 ```
+
+The Zenodo archive does not redistribute the NVIDIA-derived image. Pull the
+immutable GHCR image as shown above.
 
 ## 2. Download Inputs
 
@@ -123,7 +125,49 @@ metadata. Preparation may take tens of minutes. The training checkpoint is
 approximately 1.53 GB. Loading preparation creates a BF16 copy plus NF4 and
 MemRift directories of approximately 2.20 GB, 0.76 GB, and 1.55 GB.
 
-## 4. Run Supported Experiments
+## 4. Automated Reviewer Workflow
+
+After completing the input and checkpoint preparation above, set the common
+paths and run the resumable core evaluation directly:
+
+```bash
+export MODEL_DIR="$PWD/inputs/TinyLlama-1.1B-Chat-v1.0"
+export CHECKPOINT_DIR="$PWD/checkpoints/tinyllama-zstd18"
+export LOADING_CHECKPOINT_DIR="$PWD/checkpoints/tinyllama-loading"
+export CACHE_DIR="$PWD/.cache/huggingface"
+export RESULTS_DIR="$PWD/results"
+
+make reviewer TAG="$MEMRIFT_IMAGE" MODEL_DIR="$MODEL_DIR" \
+  CHECKPOINT_DIR="$CHECKPOINT_DIR" CACHE_DIR="$CACHE_DIR" \
+  RESULTS_DIR="$RESULTS_DIR"
+```
+
+This runs environment validation, quick correctness, smoke, and balanced memory
+comparison. Each stage streams progress and preserves its command, logs, and raw
+outputs below a configuration-identified `results/reviewer-*` directory.
+`events.jsonl` records incremental progress and `evaluation.json` is the final
+summary. Re-running the same command verifies the evidence hashes and skips
+completed stages. The recorded clean core run took about 31 minutes after setup.
+
+Run the complete seven-stage suite, including loading, entropy, and backends,
+with:
+
+```bash
+make reviewer TAG="$MEMRIFT_IMAGE" MODEL_DIR="$MODEL_DIR" \
+  CHECKPOINT_DIR="$CHECKPOINT_DIR" \
+  LOADING_CHECKPOINT_DIR="$LOADING_CHECKPOINT_DIR" \
+  CACHE_DIR="$CACHE_DIR" RESULTS_DIR="$RESULTS_DIR" \
+  REVIEWER_FLAGS=--full
+```
+
+The complete suite is expected to take about 42 minutes after setup based on the
+separately recorded 31-minute core and 11-minute optional-stage runs. To run only
+the three optional stages, replace `REVIEWER_FLAGS=--full` with
+`REVIEWER_FLAGS='--stages loading,entropy,backends'`. The core stages remain the
+default. A completed memory comparison that does not support the lower-memory
+claim is retained as `valid_negative`, not treated as missing evidence.
+
+## 5. Run Individual Experiments
 
 The recommended reviewer sequence is modular. Each experiment has one command,
 one primary result, and an automated check.
@@ -163,30 +207,6 @@ Median measured-round times were 12.77 s, 13.85 s, and 15.45 s respectively, so
 the memory result is not presented as a speedup. This profile is separate from
 the incomplete exact batch-4 Table 3 attempt.
 
-Run the core reviewer sequence with one resumable command:
-
-```bash
-make reviewer TAG="$MEMRIFT_IMAGE" MODEL_DIR="$MODEL_DIR" \
-  CHECKPOINT_DIR="$CHECKPOINT_DIR" CACHE_DIR="$CACHE_DIR" RESULTS_DIR="$RESULTS_DIR"
-```
-
-It runs validation, quick correctness, smoke, and balanced memory stages. Each
-stage streams progress, keeps its own logs and outputs, and writes structured
-records below `results/reviewer-<source>-<image>-<configuration>/`. Re-running the command skips
-stages with valid evidence. A completed memory comparison that does not support
-the lower-memory claim is recorded as `valid_negative`, not an execution error.
-
-Add the verified loading, entropy, and backend stages with:
-
-```bash
-make reviewer TAG="$MEMRIFT_IMAGE" MODEL_DIR="$MODEL_DIR" \
-  CHECKPOINT_DIR="$CHECKPOINT_DIR" LOADING_CHECKPOINT_DIR="$LOADING_CHECKPOINT_DIR" \
-  CACHE_DIR="$CACHE_DIR" RESULTS_DIR="$RESULTS_DIR" REVIEWER_FLAGS=--full
-```
-
-The core four stages remain the default so reviewers are not forced into the
-longer optional measurements.
-
 ## Unsupported Or Partial Claims
 
 The following must not be presented as reproduced by the current artifact:
@@ -208,6 +228,7 @@ is never reported as an observed OOM.
 
 - [`REPRODUCING.md`](REPRODUCING.md): experiment-by-experiment commands and checks
 - [`ARTIFACT.md`](ARTIFACT.md): AE appendix, requirements, claims, and limitations
+- [`CGO27_ARTIFACT_APPENDIX.md`](CGO27_ARTIFACT_APPENDIX.md): concise reference for the paper's two-page appendix
 - [`REFERENCE.md`](REFERENCE.md): implementation, schemas, safety, and developer details
 - `manifests/models.json`: verified model identity and hashes
 - `manifests/datasets.json`: pinned dataset identities and licenses

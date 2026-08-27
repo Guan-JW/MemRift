@@ -5,7 +5,7 @@ runtime for LLM fine-tuning on NVIDIA unified-memory systems. Reviewers should
 use the published container image rather than rebuild it.
 
 The archived artifact is available from Zenodo at
-[doi:10.5281/zenodo.22119678](https://doi.org/10.5281/zenodo.22119678).
+[doi:10.5281/zenodo.22120118](https://doi.org/10.5281/zenodo.22120118).
 
 ## Platform
 
@@ -54,10 +54,10 @@ Expected: JSON containing `"ok": true`, architecture `aarch64`, L4T
 Verify and extract the checksummed Zenodo release bundle with:
 
 ```bash
-sha256sum -c memrift-artifact-0.1.0-review-release.tar.zst.sha256
+sha256sum -c memrift-artifact-0.1.1-review-release.tar.zst.sha256
 mkdir memrift-release
-zstd -dc memrift-artifact-0.1.0-review-release.tar.zst | tar -xf - -C memrift-release
-cd memrift-release/memrift-artifact-0.1.0-review
+zstd -dc memrift-artifact-0.1.1-review-release.tar.zst | tar -xf - -C memrift-release
+cd memrift-release/memrift-artifact-0.1.1-review
 sha256sum -c SHA256SUMS
 mkdir source
 zstd -dc source.tar.zst | tar -xf - -C source

@@ -2,8 +2,8 @@
 set -euo pipefail
 
 root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
-tag=${TAG:-memrift-artifact:0.1.0-review}
-version=${VERSION:-0.1.0-review}
+tag=${TAG:-memrift-artifact:0.1.1-review}
+version=${VERSION:-0.1.1-review}
 doi=${DOI:?DOI must identify the archival release}
 include_image=${INCLUDE_IMAGE:-1}
 output_dir=${RELEASE_DIR:-"$root/dist"}

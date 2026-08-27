@@ -59,7 +59,7 @@ RUN mkdir -p /models /checkpoints /results /cache/huggingface \
 ARG BUILD_DATE=unknown
 ARG SOURCE_REVISION=unknown-uncommitted
 LABEL org.opencontainers.image.title="MemRift research artifact" \
-      org.opencontainers.image.version="0.1.0-review" \
+      org.opencontainers.image.version="0.1.1-review" \
       org.opencontainers.image.created="${BUILD_DATE}" \
       org.opencontainers.image.revision="${SOURCE_REVISION}" \
       org.opencontainers.image.licenses="Apache-2.0" \

@@ -1,6 +1,6 @@
 IMAGE ?= memrift-artifact
-VERSION ?= 0.1.0-review
-DOI ?= 10.5281/zenodo.22119678
+VERSION ?= 0.1.1-review
+DOI ?= 10.5281/zenodo.22120118
 INCLUDE_IMAGE ?= 1
 TAG ?= $(IMAGE):$(VERSION)
 MODEL_DIR ?=

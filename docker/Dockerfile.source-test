@@ -1,4 +1,4 @@
-FROM memrift-artifact:0.1.0-review
+FROM memrift-artifact:0.1.1-review
 COPY . /workspace
 RUN chmod +x /workspace/docker/entrypoint.sh /workspace/scripts/smoke.sh /workspace/scripts/evaluate.sh
 LABEL org.opencontainers.image.title="MemRift source-test image" \

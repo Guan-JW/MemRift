@@ -380,5 +380,9 @@ make release \
   CACHE_DIR=/path/to/pinned-alpaca-cache
 ```
 
+For a Zenodo deposit that does not redistribute the NVIDIA-derived container
+image, add `INCLUDE_IMAGE=0`. The generated `RELEASE.json` retains the immutable
+GHCR reference while omitting `image.tar.zst`.
+
 Do not report an archive path or checksum until that command completes and the
 bundle has been extracted and verified with `sha256sum -c SHA256SUMS`.

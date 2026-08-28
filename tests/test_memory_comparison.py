@@ -94,6 +94,9 @@ def test_summary_rejects_duplicate_repetition():
     summary = module.summarize(data, profile(), "sha256:test", "a" * 40, "b" * 40, [module.method_order(i) for i in range(3)])
     assert summary["status"] == "complete_with_failures"
     assert summary["claim_supported"] is False
+    assert summary["claim_scope"] == (
+        "The comparison did not complete all required matched runs; no lower-memory conclusion is reported."
+    )
 
 
 def test_worker_records_runtime_source_revision():

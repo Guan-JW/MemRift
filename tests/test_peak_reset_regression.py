@@ -34,3 +34,27 @@ def test_checkpoint_index_entries_are_checked_before_opening_payloads():
     assert "def _checkpoint_entries" in source
     assert source.count("_checkpoint_entries(") >= 3
     assert "checkpoint file listed by index is missing" in source
+
+
+def test_tegrastats_is_stopped_before_summary_reads():
+    tree = ast.parse(SOURCE.read_text())
+    measure = next(node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == "measure")
+    stop = next(
+        node for node in ast.walk(measure)
+        if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id == "stop_tegrastats"
+    )
+    stats_read = next(
+        node for node in ast.walk(measure)
+        if isinstance(node, ast.With)
+        and any(isinstance(item.context_expr, ast.Name) and item.context_expr.id == "tegra_stats_lock"
+                for item in node.items)
+        and node.lineno > stop.lineno
+    )
+    assert stop.lineno < stats_read.lineno
+
+
+def test_tegrastats_shutdown_stops_reaps_and_joins():
+    tree = ast.parse(SOURCE.read_text())
+    shutdown = next(node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == "stop_tegrastats")
+    calls = {call.func.attr for call in ast.walk(shutdown) if isinstance(call, ast.Call) and isinstance(call.func, ast.Attribute)}
+    assert {"set", "terminate", "join"}.issubset(calls)

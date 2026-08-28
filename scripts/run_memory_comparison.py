@@ -259,6 +259,9 @@ def summarize(rows, profile, image_digest, source_revision, runtime_source_revis
         "memrift_reduction_percent": reductions,
         "claim_supported": claim_supported,
         "claim_scope": (
+            "The comparison did not complete all required matched runs; no lower-memory "
+            "conclusion is reported."
+            if not complete else
             "MemRift has lower median peak whole-system RAM than successful matched LoRA and "
             "online-QLoRA runs for this exact reviewer configuration."
             if claim_supported else

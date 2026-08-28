@@ -1,4 +1,5 @@
 import argparse
+import atexit
 import math
 import os
 import random
@@ -285,6 +286,10 @@ tegra_stats = {
     "samples": 0,
 }
 tegra_stats_lock = threading.Lock()
+tegra_stop = threading.Event()
+tegra_process_lock = threading.Lock()
+tegra_process = None
+tegra_thread = None
 # ──────────────────────────────────────────
 # 2.  采样线程：tegrastats + torch
 PAT = re.compile(
@@ -295,11 +300,14 @@ PAT = re.compile(
 
 
 def tegra_loop():
+    global tegra_process
     cmd = [args.tegrastats_bin, '--interval', str(args.tegrastats_interval_ms)]
     csv_f = None
     try:
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                 text=True, bufsize=1)
+        with tegra_process_lock:
+            tegra_process = proc
         if args.tegra_csv:
             os.makedirs(os.path.dirname(args.tegra_csv) or ".", exist_ok=True)
             csv_f = open(args.tegra_csv, "w", buffering=1)
@@ -308,59 +316,93 @@ def tegra_loop():
         print(f"[MemRift] tegrastats unavailable: {exc}", file=sys.stderr, flush=True)
         return
 
-    for line in proc.stdout:
-        m = PAT.search(line)
-        # print(f"{m=}")
-        if not m:
-            continue                          # 依旧安全兜底
+    try:
+        for line in proc.stdout:
+            if tegra_stop.is_set():
+                break
+            m = PAT.search(line)
+            # print(f"{m=}")
+            if not m:
+                continue                          # 依旧安全兜底
 
-        ram_u, ram_t, cpu_blk, gpu_u = m.groups()
+            ram_u, ram_t, cpu_blk, gpu_u = m.groups()
 
-        # ① CPU 方括号里提取所有 “99%@freq”
-        cpu_vals = [int(x) for x in re.findall(r'(\d+)%@', cpu_blk)]
-        cpu_avg  = sum(cpu_vals) / len(cpu_vals) if cpu_vals else 0
-        with tegra_stats_lock:
-            previous_ram = tegra_stats["ram_used_MB_max"]
-            tegra_stats["ram_used_MB_max"] = int(ram_u) if previous_ram is None else max(previous_ram, int(ram_u))
-            process_rss_bytes = psutil.Process().memory_info().rss
-            available_bytes = psutil.virtual_memory().available
-            process_rss_MB = process_rss_bytes // 2**20
-            available_MB = available_bytes // 2**20
-            tegra_stats["process_rss_MB_max"] = max(tegra_stats["process_rss_MB_max"], process_rss_MB)
-            tegra_stats["process_rss_bytes_max"] = max(tegra_stats["process_rss_bytes_max"], process_rss_bytes)
-            current_min = tegra_stats["system_available_MB_min"]
-            tegra_stats["system_available_MB_min"] = available_MB if current_min is None else min(current_min, available_MB)
-            current_bytes_min = tegra_stats["system_available_bytes_min"]
-            tegra_stats["system_available_bytes_min"] = available_bytes if current_bytes_min is None else min(current_bytes_min, available_bytes)
-            tegra_stats["cpu_util_sum"] += cpu_avg
-            tegra_stats["gpu_util_sum"] += int(gpu_u)
-            tegra_stats["samples"] += 1
+            # ① CPU 方括号里提取所有 “99%@freq”
+            cpu_vals = [int(x) for x in re.findall(r'(\d+)%@', cpu_blk)]
+            cpu_avg  = sum(cpu_vals) / len(cpu_vals) if cpu_vals else 0
+            with tegra_stats_lock:
+                previous_ram = tegra_stats["ram_used_MB_max"]
+                tegra_stats["ram_used_MB_max"] = int(ram_u) if previous_ram is None else max(previous_ram, int(ram_u))
+                process_rss_bytes = psutil.Process().memory_info().rss
+                available_bytes = psutil.virtual_memory().available
+                process_rss_MB = process_rss_bytes // 2**20
+                available_MB = available_bytes // 2**20
+                tegra_stats["process_rss_MB_max"] = max(tegra_stats["process_rss_MB_max"], process_rss_MB)
+                tegra_stats["process_rss_bytes_max"] = max(tegra_stats["process_rss_bytes_max"], process_rss_bytes)
+                current_min = tegra_stats["system_available_MB_min"]
+                tegra_stats["system_available_MB_min"] = available_MB if current_min is None else min(current_min, available_MB)
+                current_bytes_min = tegra_stats["system_available_bytes_min"]
+                tegra_stats["system_available_bytes_min"] = available_bytes if current_bytes_min is None else min(current_bytes_min, available_bytes)
+                tegra_stats["cpu_util_sum"] += cpu_avg
+                tegra_stats["gpu_util_sum"] += int(gpu_u)
+                tegra_stats["samples"] += 1
 
-        ts_ms = int((time.time()-T0)*1000)
-        gpu_alloc_MB = torch.cuda.memory_allocated() // 2**20
-        gpu_reserved_MB = torch.cuda.memory_reserved() // 2**20 or -1
-        cpu_proc_MB = process_rss_MB
+            ts_ms = int((time.time()-T0)*1000)
+            gpu_alloc_MB = torch.cuda.memory_allocated() // 2**20
+            gpu_reserved_MB = torch.cuda.memory_reserved() // 2**20 or -1
+            cpu_proc_MB = process_rss_MB
+            if csv_f is not None:
+                raw = line.strip().replace('"', '""')
+                csv_f.write(f'{ts_ms},{int(ram_u)},{int(ram_t)},{cpu_avg},{int(gpu_u)},{gpu_alloc_MB},{gpu_reserved_MB},{cpu_proc_MB},"{raw}"\n')
+
+            wandb.log({
+                "timestamp": ts_ms,   # ms step
+                "ram_used_MB": int(ram_u),
+                "ram_total_MB": int(ram_t),
+                "cpu_util":  cpu_avg,                      # 平均 %
+                "gpu_util":  int(gpu_u),
+                "gpu_alloc_MB": gpu_alloc_MB,
+                "gpu_reserved_MB": gpu_reserved_MB,
+                "cpu_proc_MB": cpu_proc_MB,
+            }, commit=True)
+    finally:
+        if proc.poll() is None:
+            try:
+                proc.terminate()
+            except ProcessLookupError:
+                pass
+            try:
+                proc.wait(timeout=2)
+            except subprocess.TimeoutExpired:
+                try:
+                    proc.kill()
+                except ProcessLookupError:
+                    pass
+                proc.wait()
+        proc.stdout.close()
         if csv_f is not None:
-            raw = line.strip().replace('"', '""')
-            csv_f.write(f'{ts_ms},{int(ram_u)},{int(ram_t)},{cpu_avg},{int(gpu_u)},{gpu_alloc_MB},{gpu_reserved_MB},{cpu_proc_MB},"{raw}"\n')
+            csv_f.close()
+        with tegra_process_lock:
+            tegra_process = None
 
-        wandb.log({
-            "timestamp": ts_ms,   # ms step
-            "ram_used_MB": int(ram_u),
-            "ram_total_MB": int(ram_t),
-            "cpu_util":  cpu_avg,                      # 平均 %
-            "gpu_util":  int(gpu_u),
-            "gpu_alloc_MB": gpu_alloc_MB,
-            "gpu_reserved_MB": gpu_reserved_MB,
-            "cpu_proc_MB": cpu_proc_MB,
-        }, commit=True)
-    proc.stdout.close()
-    if csv_f is not None:
-        csv_f.close()
+
+def stop_tegrastats():
+    tegra_stop.set()
+    with tegra_process_lock:
+        proc = tegra_process
+    if proc is not None and proc.poll() is None:
+        try:
+            proc.terminate()
+        except ProcessLookupError:
+            pass
+    if tegra_thread is not None and tegra_thread is not threading.current_thread():
+        tegra_thread.join(timeout=5)
 
 
 if not args.disable_tegrastats:
-    threading.Thread(target=tegra_loop, daemon=True).start()
+    tegra_thread = threading.Thread(target=tegra_loop, name="memrift-tegrastats", daemon=True)
+    tegra_thread.start()
+    atexit.register(stop_tegrastats)
 
 print(f"\n\n{args.model=}, {args.checkpoint=}, {args.weight=}, {args.activation=}, {args.max_length=}")
 rid = 0
@@ -1946,6 +1988,7 @@ def measure(n=args.round):
         round_peak_gpu_reserved_bytes[i] = peak_gpu_reserved_bytes
         nvtx.range_pop()
 
+    stop_tegrastats()
     summary_start = min(args.warmup_rounds, max(n - 1, 0))
     measured_times = round_times[summary_start:]
     measured_gpu_peaks = round_peak_gpu_MB[summary_start:]

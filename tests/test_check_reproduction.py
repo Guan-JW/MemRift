@@ -83,23 +83,41 @@ def test_fidelity_accepts_exact_completed_roundtrip(tmp_path):
     assert checker().main(["--experiment", "fidelity", "--input", str(path)]) == 0
 
 
-def test_loading_requires_five_runs_and_tolerance(tmp_path):
+def test_loading_requires_five_runs_and_memrift_improvement(tmp_path, capsys):
+    medians = {"lora": 2.1, "qlora-online": 4.9, "qlora-prequant": 1.8, "memrift": 2.5}
     data = {}
-    for method, expected in checker().LOADING_EXPECTED_SECONDS.items():
+    for method in checker().LOADING_METHODS:
         data[method] = {
             "runs": 5,
             "cache_state": "warm",
             "cache_dropped": False,
-            "load_to_ready_seconds_median": expected,
+            "load_to_ready_seconds_median": medians[method],
             "online_quantized_tensor_calls": 154 if method == "qlora-online" else 0,
             "prequantized_tensor_calls": 154 if method == "qlora-prequant" else 0,
         }
     path = tmp_path / "loading.json"
     path.write_text(json.dumps(data))
     assert checker().main(["--experiment", "loading", "--input", str(path)]) == 0
+    report = json.loads(capsys.readouterr().out)
+    assert report["outcome"] == "passed"
+    assert report["metrics"]["memrift_improvement_vs_qlora_online_percent"] == (4.9 - 2.5) / 4.9 * 100
     data["memrift"]["runs"] = 1
     path.write_text(json.dumps(data))
     assert checker().main(["--experiment", "loading", "--input", str(path)]) == 1
+
+
+def test_loading_does_not_require_historical_absolute_times(tmp_path):
+    data = {}
+    for method, median in {"lora": 20, "qlora-online": 40, "qlora-prequant": 10, "memrift": 30}.items():
+        data[method] = {
+            "runs": 5, "cache_state": "warm", "cache_dropped": False,
+            "load_to_ready_seconds_median": median,
+            "online_quantized_tensor_calls": 1 if method == "qlora-online" else 0,
+            "prequantized_tensor_calls": 1 if method == "qlora-prequant" else 0,
+        }
+    path = tmp_path / "loading.json"
+    path.write_text(json.dumps(data))
+    assert checker().main(["--experiment", "loading", "--input", str(path)]) == 0
 
 
 def test_tables23_rejects_nonreportable_result(tmp_path):

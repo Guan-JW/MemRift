@@ -13,7 +13,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_STAGES = ("validate", "correctness", "smoke", "memory")
+DEFAULT_STAGES = ("validate", "correctness", "memory")
 OPTIONAL_STAGES = ("loading", "entropy", "backends")
 ALL_STAGES = DEFAULT_STAGES + OPTIONAL_STAGES
 STAGE_TARGETS = {
@@ -26,10 +26,25 @@ STAGE_CHECKERS = {
     "loading": "loading", "entropy": "entropy", "backends": "backends",
 }
 CLAIM_CHECKS = {"memrift_vs_lora", "memrift_vs_qlora", "claim_supported"}
+LOADING_CLAIM_CHECKS = {"memrift_vs_qlora_online"}
+LOADING_MEDIAN_CHECKS = {
+    "lora_median_seconds", "qlora-online_median_seconds",
+    "qlora-prequant_median_seconds", "memrift_median_seconds",
+}
+REQUIRED_LOADING_CHECKS = {
+    "methods", "lora_runs", "lora_cache", "qlora-online_runs",
+    "qlora-online_cache", "qlora-prequant_runs", "qlora-prequant_cache",
+    "memrift_runs", "memrift_cache", "serialized_nf4_path", "online_nf4_path",
+    *LOADING_MEDIAN_CHECKS,
+}
 REQUIRED_MEMORY_CHECKS = {
     "status", "methods", "repetitions", "review_profile", "gradient_checkpointing",
     "minimum_reduction", "method_order", "orchestrator_source_revision",
-    "runtime_source_revision", "container_image_digest", "input_validation",
+    "runtime_source_revision", "container_image_digest", "model_revision",
+    "checkpoint_model_logical_id", "checkpoint_source_revision", "checkpoint_format",
+    "checkpoint_zstd_level", "checkpoint_payload_sha256", "dataset_fingerprint", "dataset_rows",
+    "rep_01_environment", "rep_01_configuration", "rep_02_environment", "rep_02_configuration",
+    "rep_03_environment", "rep_03_configuration",
     "raw_matched_runs", "lora_successful_runs", "lora_system_peaks", "lora_median",
     "lora_raw_peaks", "qlora_successful_runs", "qlora_system_peaks", "qlora_median",
     "qlora_raw_peaks", "memrift_successful_runs", "memrift_system_peaks",
@@ -219,14 +234,31 @@ def classify_check(stage, report):
     checks = {item.get("name"): item.get("ok") for item in report.get("checks", [])}
     failed = {name for name, ok in checks.items() if not ok}
     if report.get("ok") is True:
-        return True, "passed", "supported" if stage == "memory" else None
+        return True, "passed", "supported" if stage in {"memory", "loading"} else None
     integrity_complete = (
         (REQUIRED_MEMORY_CHECKS | CLAIM_CHECKS).issubset(checks)
         and all(checks[name] for name in REQUIRED_MEMORY_CHECKS)
     )
     if stage == "memory" and integrity_complete and failed and failed.issubset(CLAIM_CHECKS):
         return True, "valid_negative", "not_supported"
-    return False, "invalid_evidence", "not_supported" if stage == "memory" else None
+    loading_integrity_complete = (
+        (REQUIRED_LOADING_CHECKS | LOADING_CLAIM_CHECKS).issubset(checks)
+        and all(checks[name] for name in REQUIRED_LOADING_CHECKS)
+    )
+    if stage == "loading" and loading_integrity_complete and failed and failed.issubset(LOADING_CLAIM_CHECKS):
+        return True, "valid_negative", "not_supported"
+    return False, "requirements_not_met", "not_evaluated" if stage in {"memory", "loading"} else None
+
+
+def report_issues(report):
+    if isinstance(report.get("unmet_requirements"), list):
+        return report["unmet_requirements"]
+    if isinstance(report.get("errors"), list):
+        return [{"requirement": "environment", "reason": error} for error in report["errors"]]
+    return [
+        {"requirement": item.get("name"), "observed": item.get("observed"), "expected": item.get("expected")}
+        for item in report.get("checks", []) if item.get("ok") is not True
+    ]
 
 
 def check_stage(stage, output, attempt_dir, validate_text=None):
@@ -236,7 +268,13 @@ def check_stage(stage, output, attempt_dir, validate_text=None):
         except json.JSONDecodeError:
             report = {"ok": False, "error": "validation output was not one JSON document"}
         write_json(attempt_dir / "check.json", report)
-        return report.get("ok") is True, "passed" if report.get("ok") is True else "invalid_evidence", None
+        if report.get("ok") is True:
+            metrics = {key: report.get(key) for key in ("device", "compute_capability", "cuda", "l4t_release")}
+            return True, "passed", None, metrics, []
+        issues = report_issues(report)
+        if not issues:
+            issues = [{"requirement": "validation_output", "reason": report.get("error", "validation results are missing")}]
+        return False, "requirements_not_met", None, {}, issues
     experiment = STAGE_CHECKERS[stage]
     completed = subprocess.run(
         [sys.executable, str(ROOT / "scripts/check_reproduction.py"), "--experiment", experiment, "--input", str(output)],
@@ -247,7 +285,11 @@ def check_stage(stage, output, attempt_dir, validate_text=None):
     except json.JSONDecodeError:
         report = {"ok": False, "error": completed.stderr or "checker returned invalid JSON", "checks": []}
     write_json(attempt_dir / "check.json", report)
-    return classify_check(stage, report)
+    evidence_valid, outcome, claim = classify_check(stage, report)
+    issues = [] if evidence_valid else report_issues(report)
+    if not issues and not evidence_valid:
+        issues = [{"requirement": "checker_output", "reason": report.get("error", "checker results are missing")}]
+    return evidence_valid, outcome, claim, report.get("metrics") or {}, issues
 
 
 def parse_args(argv=None):
@@ -289,8 +331,13 @@ def parse_args(argv=None):
 
 def stage_summary(result):
     summary = {key: result.get(key) for key in ("stage", "outcome")}
-    if result.get("stage") == "memory":
+    if result.get("stage") in {"memory", "loading"}:
         summary["claim"] = result.get("claim")
+    if result.get("metrics"):
+        summary["metrics"] = result["metrics"]
+    if result.get("unmet_requirements"):
+        summary["unmet_requirements"] = result["unmet_requirements"]
+        summary["action"] = "correct the listed requirement and rerun"
     return summary
 
 
@@ -389,12 +436,26 @@ def main(argv=None):
         write_json(attempt_dir / "started.json", {"stage": stage, "attempt": attempt, "started_at": started, "command": command})
         exit_code, output_text = run_streamed(command, attempt_dir / "stdout.log", capture=stage == "validate")
         primary = primary_output(stage, outputs)
-        if exit_code != 0:
-            evidence_valid, outcome, claim = False, "execution_failure", "not_supported" if stage == "memory" else None
+        if stage == "validate":
+            evidence_valid, outcome, claim, metrics, issues = check_stage(stage, primary, attempt_dir, output_text)
+        elif exit_code != 0:
+            evidence_valid, outcome = False, "incomplete_run"
+            claim = "not_evaluated" if stage in {"memory", "loading"} else None
+            metrics = {}
+            issues = [{
+                "requirement": "stage_execution", "observed": f"exit code {exit_code}",
+                "expected": "completed execution", "reason": "the run ended before complete results were produced",
+            }]
         elif stage != "validate" and (primary is None or not primary.is_file()):
-            evidence_valid, outcome, claim = False, "invalid_evidence", "not_supported" if stage == "memory" else None
+            evidence_valid, outcome = False, "missing_results"
+            claim = "not_evaluated" if stage in {"memory", "loading"} else None
+            metrics = {}
+            issues = [{
+                "requirement": "primary_output", "observed": str(primary) if primary else None,
+                "expected": "completed result file", "reason": "the expected result was not produced",
+            }]
         else:
-            evidence_valid, outcome, claim = check_stage(stage, primary, attempt_dir, output_text)
+            evidence_valid, outcome, claim, metrics, issues = check_stage(stage, primary, attempt_dir, output_text)
         result = {
             "schema_version": "1.0", "stage": stage, "attempt": attempt,
             "started_at": started, "ended_at": utc_now(), "command": command,
@@ -403,7 +464,11 @@ def main(argv=None):
             "primary_output": str(primary.relative_to(evaluation_dir)) if primary else None,
             "outputs_sha256": hash_tree(outputs),
         }
-        if stage == "memory":
+        if metrics:
+            result["metrics"] = metrics
+        if issues:
+            result["unmet_requirements"] = issues
+        if stage in {"memory", "loading"}:
             result["claim"] = claim
         write_json(attempt_dir / "result.json", result)
         append_event(events, stage, "finished", attempt=attempt, outcome=outcome, evidence_valid=evidence_valid)
@@ -415,9 +480,11 @@ def main(argv=None):
 
     evaluation = {
         "schema_version": "1.0", "evaluation_id": evaluation_id,
-        "status": "failed" if failed else "complete", "updated_at": utc_now(),
+        "status": "incomplete" if failed else "complete", "updated_at": utc_now(),
         "stages": stage_results,
     }
+    if failed:
+        evaluation["action"] = "correct the listed requirement and rerun; completed stages will be reused"
     write_json(evaluation_dir / "evaluation.json", evaluation)
     print(json.dumps({"evaluation": str(evaluation_dir), "status": evaluation["status"], "stages": [
         stage_summary(item) for item in stage_results

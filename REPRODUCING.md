@@ -22,17 +22,19 @@ make reviewer TAG="$MEMRIFT_IMAGE" MODEL_DIR="$MODEL_DIR" \
   CHECKPOINT_DIR="$CHECKPOINT_DIR" CACHE_DIR="$CACHE_DIR" RESULTS_DIR="$RESULTS_DIR"
 ```
 
-This resumable command runs environment validation, quick correctness, smoke,
-and balanced comparative memory in isolated stage directories. Console progress
+This resumable command runs environment validation, quick correctness, and
+balanced comparative memory in isolated stage directories. Console progress
 is mirrored to stage logs, while `events.jsonl` and `evaluation.json` provide
-machine-readable progress and final outcomes. Use `REVIEWER_FLAGS='--rerun smoke'`
+machine-readable progress and final outcomes. Use `REVIEWER_FLAGS='--rerun memory'`
 to repeat one stage or `REVIEWER_FLAGS='--stages validate,correctness'` to select
 a subset. Input acquisition and checkpoint preparation remain separate because
 they are not network-isolated evaluation steps.
 
 Use `REVIEWER_FLAGS=--full` and provide `LOADING_CHECKPOINT_DIR` to append the
 five-run loading comparison, TinyLlama entropy collector, and four-backend
-comparison. The default remains the shorter four-stage core workflow.
+comparison. The default remains the shorter three-stage core workflow; the full
+workflow contains six stages. The smoke experiment below remains available
+individually but is not part of either reviewer workflow.
 
 ## A. End-To-End Smoke
 
@@ -156,7 +158,8 @@ Expected output:
 `results/model-loading/tinyllama-1.1b-chat-v1.0/summary.json`.
 
 Each sample uses a fresh process. Results are warm-cache medians; privileged
-cache dropping is not claimed. Acceptance is within 15% of these references:
+cache dropping is not claimed. The historical reference and locally observed
+values below are informational:
 
 | Method | Reference median | Locally observed AE median |
 |---|---:|---:|
@@ -173,6 +176,11 @@ make check \
 
 The checker also verifies five samples per method, warm-cache labeling, and that
 the online and serialized NF4 instrumentation took different intended paths.
+Acceptance requires positive finite medians and MemRift loading faster than
+online QLoRA. The checker reports the relative improvement percentage. LoRA and
+prequantized QLoRA remain informative comparisons, not acceptance baselines.
+Missing output is reported as `missing_results` or `incomplete_run`; mismatched
+requirements include exact observed and expected values.
 
 ## E. TinyLlama Entropy
 

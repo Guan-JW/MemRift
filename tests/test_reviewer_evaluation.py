@@ -50,7 +50,7 @@ def test_memory_integrity_failure_is_not_valid_negative():
             {"name": "claim_supported", "ok": False},
         ],
     }
-    assert module.classify_check("memory", report) == (False, "invalid_evidence", "not_supported")
+    assert module.classify_check("memory", report) == (False, "requirements_not_met", "not_evaluated")
 
 
 def test_memory_negative_requires_all_claim_checks():
@@ -58,11 +58,29 @@ def test_memory_negative_requires_all_claim_checks():
     checks = [{"name": name, "ok": True} for name in module.REQUIRED_MEMORY_CHECKS]
     checks.append({"name": "claim_supported", "ok": False})
     assert module.classify_check("memory", {"ok": False, "checks": checks}) == (
-        False, "invalid_evidence", "not_supported",
+        False, "requirements_not_met", "not_evaluated",
     )
 
 
-def test_stage_summary_only_reports_claim_for_memory():
+def test_loading_valid_negative_requires_complete_evidence():
+    module = reviewer_module()
+    checks = [{"name": name, "ok": True} for name in module.REQUIRED_LOADING_CHECKS]
+    checks.append({"name": "memrift_vs_qlora_online", "ok": False})
+    assert module.classify_check("loading", {"ok": False, "checks": checks}) == (
+        True, "valid_negative", "not_supported",
+    )
+
+
+def test_loading_integrity_failure_reports_unmet_requirements():
+    module = reviewer_module()
+    checks = [{"name": name, "ok": name != "online_nf4_path"} for name in module.REQUIRED_LOADING_CHECKS]
+    checks.append({"name": "memrift_vs_qlora_online", "ok": True})
+    assert module.classify_check("loading", {"ok": False, "checks": checks}) == (
+        False, "requirements_not_met", "not_evaluated",
+    )
+
+
+def test_stage_summary_reports_claim_only_for_claim_stages():
     module = reviewer_module()
     assert module.stage_summary({"stage": "correctness", "outcome": "passed"}) == {
         "stage": "correctness", "outcome": "passed",
@@ -70,6 +88,28 @@ def test_stage_summary_only_reports_claim_for_memory():
     assert module.stage_summary({"stage": "memory", "outcome": "valid_negative", "claim": "not_supported"}) == {
         "stage": "memory", "outcome": "valid_negative", "claim": "not_supported",
     }
+    assert module.stage_summary({"stage": "loading", "outcome": "passed", "claim": "supported"}) == {
+        "stage": "loading", "outcome": "passed", "claim": "supported",
+    }
+
+
+def test_stage_summary_explains_unmet_requirements():
+    module = reviewer_module()
+    issue = {"requirement": "input_validation", "observed": None, "expected": "manifest-matched inputs"}
+    assert module.stage_summary({
+        "stage": "memory", "outcome": "requirements_not_met", "claim": "not_evaluated",
+        "unmet_requirements": [issue],
+    }) == {
+        "stage": "memory", "outcome": "requirements_not_met", "claim": "not_evaluated",
+        "unmet_requirements": [issue], "action": "correct the listed requirement and rerun",
+    }
+
+
+def test_validation_errors_are_preserved_as_reasons():
+    module = reviewer_module()
+    assert module.report_issues({"errors": ["dataset receipt has an invalid fingerprint or row count"]}) == [{
+        "requirement": "environment", "reason": "dataset receipt has an invalid fingerprint or row count",
+    }]
 
 
 def test_completed_result_supports_resume(tmp_path):
@@ -80,7 +120,7 @@ def test_completed_result_supports_resume(tmp_path):
     second.mkdir()
     (first / "outputs").mkdir()
     (second / "outputs").mkdir()
-    (first / "result.json").write_text(json.dumps({"evidence_valid": False, "outcome": "execution_failure"}))
+    (first / "result.json").write_text(json.dumps({"evidence_valid": False, "outcome": "incomplete_run"}))
     expected = {
         "evidence_valid": True,
         "outcome": "valid_negative",
@@ -102,7 +142,7 @@ def test_latest_failed_attempt_prevents_stale_resume(tmp_path):
         "evidence_valid": True, "outcome": "passed",
         "outputs_sha256": module.hash_tree(first / "outputs"),
     }))
-    (second / "result.json").write_text(json.dumps({"evidence_valid": False, "outcome": "execution_failure"}))
+    (second / "result.json").write_text(json.dumps({"evidence_valid": False, "outcome": "incomplete_run"}))
     assert module.completed_result(tmp_path) is None
 
 
@@ -123,8 +163,10 @@ def test_interrupted_latest_attempt_prevents_stale_resume(tmp_path):
 
 def test_core_default_and_optional_stage_contracts(tmp_path):
     module = reviewer_module()
-    assert module.DEFAULT_STAGES == ("validate", "correctness", "smoke", "memory")
+    assert module.DEFAULT_STAGES == ("validate", "correctness", "memory")
     assert module.OPTIONAL_STAGES == ("loading", "entropy", "backends")
+    assert module.ALL_STAGES == ("validate", "correctness", "memory", "loading", "entropy", "backends")
+    assert "smoke" not in module.ALL_STAGES
     args = Namespace(
         image="image", image_digest="sha256:test", model="/model", checkpoint="/checkpoint",
         cache="/cache", loading_checkpoint="/loading",

@@ -43,8 +43,11 @@ def validate_dataset_cache(root: Path, dataset_id: str | None, revision: str | N
         ]
         if len(matches) != 1:
             errors.append(f"dataset receipt does not bind {dataset_id}@{revision}")
-        elif not matches[0].get("fingerprint") or matches[0].get("num_rows", 0) < 1:
-            errors.append("dataset receipt has an invalid fingerprint or row count")
+        else:
+            if not matches[0].get("fingerprint"):
+                errors.append("dataset receipt is missing a fingerprint")
+            if not isinstance(matches[0].get("num_rows"), int) or matches[0].get("num_rows", 0) < 1:
+                errors.append("dataset receipt row count must be a positive integer")
     except (OSError, UnicodeError, json.JSONDecodeError, AttributeError) as exc:
         errors.append(f"dataset receipt is invalid: {exc}")
     return errors

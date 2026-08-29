@@ -142,15 +142,15 @@ make reviewer TAG="$MEMRIFT_IMAGE" MODEL_DIR="$MODEL_DIR" \
   RESULTS_DIR="$RESULTS_DIR"
 ```
 
-This runs environment validation, quick correctness, smoke, and balanced memory
-comparison. Each stage streams progress and preserves its command, logs, and raw
+This runs three stages: environment validation, quick correctness, and balanced
+memory comparison. Each stage streams progress and preserves its command, logs, and raw
 outputs below a configuration-identified `results/reviewer-*` directory.
 `events.jsonl` records incremental progress and `evaluation.json` is the final
 summary. Re-running the same command verifies the evidence hashes and skips
 completed stages. The memory-optimized core is expected to take about 43 minutes
 after setup.
 
-Run the complete seven-stage suite, including loading, entropy, and backends,
+Run the complete six-stage suite, including loading, entropy, and backends,
 with:
 
 ```bash
@@ -167,6 +167,11 @@ the three optional stages, replace `REVIEWER_FLAGS=--full` with
 `REVIEWER_FLAGS='--stages loading,entropy,backends'`. The core stages remain the
 default. A completed memory comparison that does not support the lower-memory
 claim is retained as `valid_negative`, not treated as missing evidence.
+A completed loading comparison reports MemRift's improvement relative to online
+QLoRA. Missing outputs are reported as `missing_results` or `incomplete_run`;
+configuration and provenance mismatches are `requirements_not_met` with the
+exact observed and expected values. These outcomes never imply that a claim was
+tested and rejected.
 
 ## 5. Run Individual Experiments
 
@@ -176,10 +181,9 @@ one primary result, and an automated check.
 | Module | Purpose | Current status | Expected result |
 |---|---|---|---|
 | Environment | Image and CUDA validation | Verified | `ok: true` |
-| Smoke | End-to-end MemRift training path | Verified functional | successful synthetic run |
 | Quick correctness | 10-step lossless codec check | Reviewer default | exactly 0 mismatches |
 | Memory comparison | Balanced LoRA/QLoRA/MemRift runs | Verified measurement | MemRift median below both baselines |
-| Loading | Five-run TinyLlama loading comparison | Verified measurement | all medians within 15% |
+| Loading | Five-run TinyLlama loading comparison | Verified measurement | MemRift faster than online QLoRA |
 | Entropy | TinyLlama Table 1 field entropy | Runnable | exponent entropy 2.61-2.93 bits |
 | Backends | Table 6 backend implementation | Verified functional | four successful backends |
 

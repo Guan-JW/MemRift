@@ -56,3 +56,19 @@ def test_mock_validation_reports_cuda_and_mount_failures(monkeypatch, capsys, tm
     assert any("CUDA support is unavailable" in error for error in report["errors"])
     assert any("lacks config.json" in error for error in report["errors"])
     assert any("lacks index.json" in error for error in report["errors"])
+
+
+def test_dataset_receipt_reports_fingerprint_and_row_count_separately(tmp_path):
+    module = load_module("scripts/validate_environment.py", "dataset_receipt_details")
+    (tmp_path / "data.arrow").write_bytes(b"arrow")
+    (tmp_path / "memrift-dataset-receipt.json").write_text(json.dumps({
+        "datasets": [{
+            "huggingface_id": "tatsu-lab/alpaca", "revision": "a" * 40,
+            "fingerprint": "", "num_rows": 0,
+        }]
+    }))
+    errors = module.validate_dataset_cache(tmp_path, "tatsu-lab/alpaca", "a" * 40)
+    assert errors == [
+        "dataset receipt is missing a fingerprint",
+        "dataset receipt row count must be a positive integer",
+    ]

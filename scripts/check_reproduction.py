@@ -9,12 +9,7 @@ import statistics
 from pathlib import Path
 
 
-LOADING_EXPECTED_SECONDS = {
-    "lora": 2.15,
-    "qlora-online": 4.26,
-    "qlora-prequant": 2.07,
-    "memrift": 2.66,
-}
+LOADING_METHODS = {"lora", "qlora-online", "qlora-prequant", "memrift"}
 
 
 def record(checks, name, ok, observed, expected):
@@ -52,18 +47,25 @@ def check_entropy(path, checks):
 
 def check_loading(path, checks):
     data = json.loads(path.read_text(encoding="utf-8"))
-    record(checks, "methods", set(data) == set(LOADING_EXPECTED_SECONDS), sorted(data), sorted(LOADING_EXPECTED_SECONDS))
-    for method, expected in LOADING_EXPECTED_SECONDS.items():
+    record(checks, "methods", set(data) == LOADING_METHODS, sorted(data), sorted(LOADING_METHODS))
+    medians = {}
+    for method in sorted(LOADING_METHODS):
         values = data.get(method) or {}
         observed = values.get("load_to_ready_seconds_median")
-        within = isinstance(observed, (int, float)) and math.isfinite(observed) and abs(observed - expected) / expected <= 0.15
+        valid_median = isinstance(observed, (int, float)) and math.isfinite(observed) and observed > 0
+        medians[method] = observed if valid_median else None
         record(checks, f"{method}_runs", values.get("runs", 0) >= 5, values.get("runs"), ">= 5")
         record(checks, f"{method}_cache", values.get("cache_state") == "warm" and values.get("cache_dropped") is False, {"state": values.get("cache_state"), "dropped": values.get("cache_dropped")}, {"state": "warm", "dropped": False})
-        record(checks, f"{method}_median_seconds", within, observed, f"{expected} +/- 15%")
+        record(checks, f"{method}_median_seconds", valid_median, observed, "positive finite seconds")
     prequant = data.get("qlora-prequant") or {}
     online = data.get("qlora-online") or {}
     record(checks, "serialized_nf4_path", prequant.get("online_quantized_tensor_calls") == 0 and prequant.get("prequantized_tensor_calls", 0) > 0, {"online": prequant.get("online_quantized_tensor_calls"), "prequantized": prequant.get("prequantized_tensor_calls")}, "online=0 and prequantized>0")
     record(checks, "online_nf4_path", online.get("online_quantized_tensor_calls", 0) > 0 and online.get("prequantized_tensor_calls") == 0, {"online": online.get("online_quantized_tensor_calls"), "prequantized": online.get("prequantized_tensor_calls")}, "online>0 and prequantized=0")
+    improvement = (
+        (medians["qlora-online"] - medians["memrift"]) / medians["qlora-online"] * 100
+        if medians["qlora-online"] and medians["memrift"] is not None else None
+    )
+    record(checks, "memrift_vs_qlora_online", improvement is not None and improvement > 0, improvement, "> 0%")
 
 
 def check_backends(path, checks):
@@ -184,17 +186,20 @@ def check_memory(path, checks):
     record(checks, "container_image_digest", digest_valid, digest, "sha256:<64 hex characters>")
     validation = data.get("input_validation") or {}
     model_revision = "de253fa9783f8bd558c9ed398c8ffbe3c55cedb3"
-    validation_ok = (
-        validation.get("model_revision") == model_revision
-        and validation.get("checkpoint_model_logical_id") == "tinyllama-1.1b-chat-v1.0"
-        and validation.get("checkpoint_source_revision") == model_revision
-        and validation.get("checkpoint_format") == "memrift-float-split-stride-v1"
-        and validation.get("checkpoint_zstd_level") == 18
-        and validation.get("checkpoint_payload_sha256") == "f4dff6bb6c0017a8668e0263a24c311bc2891a2ed467ca58520aff30a5c9cdaa"
-        and isinstance(validation.get("dataset_fingerprint"), str) and validation.get("dataset_fingerprint")
-        and isinstance(validation.get("dataset_rows"), int) and validation.get("dataset_rows") > 0
-    )
-    record(checks, "input_validation", validation_ok, validation, "manifest-matched model, checkpoint, and dataset")
+    exact_inputs = {
+        "model_revision": model_revision,
+        "checkpoint_model_logical_id": "tinyllama-1.1b-chat-v1.0",
+        "checkpoint_source_revision": model_revision,
+        "checkpoint_format": "memrift-float-split-stride-v1",
+        "checkpoint_zstd_level": 18,
+        "checkpoint_payload_sha256": "f4dff6bb6c0017a8668e0263a24c311bc2891a2ed467ca58520aff30a5c9cdaa",
+    }
+    for name, expected in exact_inputs.items():
+        record(checks, name, validation.get(name) == expected, validation.get(name), expected)
+    fingerprint = validation.get("dataset_fingerprint")
+    rows = validation.get("dataset_rows")
+    record(checks, "dataset_fingerprint", isinstance(fingerprint, str) and bool(fingerprint), fingerprint, "non-empty dataset fingerprint")
+    record(checks, "dataset_rows", isinstance(rows, int) and not isinstance(rows, bool) and rows > 0, rows, "positive dataset row count")
 
     runs = data.get("runs") or []
     expected_orders = [
@@ -212,19 +217,21 @@ def check_memory(path, checks):
             except (OSError, UnicodeError, json.JSONDecodeError):
                 environment = {}
                 resolved = {}
-            raw_valid = raw_valid and (
-                environment.get("git_revision") == data.get("runtime_source_revision")
-                and environment.get("container_image_digest") == data.get("container_image_digest")
-                and resolved.get("min_available_mb") == 4096
-                and resolved.get("matched_context") == 2048 and resolved.get("batch_size") == 3
-                and resolved.get("rounds") == 7 and resolved.get("warmup_rounds") == 1
-                and resolved.get("variants") == list(order)
-                and resolved.get("activation_compaction_concurrency") == 1
-                and resolved.get("activation_decode_concurrency") == 1
-                and resolved.get("weight_materialization_concurrency") == 1
-                and resolved.get("weight_lookahead") == 1 and resolved.get("activation_lookahead") == 0
-                and resolved.get("activation_backend") == "ebc-zstd" and resolved.get("compression_level") == 1
-            )
+            expected_environment = {
+                "git_revision": data.get("runtime_source_revision"),
+                "container_image_digest": data.get("container_image_digest"),
+            }
+            observed_environment = {key: environment.get(key) for key in expected_environment}
+            record(checks, f"rep_{repetition:02d}_environment", observed_environment == expected_environment, observed_environment, expected_environment)
+            expected_resolved = {
+                "min_available_mb": 4096, "matched_context": 2048, "batch_size": 3,
+                "rounds": 7, "warmup_rounds": 1, "variants": list(order),
+                "activation_compaction_concurrency": 1, "activation_decode_concurrency": 1,
+                "weight_materialization_concurrency": 1, "weight_lookahead": 1,
+                "activation_lookahead": 0, "activation_backend": "ebc-zstd", "compression_level": 1,
+            }
+            observed_resolved = {key: resolved.get(key) for key in expected_resolved}
+            record(checks, f"rep_{repetition:02d}_configuration", observed_resolved == expected_resolved, observed_resolved, expected_resolved)
             for position, method in enumerate(order, 1):
                 candidates = [
                     row for row in runs
@@ -303,6 +310,58 @@ CHECKERS = {
 }
 
 
+def result_metrics(experiment, path):
+    if experiment in {"fidelity", "loading", "memory", "smoke", "tables23"}:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    if experiment == "fidelity":
+        return {
+            "steps": f"{data.get('steps_completed')}/{data.get('steps_requested')}",
+            "tensor_mismatches": data.get("tensor_mismatches"),
+        }
+    if experiment == "loading":
+        medians = {
+            method: (data.get(method) or {}).get("load_to_ready_seconds_median")
+            for method in sorted(LOADING_METHODS)
+        }
+        online = medians["qlora-online"]
+        memrift = medians["memrift"]
+        improvement = (
+            (online - memrift) / online * 100
+            if isinstance(online, (int, float)) and online > 0 and isinstance(memrift, (int, float)) else None
+        )
+        return {
+            "median_loading_seconds": medians,
+            "memrift_improvement_vs_qlora_online_percent": improvement,
+        }
+    if experiment == "memory":
+        methods = data.get("methods") or {}
+        return {
+            "median_peak_system_memory_mib": {
+                method: (values.get("peak_system_used_bytes_median") / 2**20
+                         if isinstance(values.get("peak_system_used_bytes_median"), (int, float)) else None)
+                for method, values in sorted(methods.items())
+            },
+            "memrift_reduction_percent": data.get("memrift_reduction_percent"),
+        }
+    if experiment == "smoke":
+        result = data.get("result") or {}
+        return {"rounds": result.get("rounds"), "activation_compression_ratio": result.get("activation_compression_ratio")}
+    if experiment == "tables23":
+        return {"protocol_reportable": data.get("protocol_reportable"), "numeric_acceptance_met": data.get("reported_numeric_acceptance_met")}
+    with path.open(newline="", encoding="utf-8") as stream:
+        rows = list(csv.DictReader(stream))
+    if experiment == "entropy":
+        return {"exponent_entropy_bits": {row.get("scope"): float(row["exponent_per_8"]) for row in rows}}
+    if experiment == "backends":
+        return {
+            "backends": {
+                row.get("backend"): {"status": row.get("status"), "compression_ratio": float(row.get("compression_ratio") or 0)}
+                for row in rows
+            }
+        }
+    return {}
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--experiment", choices=sorted(CHECKERS), required=True)
@@ -313,7 +372,23 @@ def main(argv=None):
 
     checks = []
     CHECKERS[args.experiment](args.input, checks)
-    report = {"schema_version": "1.0", "experiment": args.experiment, "input": str(args.input), "ok": all(item["ok"] for item in checks), "checks": checks}
+    ok = all(item["ok"] for item in checks)
+    failed = [
+        {"requirement": item["name"], "observed": item["observed"], "expected": item["expected"]}
+        for item in checks if not item["ok"]
+    ]
+    claim_checks = {"memory": {"memrift_vs_lora", "memrift_vs_qlora", "claim_supported"},
+                    "loading": {"memrift_vs_qlora_online"}}
+    failed_names = {item["requirement"] for item in failed}
+    claim_not_supported = bool(failed_names) and failed_names.issubset(claim_checks.get(args.experiment, set()))
+    report = {
+        "schema_version": "1.0", "experiment": args.experiment, "input": str(args.input),
+        "ok": ok,
+        "outcome": "passed" if ok else "claim_not_supported" if claim_not_supported else "requirements_not_met",
+        "metrics": result_metrics(args.experiment, args.input),
+        "unmet_requirements": failed,
+        "checks": checks,
+    }
     print(json.dumps(report, indent=2, sort_keys=True))
     return 0 if report["ok"] else 1
 

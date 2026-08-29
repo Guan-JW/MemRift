@@ -219,14 +219,14 @@ def classify_check(stage, report):
     checks = {item.get("name"): item.get("ok") for item in report.get("checks", [])}
     failed = {name for name, ok in checks.items() if not ok}
     if report.get("ok") is True:
-        return True, "passed", "supported" if stage == "memory" else "not_applicable"
+        return True, "passed", "supported" if stage == "memory" else None
     integrity_complete = (
         (REQUIRED_MEMORY_CHECKS | CLAIM_CHECKS).issubset(checks)
         and all(checks[name] for name in REQUIRED_MEMORY_CHECKS)
     )
     if stage == "memory" and integrity_complete and failed and failed.issubset(CLAIM_CHECKS):
         return True, "valid_negative", "not_supported"
-    return False, "invalid_evidence", "not_supported" if stage == "memory" else "not_applicable"
+    return False, "invalid_evidence", "not_supported" if stage == "memory" else None
 
 
 def check_stage(stage, output, attempt_dir, validate_text=None):
@@ -236,7 +236,7 @@ def check_stage(stage, output, attempt_dir, validate_text=None):
         except json.JSONDecodeError:
             report = {"ok": False, "error": "validation output was not one JSON document"}
         write_json(attempt_dir / "check.json", report)
-        return report.get("ok") is True, "passed" if report.get("ok") is True else "invalid_evidence", "not_applicable"
+        return report.get("ok") is True, "passed" if report.get("ok") is True else "invalid_evidence", None
     experiment = STAGE_CHECKERS[stage]
     completed = subprocess.run(
         [sys.executable, str(ROOT / "scripts/check_reproduction.py"), "--experiment", experiment, "--input", str(output)],
@@ -285,6 +285,13 @@ def parse_args(argv=None):
         except ValueError as exc:
             parser.error(str(exc))
     return args
+
+
+def stage_summary(result):
+    summary = {key: result.get(key) for key in ("stage", "outcome")}
+    if result.get("stage") == "memory":
+        summary["claim"] = result.get("claim")
+    return summary
 
 
 def main(argv=None):
@@ -383,19 +390,21 @@ def main(argv=None):
         exit_code, output_text = run_streamed(command, attempt_dir / "stdout.log", capture=stage == "validate")
         primary = primary_output(stage, outputs)
         if exit_code != 0:
-            evidence_valid, outcome, claim = False, "execution_failure", "not_applicable"
+            evidence_valid, outcome, claim = False, "execution_failure", "not_supported" if stage == "memory" else None
         elif stage != "validate" and (primary is None or not primary.is_file()):
-            evidence_valid, outcome, claim = False, "invalid_evidence", "not_applicable"
+            evidence_valid, outcome, claim = False, "invalid_evidence", "not_supported" if stage == "memory" else None
         else:
             evidence_valid, outcome, claim = check_stage(stage, primary, attempt_dir, output_text)
         result = {
             "schema_version": "1.0", "stage": stage, "attempt": attempt,
             "started_at": started, "ended_at": utc_now(), "command": command,
             "exit_code": exit_code, "execution": "success" if exit_code == 0 else "failure",
-            "evidence_valid": evidence_valid, "outcome": outcome, "claim": claim,
+            "evidence_valid": evidence_valid, "outcome": outcome,
             "primary_output": str(primary.relative_to(evaluation_dir)) if primary else None,
             "outputs_sha256": hash_tree(outputs),
         }
+        if stage == "memory":
+            result["claim"] = claim
         write_json(attempt_dir / "result.json", result)
         append_event(events, stage, "finished", attempt=attempt, outcome=outcome, evidence_valid=evidence_valid)
         print(f"[{index}/{total}] {stage}: {outcome.upper()}", flush=True)
@@ -411,7 +420,7 @@ def main(argv=None):
     }
     write_json(evaluation_dir / "evaluation.json", evaluation)
     print(json.dumps({"evaluation": str(evaluation_dir), "status": evaluation["status"], "stages": [
-        {key: item.get(key) for key in ("stage", "outcome", "claim")} for item in stage_results
+        stage_summary(item) for item in stage_results
     ]}, indent=2))
     return 1 if failed else 0
 

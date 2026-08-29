@@ -62,6 +62,16 @@ def test_memory_negative_requires_all_claim_checks():
     )
 
 
+def test_stage_summary_only_reports_claim_for_memory():
+    module = reviewer_module()
+    assert module.stage_summary({"stage": "correctness", "outcome": "passed"}) == {
+        "stage": "correctness", "outcome": "passed",
+    }
+    assert module.stage_summary({"stage": "memory", "outcome": "valid_negative", "claim": "not_supported"}) == {
+        "stage": "memory", "outcome": "valid_negative", "claim": "not_supported",
+    }
+
+
 def test_completed_result_supports_resume(tmp_path):
     module = reviewer_module()
     first = tmp_path / "attempt-001"

@@ -289,8 +289,8 @@ def build_container_command(args, comparison_name, repetition, order, runtime_so
         "--matched-context", str(args.context), "--batch-size", str(args.batch_size),
         "--rounds", str(args.rounds), "--warmup-rounds", str(args.warmup_rounds),
         "--variants", *order,
-        "--activation-compaction-concurrency", "16", "--activation-decode-concurrency", "4",
-        "--weight-materialization-concurrency", "4", "--weight-lookahead", "1",
+        "--activation-compaction-concurrency", "1", "--activation-decode-concurrency", "1",
+        "--weight-materialization-concurrency", "1", "--weight-lookahead", "1",
         "--activation-lookahead", "0", "--activation-backend", "ebc-zstd",
         "--compression-level", "1", "--timeout-sec", str(args.timeout_seconds),
         "--min-available-mb", str(args.min_available_mb),
@@ -411,6 +411,9 @@ def main(argv=None):
         "warmup_rounds": args.warmup_rounds,
         "repetitions": args.repetitions,
         "gradient_checkpointing": False,
+        "activation_compaction_concurrency": 1,
+        "activation_decode_concurrency": 1,
+        "weight_materialization_concurrency": 1,
         "minimum_reduction_percent": args.minimum_reduction_percent,
     }
     summary = summarize(

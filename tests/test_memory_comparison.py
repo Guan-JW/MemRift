@@ -58,6 +58,9 @@ def profile():
         "batch_size": 3,
         "rounds": 7,
         "warmup_rounds": 1,
+        "activation_compaction_concurrency": 1,
+        "activation_decode_concurrency": 1,
+        "weight_materialization_concurrency": 1,
     }
 
 

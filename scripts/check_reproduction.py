@@ -109,8 +109,8 @@ def valid_memory_command(command, method):
         "--dataset-revision": "dce01c9b08f87459cf36a430d809084718273017",
         "--seed": "42", "--max_length": "2048", "--batch_size": "3",
         "--round": "7", "--warmup_rounds": "1",
-        "--act_compact_concurrency": "16", "--act_decode_concurrency": "4",
-        "--weight_async_concurrency": "4", "--weight_lookahead": "1",
+        "--act_compact_concurrency": "1", "--act_decode_concurrency": "1",
+        "--weight_async_concurrency": "1", "--weight_lookahead": "1",
         "--activation_lookahead": "0", "--activation-backend": "ebc-zstd",
         "--level": "1", "--tegra-csv": "tegrastats.csv",
     }
@@ -153,7 +153,8 @@ def check_memory(path, checks):
     record(checks, "repetitions", repetitions == 3, repetitions, 3)
     observed_profile = {key: profile.get(key) for key in (
         "model_logical_id", "dataset", "dataset_revision", "context",
-        "batch_size", "rounds", "warmup_rounds",
+        "batch_size", "rounds", "warmup_rounds", "activation_compaction_concurrency",
+        "activation_decode_concurrency", "weight_materialization_concurrency",
     )}
     expected_profile = {
         "model_logical_id": "tinyllama-1.1b-chat-v1.0",
@@ -163,6 +164,9 @@ def check_memory(path, checks):
         "batch_size": 3,
         "rounds": 7,
         "warmup_rounds": 1,
+        "activation_compaction_concurrency": 1,
+        "activation_decode_concurrency": 1,
+        "weight_materialization_concurrency": 1,
     }
     record(checks, "review_profile", observed_profile == expected_profile, observed_profile, expected_profile)
     record(checks, "gradient_checkpointing", profile.get("gradient_checkpointing") is False, profile.get("gradient_checkpointing"), False)
@@ -215,9 +219,9 @@ def check_memory(path, checks):
                 and resolved.get("matched_context") == 2048 and resolved.get("batch_size") == 3
                 and resolved.get("rounds") == 7 and resolved.get("warmup_rounds") == 1
                 and resolved.get("variants") == list(order)
-                and resolved.get("activation_compaction_concurrency") == 16
-                and resolved.get("activation_decode_concurrency") == 4
-                and resolved.get("weight_materialization_concurrency") == 4
+                and resolved.get("activation_compaction_concurrency") == 1
+                and resolved.get("activation_decode_concurrency") == 1
+                and resolved.get("weight_materialization_concurrency") == 1
                 and resolved.get("weight_lookahead") == 1 and resolved.get("activation_lookahead") == 0
                 and resolved.get("activation_backend") == "ebc-zstd" and resolved.get("compression_level") == 1
             )

@@ -34,8 +34,8 @@ def add_memory_evidence(tmp_path, data):
         (repetition_dir / "resolved_config.json").write_text(json.dumps({
             "min_available_mb": 4096, "matched_context": 2048, "batch_size": 3,
             "rounds": 7, "warmup_rounds": 1, "variants": list(order),
-            "activation_compaction_concurrency": 16, "activation_decode_concurrency": 4,
-            "weight_materialization_concurrency": 4, "weight_lookahead": 1,
+            "activation_compaction_concurrency": 1, "activation_decode_concurrency": 1,
+            "weight_materialization_concurrency": 1, "weight_lookahead": 1,
             "activation_lookahead": 0, "activation_backend": "ebc-zstd", "compression_level": 1,
         }))
         for position, method in enumerate(order, 1):
@@ -46,7 +46,7 @@ def add_memory_evidence(tmp_path, data):
                 "--dataset", "tatsu-lab/alpaca", "--dataset-revision", "dce01c9b08f87459cf36a430d809084718273017",
                 "--dataset-cache", "/cache/huggingface",
                 "--seed", "42", "--max_length", "2048", "--batch_size", "3", "--round", "7", "--warmup_rounds", "1",
-                "--act_compact_concurrency", "16", "--act_decode_concurrency", "4", "--weight_async_concurrency", "4",
+                "--act_compact_concurrency", "1", "--act_decode_concurrency", "1", "--weight_async_concurrency", "1",
                 "--weight_lookahead", "1", "--activation_lookahead", "0", "--activation-backend", "ebc-zstd",
                 "--level", "1", "--tegra-csv", "tegrastats.csv",
             ]
@@ -127,6 +127,9 @@ def test_memory_requires_completed_lower_memrift_medians(tmp_path):
             "batch_size": 3,
             "rounds": 7,
             "warmup_rounds": 1,
+            "activation_compaction_concurrency": 1,
+            "activation_decode_concurrency": 1,
+            "weight_materialization_concurrency": 1,
         },
         "methods": {
             "lora": {"successful_runs": 3, "peak_system_used_bytes": [100 * 2**20, 101 * 2**20, 99 * 2**20], "peak_system_used_bytes_median": 100 * 2**20},
@@ -163,6 +166,8 @@ def test_memory_recomputes_reductions_from_peaks(tmp_path):
             "model_logical_id": "tinyllama-1.1b-chat-v1.0", "dataset": "tatsu-lab/alpaca",
             "dataset_revision": "dce01c9b08f87459cf36a430d809084718273017",
             "context": 2048, "batch_size": 3, "rounds": 7, "warmup_rounds": 1,
+            "activation_compaction_concurrency": 1, "activation_decode_concurrency": 1,
+            "weight_materialization_concurrency": 1,
         },
         "methods": {
             "lora": {"successful_runs": 3, "peak_system_used_bytes": [80 * 2**20, 81 * 2**20, 79 * 2**20], "peak_system_used_bytes_median": 80 * 2**20},

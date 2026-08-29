@@ -147,7 +147,8 @@ comparison. Each stage streams progress and preserves its command, logs, and raw
 outputs below a configuration-identified `results/reviewer-*` directory.
 `events.jsonl` records incremental progress and `evaluation.json` is the final
 summary. Re-running the same command verifies the evidence hashes and skips
-completed stages. The recorded clean core run took about 31 minutes after setup.
+completed stages. The memory-optimized core is expected to take about 43 minutes
+after setup.
 
 Run the complete seven-stage suite, including loading, entropy, and backends,
 with:
@@ -160,8 +161,8 @@ make reviewer TAG="$MEMRIFT_IMAGE" MODEL_DIR="$MODEL_DIR" \
   REVIEWER_FLAGS=--full
 ```
 
-The complete suite is expected to take about 42 minutes after setup based on the
-separately recorded 31-minute core and 11-minute optional-stage runs. To run only
+The complete suite is expected to take about 54 minutes after setup based on the
+43-minute core and 11-minute optional-stage runs. To run only
 the three optional stages, replace `REVIEWER_FLAGS=--full` with
 `REVIEWER_FLAGS='--stages loading,entropy,backends'`. The core stages remain the
 default. A completed memory comparison that does not support the lower-memory
@@ -200,12 +201,14 @@ The memory comparison uses peak whole-system RAM from `tegrastats`, not CUDA
 allocator memory. A completed negative result is retained and causes the memory
 claim check to fail rather than being filtered out.
 
-The verified batch-3 reviewer profile measured median peak whole-system RAM of
-23,140 MiB for LoRA, 24,698 MiB for online QLoRA, and 22,124 MiB for MemRift.
-This is a 4.39% reduction from LoRA and a 10.42% reduction from online QLoRA.
-Median measured-round times were 12.77 s, 13.85 s, and 15.45 s respectively, so
-the memory result is not presented as a speedup. This profile is separate from
-the incomplete exact batch-4 Table 3 attempt.
+The balanced memory-optimized profile validation measured median peak
+whole-system RAM of 23,130 MiB for LoRA, 24,555 MiB for online QLoRA, and
+21,912 MiB for MemRift. This is a 5.27% reduction from LoRA and a 10.76%
+reduction from online QLoRA. Median measured-round times were 12.72 s, 13.77 s,
+and 54.29 s respectively. The lower concurrency deliberately trades throughput
+for a more stable whole-system memory reduction and is not presented as a
+speedup. This profile is separate from the paper configuration and the
+incomplete exact batch-4 Table 3 attempt.
 
 ## More Information
 

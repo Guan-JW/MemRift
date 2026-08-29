@@ -105,11 +105,13 @@ make memory-comparison \
   RESULTS_DIR="$RESULTS_DIR"
 ```
 
-The review profile uses context 2048, batch 3, seven rounds, one warmup, and
-the unchanged 4 GiB safety guard. Method order rotates across repetitions. Each
-method runs in a fresh worker process. The primary metric is peak whole-system
-used RAM sampled by `tegrastats`; CUDA allocation and process RSS are secondary
-diagnostics and are not substituted for that metric.
+The memory-optimized review profile uses context 2048, batch 3, seven rounds,
+one warmup, and the unchanged 4 GiB safety guard. MemRift uses one activation
+compaction worker, one activation decode worker, and one weight materialization
+worker to limit asynchronous transition buffers. Method order rotates across
+repetitions. Each method runs in a fresh worker process. The primary metric is
+peak whole-system used RAM sampled by `tegrastats`; CUDA allocation and process
+RSS are secondary diagnostics and are not substituted for that metric.
 
 Expected output:
 `results/memory-comparison-tinyllama-1.1b-chat-v1.0/summary.json`, plus
@@ -125,7 +127,7 @@ Acceptance requires all nine matched workers to complete with telemetry and
 MemRift's median whole-system peak to be lower than both baselines. A completed
 negative result remains valid evidence but does not support the lower-memory
 claim. This is a safe AE reviewer configuration, not the paper's exact batch-4
-Table 3 point.
+Table 3 point. It is explicitly optimized for memory rather than throughput.
 
 The verified artifact run completed all nine workers and produced these
 whole-system medians:
